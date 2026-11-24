@@ -1,0 +1,19 @@
+﻿condicion,grupo,n_mediciones,penetracion_cl_media_mm,desv_est_mm,reduccion_vs_REF_pct
+Uncracked H,REF,28,9.07,3.44,0.0
+Uncracked H,BAS,28,6.35,3.71,30.0
+Uncracked H,CA,28,4.9,2.39,46.0
+Crack 100 H,REF,40,13.84,7.0,0.0
+Crack 100 H,BAS,40,18.77,16.17,-35.6
+Crack 100 H,CA,40,12.56,6.02,9.3
+Crack 300 H,REF,38,24.44,10.85,0.0
+Crack 300 H,BAS,40,22.57,15.34,7.7
+Crack 300 H,CA,40,11.91,6.12,51.3
+Uncracked U,REF,28,23.1,8.51,0.0
+Uncracked U,BAS,28,16.52,5.14,28.5
+Uncracked U,CA,28,18.39,6.7,20.4
+Crack 100 U,REF,36,29.18,8.38,0.0
+Crack 100 U,BAS,40,24.69,9.08,15.4
+Crack 100 U,CA,40,21.97,7.56,24.7
+Crack 300 U,REF,40,34.69,12.02,0.0
+Crack 300 U,BAS,40,28.11,12.81,19.0
+Crack 300 U,CA,40,32.01,12.28,7.7

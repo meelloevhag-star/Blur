@@ -1,0 +1,109 @@
+{
+  "n_ensayos_meta_dataset": 36,
+  "cv_5fold_alpha": {
+    "objetivo": "Reducción de cloruros/permeabilidad (alpha)",
+    "NEAT": {
+      "R2": 0.366,
+      "MAE": 0.123,
+      "RMSE": 0.146
+    },
+    "Ridge": {
+      "R2": 0.523,
+      "MAE": 0.11,
+      "RMSE": 0.127
+    },
+    "RandomForest": {
+      "R2": 0.514,
+      "MAE": 0.109,
+      "RMSE": 0.128
+    },
+    "neat_neuronas_ocultas_promedio": 1.4
+  },
+  "cv_5fold_cierre_pct": {
+    "objetivo": "Cierre óptico de fisuras (%)",
+    "NEAT": {
+      "R2": 0.047,
+      "MAE": 14.359,
+      "RMSE": 19.838
+    },
+    "Ridge": {
+      "R2": 0.164,
+      "MAE": 14.382,
+      "RMSE": 18.58
+    },
+    "RandomForest": {
+      "R2": 0.039,
+      "MAE": 14.786,
+      "RMSE": 19.928
+    },
+    "neat_neuronas_ocultas_promedio": 0.4
+  },
+  "topologia_final_alpha": {
+    "neuronas_ocultas": 0,
+    "conexiones_activas": 2
+  },
+  "importancia_permutacion_alpha": [
+    {
+      "variable": "Protección bio (0-3)",
+      "delta_rmse": 0.1122
+    },
+    {
+      "variable": "Ancho fisura (mm)",
+      "delta_rmse": 0.0094
+    },
+    {
+      "variable": "a/c",
+      "delta_rmse": 0.0
+    },
+    {
+      "variable": "Edad curado (d)",
+      "delta_rmse": 0.0
+    },
+    {
+      "variable": "Ambiente marino",
+      "delta_rmse": 0.0
+    },
+    {
+      "variable": "Usa lactato",
+      "delta_rmse": 0.0
+    }
+  ],
+  "puente_micro_macro_paita": [
+    {
+      "escenario": "Tu mezcla actual (a/c 0,68 · directa · fisura 0,2 mm · 90d)",
+      "cierre_predicho_neat_pct": 79.9,
+      "alpha_predicho_neat": 0.362,
+      "umbral_alpha_biocrete_markov_25a": "No alcanzable (techo τ_bio)"
+    },
+    {
+      "escenario": "Tu mezcla actual (a/c 0,68 · directa · fisura 0,5 mm · 90d)",
+      "cierre_predicho_neat_pct": 64.3,
+      "alpha_predicho_neat": 0.289,
+      "umbral_alpha_biocrete_markov_25a": "No alcanzable (techo τ_bio)"
+    },
+    {
+      "escenario": "Tu mezcla actual (a/c 0,68 · directa · fisura 1,0 mm · 90d)",
+      "cierre_predicho_neat_pct": 32.5,
+      "alpha_predicho_neat": 0.189,
+      "umbral_alpha_biocrete_markov_25a": "No alcanzable (techo τ_bio)"
+    },
+    {
+      "escenario": "Mezcla futura (a/c 0,45 · directa · rec 50 mm · 0,2 mm · 90d)",
+      "cierre_predicho_neat_pct": 79.9,
+      "alpha_predicho_neat": 0.362,
+      "umbral_alpha_biocrete_markov_25a": "0,262 (BioCrete-Markov 25a)"
+    },
+    {
+      "escenario": "Mezcla futura (a/c 0,45 · portador · rec 40 mm · 0,3 mm · 90d)",
+      "cierre_predicho_neat_pct": 94.5,
+      "alpha_predicho_neat": 0.466,
+      "umbral_alpha_biocrete_markov_25a": "0,520 (BioCrete-Markov 25a)"
+    },
+    {
+      "escenario": "Mezcla futura (a/c 0,45 · encapsul. · rec 40 mm · 0,3 mm · 90d)",
+      "cierre_predicho_neat_pct": 95.4,
+      "alpha_predicho_neat": 0.601,
+      "umbral_alpha_biocrete_markov_25a": "0,331 (BioCrete-Markov 25a)"
+    }
+  ]
+}

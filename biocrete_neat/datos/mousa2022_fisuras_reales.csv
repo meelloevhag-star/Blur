@@ -1,0 +1,53 @@
+﻿fila_excel,muestra,metodo,tiene_bacterias,nivel_proteccion,tiene_nutriente,w0_um,w0_mm,edad_dias,wt_um,cierre_pct
+4,Control No Nutrients No bacteria,Nutriente/Directa,0,0,0,170.7,0.1707,3,124.6,27.03
+4,Control No Nutrients No bacteria,Nutriente/Directa,0,0,0,170.7,0.1707,7,61.4,64.03
+4,Control No Nutrients No bacteria,Nutriente/Directa,0,0,0,170.7,0.1707,14,59.7,65.03
+4,Control No Nutrients No bacteria,Nutriente/Directa,0,0,0,170.7,0.1707,28,59.5,65.13
+5,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,90.2,0.0902,3,73.8,18.23
+5,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,90.2,0.0902,7,56.0,37.89
+5,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,90.2,0.0902,14,36.3,59.77
+5,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,90.2,0.0902,28,35.9,60.17
+6,M. A. 75 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,195.3,0.1953,3,96.9,50.36
+6,M. A. 75 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,195.3,0.1953,7,85.8,56.05
+6,M. A. 75 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,195.3,0.1953,14,79.0,59.52
+6,M. A. 75 mM/l + 1.74 mM/l Yeast Extract,Nutriente/Directa,1,1,1,195.3,0.1953,28,74.8,61.71
+7,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,223.5,0.2235,3,173.7,22.29
+7,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,223.5,0.2235,7,121.7,45.56
+7,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,223.5,0.2235,14,80.9,63.79
+7,M. A. 67.76 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,223.5,0.2235,28,75.8,66.11
+8,M. A. 75 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,190.9,0.1909,3,125.0,34.55
+8,M. A. 75 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,190.9,0.1909,7,79.5,58.33
+8,M. A. 75 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,190.9,0.1909,14,66.9,64.95
+8,M. A. 75 mM/l + 1.74 mM/l Yeast Extract + bacteria,Nutriente/Directa,1,1,1,190.9,0.1909,28,54.3,71.58
+9,CL 67  nutrients only,Nutriente/Directa,0,0,1,201.0,0.201,3,132.2,34.24
+9,CL 67  nutrients only,Nutriente/Directa,0,0,1,201.0,0.201,7,114.0,43.27
+9,CL 67  nutrients only,Nutriente/Directa,0,0,1,201.0,0.201,14,98.1,51.2
+9,CL 67  nutrients only,Nutriente/Directa,0,0,1,201.0,0.201,28,72.3,64.02
+10,CL 75 nutirents only,Nutriente/Directa,0,0,1,194.0,0.194,3,126.0,35.04
+10,CL 75 nutirents only,Nutriente/Directa,0,0,1,194.0,0.194,7,102.2,47.3
+10,CL 75 nutirents only,Nutriente/Directa,0,0,1,194.0,0.194,14,44.3,77.17
+10,CL 75 nutirents only,Nutriente/Directa,0,0,1,194.0,0.194,28,42.5,78.08
+11,CL 67 with bact,Nutriente/Directa,1,1,1,80.0,0.08,3,45.1,43.59
+11,CL 67 with bact,Nutriente/Directa,1,1,1,80.0,0.08,7,41.6,48.05
+11,CL 67 with bact,Nutriente/Directa,1,1,1,80.0,0.08,14,38.0,52.56
+11,CL 67 with bact,Nutriente/Directa,1,1,1,80.0,0.08,28,32.3,59.61
+12,CL 75 nutrients and bact,Nutriente/Directa,1,1,1,50.2,0.0502,3,20.5,59.07
+12,CL 75 nutrients and bact,Nutriente/Directa,1,1,1,50.2,0.0502,7,16.2,67.73
+12,CL 75 nutrients and bact,Nutriente/Directa,1,1,1,50.2,0.0502,14,8.3,83.45
+12,CL 75 nutrients and bact,Nutriente/Directa,1,1,1,50.2,0.0502,28,8.0,84.01
+13,SL 67 NO BACT,Nutriente/Directa,0,0,1,76.0,0.076,3,68.7,9.58
+13,SL 67 NO BACT,Nutriente/Directa,0,0,1,76.0,0.076,7,63.3,16.67
+13,SL 67 NO BACT,Nutriente/Directa,0,0,1,76.0,0.076,14,56.8,25.27
+13,SL 67 NO BACT,Nutriente/Directa,0,0,1,76.0,0.076,28,51.6,32.07
+14,SL 75 NO BACT,Nutriente/Directa,0,0,1,102.3,0.1023,3,89.2,12.84
+14,SL 75 NO BACT,Nutriente/Directa,0,0,1,102.3,0.1023,7,69.4,32.15
+14,SL 75 NO BACT,Nutriente/Directa,0,0,1,102.3,0.1023,14,56.4,44.84
+14,SL 75 NO BACT,Nutriente/Directa,0,0,1,102.3,0.1023,28,47.4,53.7
+15,SL 67 WITH BACT,Nutriente/Directa,1,1,1,198.0,0.198,3,148.3,25.1
+15,SL 67 WITH BACT,Nutriente/Directa,1,1,1,198.0,0.198,7,134.5,32.07
+15,SL 67 WITH BACT,Nutriente/Directa,1,1,1,198.0,0.198,14,121.9,38.44
+15,SL 67 WITH BACT,Nutriente/Directa,1,1,1,198.0,0.198,28,111.4,43.76
+16,SL 75 WITH BACT,Nutriente/Directa,1,1,1,70.4,0.0704,3,52.0,26.16
+16,SL 75 WITH BACT,Nutriente/Directa,1,1,1,70.4,0.0704,7,48.5,31.12
+16,SL 75 WITH BACT,Nutriente/Directa,1,1,1,70.4,0.0704,14,44.3,37.14
+16,SL 75 WITH BACT,Nutriente/Directa,1,1,1,70.4,0.0704,28,33.6,52.34

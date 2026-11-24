@@ -1,0 +1,125 @@
+[
+  {
+    "zenodo_id": "11305154",
+    "carpeta": "Cappellesso2024_Marine_CAB_Cloruros",
+    "titulo": "Supplementary data for the paper: \"Self-healing concrete with a bacteria-based or crystalline admixture as healing agent to prevent chloride ingress and corrosion in a marine environment'\"",
+    "doi": "10.5281/zenodo.11305154",
+    "autores": [
+      "Giaretton Cappellesso, Vanessa",
+      "Van Mullem, Tim",
+      "Gruyaert, Elke",
+      "Van Tittelboom, Kim"
+    ],
+    "archivos": [
+      {
+        "archivo": "02_Mar_Microscope measurements.xlsx",
+        "kb": 503.6
+      },
+      {
+        "archivo": "03_Mar_Silver nitrate measurements.xlsx",
+        "kb": 252.9
+      },
+      {
+        "archivo": "05_Mar_Titration - 12 MONTHS.xlsx",
+        "kb": 122.3
+      },
+      {
+        "archivo": "04_Mar_Titration - 3 MONTHS.xlsx",
+        "kb": 126.5
+      },
+      {
+        "archivo": "06_Mar_Mass change.xlsx",
+        "kb": 141.0
+      },
+      {
+        "archivo": "08_EDX_Rebars.xlsx",
+        "kb": 39.5
+      },
+      {
+        "archivo": "09_Rebars measurements.xlsx",
+        "kb": 30.5
+      }
+    ]
+  },
+  {
+    "zenodo_id": "8184530",
+    "carpeta": "Dryad_RCM_Chloride_Diffusion_Database",
+    "titulo": "Experimental data for chloride diffusion coefficient of concrete by rapid chloride migration test",
+    "doi": "10.5061/dryad.66t1g1k6j",
+    "autores": [
+      "Yang, LuFeng",
+      "Zhu, En",
+      "Wei, YuChen"
+    ],
+    "archivos": [
+      {
+        "archivo": "Experimental_data_for_chloride_diffusion_coefficient_of_concrete_by_rapid_chloride_migration_test.xlsx",
+        "kb": 52.2
+      },
+      {
+        "archivo": "README.md",
+        "kb": 2.1
+      }
+    ]
+  },
+  {
+    "zenodo_id": "10849616",
+    "carpeta": "Ghent2024_Chloride_Rich_Capillary_AgNO3",
+    "titulo": "Supplementary data for the paper: \"Enhancing concrete durability in chloride-rich environments through manual application of healing agents\"",
+    "doi": "10.5281/zenodo.10849616",
+    "autores": [
+      "Giaretton Cappellesso, Vanessa",
+      "Van Mullem, Tim",
+      "Van Tittelboom, Kim",
+      "De Belie, Nele"
+    ],
+    "archivos": [
+      {
+        "archivo": "Capillary absorption test.xlsx",
+        "kb": 50.3
+      },
+      {
+        "archivo": "Cl_Silver nitrate measurements.xlsx",
+        "kb": 137.9
+      },
+      {
+        "archivo": "FT_Silver nitrate measurements.xlsx",
+        "kb": 35.6
+      },
+      {
+        "archivo": "Scaling.xlsx",
+        "kb": 22.2
+      },
+      {
+        "archivo": "Cl_Titration + EDX.xlsx",
+        "kb": 122.8
+      },
+      {
+        "archivo": "Crack width.xlsx",
+        "kb": 37.9
+      },
+      {
+        "archivo": "FT_Titration + EDX.xlsx",
+        "kb": 119.0
+      }
+    ]
+  },
+  {
+    "zenodo_id": "6469122",
+    "carpeta": "Encapsulated_Bacteria_Optimal_SH",
+    "titulo": "Determination of the Optimal Parameters for Self-Healing Efficiency of Encapsulated bacteria in Concrete Simulated Subtropical Climate",
+    "doi": "10.5281/zenodo.6469122",
+    "autores": [
+      "Momen R. Mousa",
+      "Marwa Hassan",
+      "Gabriel A. Arce",
+      "Ricardo Hungria"
+    ],
+    "archivos": [
+      {
+        "archivo": "All_methods_info.zip",
+        "kb": 1119.1
+      }
+    ]
+  }
+]

@@ -1,0 +1,37 @@
+id,estudio,anio,doi,a_c,ancho_fisura_mm,edad_curado_dias,nivel_proteccion,ambiente_marino,usa_lactato,cierre_fisura_pct,alpha_equiv,nota
+1,Wiktor y Jonkers,2011,10.1016/j.cemconcomp.2011.03.012,0.50,0.18,100,0,0,0,100.0,0.20,Testigo sin bacterias: cierre autogeno maximo 0.18 mm
+2,Wiktor y Jonkers,2011,10.1016/j.cemconcomp.2011.03.012,0.50,0.46,100,0,0,0,39.0,0.10,Testigo sin bacterias en fisura 0.46 mm (cierre parcial)
+3,Wiktor y Jonkers,2011,10.1016/j.cemconcomp.2011.03.012,0.50,0.46,100,2,0,1,100.0,0.55,Bacillus + lactato en arcilla expandida: cierre total hasta 0.46 mm
+4,Wang et al.,2014,10.1016/j.cemconres.2013.11.009,0.50,0.20,28,3,0,0,98.0,0.68,Bacillus sphaericus en hidrogel: cierre casi total en 0.20 mm
+5,Wang et al.,2014,10.1016/j.cemconres.2013.11.009,0.50,0.40,28,3,0,0,80.0,0.58,Bacillus sphaericus en hidrogel en 0.40 mm
+6,Wang et al.,2014,10.1016/j.cemconres.2013.11.009,0.50,0.50,28,3,0,0,68.0,0.50,Bacillus sphaericus en hidrogel en 0.50 mm
+7,Wang et al.,2014,10.1016/j.cemconres.2013.11.009,0.50,0.30,28,0,0,0,35.0,0.12,Testigo sin bacterias en 0.30 mm (28 d)
+8,Luo Qian y Li,2015,10.1016/j.conbuildmat.2015.05.059,0.45,0.20,28,1,0,1,92.0,0.48,Bacterias + lactato en microfisura 0.20 mm (28 d inmersion)
+9,Luo Qian y Li,2015,10.1016/j.conbuildmat.2015.05.059,0.45,0.40,28,1,0,1,78.0,0.38,Bacterias + lactato en fisura 0.40 mm (28 d)
+10,Luo Qian y Li,2015,10.1016/j.conbuildmat.2015.05.059,0.45,0.80,28,1,0,1,30.0,0.12,Limite practico reportado: caida fuerte cerca de 0.80 mm
+11,Luo Qian y Li,2015,10.1016/j.conbuildmat.2015.05.059,0.45,0.40,56,1,0,1,85.0,0.42,Aumento de cierre a 56 dias en 0.40 mm
+12,Tziviloglou et al.,2016,10.1016/j.conbuildmat.2016.06.080,0.50,0.35,28,2,0,1,95.0,0.60,Bacillus + lactato en LWA (ciclos humedecimiento-secado 28 d)
+13,Tziviloglou et al.,2016,10.1016/j.conbuildmat.2016.06.080,0.50,0.35,56,2,0,1,98.0,0.66,Bacillus + lactato en LWA (56 d; reduccion permeabilidad ~70-80%)
+14,Tziviloglou et al.,2016,10.1016/j.conbuildmat.2016.06.080,0.50,0.35,28,0,0,0,42.0,0.15,Mortero control sin bacterias (0.35 mm, 28 d)
+15,Palin et al.,2017,10.3390/biomimetics2030013,0.50,0.40,56,3,1,1,95.0,0.62,Perlas con bacterias en agua de mar 8 C: 95% red. permeabilidad
+16,Palin et al.,2017,10.3390/biomimetics2030013,0.50,0.60,56,3,1,1,93.0,0.58,Perlas con bacterias en agua de mar 8 C en 0.60 mm
+17,Palin et al.,2017,10.3390/biomimetics2030013,0.50,0.40,56,0,1,0,66.0,0.22,Testigo agua de mar 56 d (cicatrizacion autogena brucita/aragonito)
+18,Palin et al.,2017,10.3390/biomimetics2030013,0.50,0.60,56,0,1,0,68.0,0.20,Testigo agua de mar 56 d en 0.60 mm
+19,Khan et al.,2021,10.1016/j.conbuildmat.2021.122332,0.45,0.20,28,2,1,1,90.0,0.35,Halobacillus / Bacillus + lactato en ambiente marino/mareas (0.20 mm)
+20,Khan et al.,2021,10.1016/j.conbuildmat.2021.122332,0.45,0.40,28,2,1,1,78.0,0.28,Ambiente marino/mareas en 0.40 mm (+17% mejora en marea)
+21,Khan et al.,2021,10.1016/j.conbuildmat.2021.122332,0.45,0.50,28,2,1,1,72.0,0.24,Ambiente marino/mareas en 0.50 mm
+22,Khan et al.,2021,10.1016/j.conbuildmat.2021.122332,0.45,0.40,28,0,1,0,58.0,0.14,Testigo en zona de mareas sin bacterias (0.40 mm)
+23,Doostkami et al.,2023,10.1016/j.conbuildmat.2023.132903,0.50,0.15,28,2,1,1,100.0,0.45,Bacterias comerciales en concreto convencional (fisura fina 0.15 mm)
+24,Doostkami et al.,2023,10.1016/j.conbuildmat.2023.132903,0.50,0.35,28,2,1,1,85.0,0.34,Bacterias comerciales en concreto convencional (0.35 mm)
+25,Doostkami et al.,2023,10.1016/j.conbuildmat.2023.132903,0.50,0.45,28,2,1,1,68.0,0.24,Bacterias comerciales en 0.45 mm (caida en fisuras anchas)
+26,Doostkami et al.,2023,10.1016/j.conbuildmat.2023.132903,0.50,0.35,28,0,1,0,48.0,0.12,Testigo convencional sin bacterias (0.35 mm)
+27,Cappellesso et al.,2024,10.1016/j.dibe.2024.100486,0.45,0.10,90,3,1,1,98.0,0.68,Bacterias encapsuladas PLA en agua de mar (fisura 0.10 mm; max red. Cl 68%)
+28,Cappellesso et al.,2024,10.1016/j.dibe.2024.100486,0.45,0.30,90,3,1,1,97.0,0.42,Bacterias encapsuladas PLA en agua de mar (0.30 mm; 97% cierre)
+29,Cappellesso et al.,2024,10.1016/j.dibe.2024.100486,0.45,0.30,28,3,1,1,78.0,0.28,Bacterias encapsuladas PLA en agua de mar (edad temprana 28 d)
+30,Cappellesso et al.,2024,10.1016/j.dibe.2024.100486,0.45,0.30,90,0,1,0,55.0,0.16,Testigo en agua de mar 0.30 mm (rango inferior 16%)
+31,Mohammed et al.,2024,10.1186/s40069-024-00661-4,0.35,0.26,28,1,0,0,96.0,0.45,S. koreensis + B. flexus en concreto 60 MPa (cierre 259.7 um)
+32,Jia et al.,2024,10.1016/j.jobe.2024.111430,0.45,0.40,28,2,0,1,94.0,0.50,Bacillus en perlita expandida tras carbonatacion (0.40 mm)
+33,Jia et al.,2024,10.1016/j.jobe.2024.111430,0.45,0.81,56,2,0,1,88.0,0.42,Bacillus en perlita expandida: reparacion hasta 0.81 mm
+34,Xiao et al.,2025,10.1016/j.conbuildmat.2025.140670,0.45,0.35,28,3,0,1,100.0,0.65,Capsulas MgO co-encapsulando Bacillus+nutrientes (<350 um; -89.3% perm.)
+35,Xiao et al.,2025,10.1016/j.conbuildmat.2025.140670,0.45,0.60,28,3,0,1,76.0,0.48,Capsulas MgO en fisura ancha 0.60 mm
+36,Jonkers y Schlangen,2010,10.1016/j.ecoleng.2008.12.036,0.50,0.20,28,1,0,1,65.0,0.25,Adicion directa sin encapsular: cierre temprano moderado, viabilidad cae a 2-4 meses

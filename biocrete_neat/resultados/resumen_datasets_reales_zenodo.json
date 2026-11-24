@@ -1,0 +1,169 @@
+{
+  "dryad_n_opc": 239,
+  "dryad_razon_mediana_life365_vs_exp": 1.038,
+  "cappellesso2024_agno3_marino": [
+    {
+      "condicion": "Uncracked H",
+      "grupo": "REF",
+      "n_mediciones": 28,
+      "penetracion_cl_media_mm": 9.07,
+      "desv_est_mm": 3.44,
+      "reduccion_vs_REF_pct": 0.0
+    },
+    {
+      "condicion": "Uncracked H",
+      "grupo": "BAS",
+      "n_mediciones": 28,
+      "penetracion_cl_media_mm": 6.35,
+      "desv_est_mm": 3.71,
+      "reduccion_vs_REF_pct": 30.0
+    },
+    {
+      "condicion": "Uncracked H",
+      "grupo": "CA",
+      "n_mediciones": 28,
+      "penetracion_cl_media_mm": 4.9,
+      "desv_est_mm": 2.39,
+      "reduccion_vs_REF_pct": 46.0
+    },
+    {
+      "condicion": "Crack 100 H",
+      "grupo": "REF",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 13.84,
+      "desv_est_mm": 7.0,
+      "reduccion_vs_REF_pct": 0.0
+    },
+    {
+      "condicion": "Crack 100 H",
+      "grupo": "BAS",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 18.77,
+      "desv_est_mm": 16.17,
+      "reduccion_vs_REF_pct": -35.6
+    },
+    {
+      "condicion": "Crack 100 H",
+      "grupo": "CA",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 12.56,
+      "desv_est_mm": 6.02,
+      "reduccion_vs_REF_pct": 9.3
+    },
+    {
+      "condicion": "Crack 300 H",
+      "grupo": "REF",
+      "n_mediciones": 38,
+      "penetracion_cl_media_mm": 24.44,
+      "desv_est_mm": 10.85,
+      "reduccion_vs_REF_pct": 0.0
+    },
+    {
+      "condicion": "Crack 300 H",
+      "grupo": "BAS",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 22.57,
+      "desv_est_mm": 15.34,
+      "reduccion_vs_REF_pct": 7.7
+    },
+    {
+      "condicion": "Crack 300 H",
+      "grupo": "CA",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 11.91,
+      "desv_est_mm": 6.12,
+      "reduccion_vs_REF_pct": 51.3
+    },
+    {
+      "condicion": "Uncracked U",
+      "grupo": "REF",
+      "n_mediciones": 28,
+      "penetracion_cl_media_mm": 23.1,
+      "desv_est_mm": 8.51,
+      "reduccion_vs_REF_pct": 0.0
+    },
+    {
+      "condicion": "Uncracked U",
+      "grupo": "BAS",
+      "n_mediciones": 28,
+      "penetracion_cl_media_mm": 16.52,
+      "desv_est_mm": 5.14,
+      "reduccion_vs_REF_pct": 28.5
+    },
+    {
+      "condicion": "Uncracked U",
+      "grupo": "CA",
+      "n_mediciones": 28,
+      "penetracion_cl_media_mm": 18.39,
+      "desv_est_mm": 6.7,
+      "reduccion_vs_REF_pct": 20.4
+    },
+    {
+      "condicion": "Crack 100 U",
+      "grupo": "REF",
+      "n_mediciones": 36,
+      "penetracion_cl_media_mm": 29.18,
+      "desv_est_mm": 8.38,
+      "reduccion_vs_REF_pct": 0.0
+    },
+    {
+      "condicion": "Crack 100 U",
+      "grupo": "BAS",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 24.69,
+      "desv_est_mm": 9.08,
+      "reduccion_vs_REF_pct": 15.4
+    },
+    {
+      "condicion": "Crack 100 U",
+      "grupo": "CA",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 21.97,
+      "desv_est_mm": 7.56,
+      "reduccion_vs_REF_pct": 24.7
+    },
+    {
+      "condicion": "Crack 300 U",
+      "grupo": "REF",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 34.69,
+      "desv_est_mm": 12.02,
+      "reduccion_vs_REF_pct": 0.0
+    },
+    {
+      "condicion": "Crack 300 U",
+      "grupo": "BAS",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 28.11,
+      "desv_est_mm": 12.81,
+      "reduccion_vs_REF_pct": 19.0
+    },
+    {
+      "condicion": "Crack 300 U",
+      "grupo": "CA",
+      "n_mediciones": 40,
+      "penetracion_cl_media_mm": 32.01,
+      "desv_est_mm": 12.28,
+      "reduccion_vs_REF_pct": 7.7
+    }
+  ],
+  "mousa2022_neat_5fold": {
+    "n_mediciones_reales_zenodo": 52,
+    "NEAT": {
+      "R2": 0.195,
+      "MAE_pct": 13.58,
+      "RMSE_pct": 16.46
+    },
+    "RandomForest": {
+      "R2": 0.529,
+      "MAE_pct": 10.45,
+      "RMSE_pct": 12.6
+    },
+    "Ridge": {
+      "R2": 0.356,
+      "MAE_pct": 12.11,
+      "RMSE_pct": 14.72
+    },
+    "neat_neuronas_ocultas_prom": 0.4
+  }
+}
