@@ -144,6 +144,8 @@ def construir(pais="PER") -> dict:
                           # atajos para colorear el mapa
                           "ideal_cierre_pct": ideal["prediccion"]["cierre_pct"],
                           "ideal_vida_anios": ideal["vida_util_anios"],
+                          "ideal_vida_sin_reparacion_anios": ideal["vida_util_sin_reparacion_anios"],
+                          "ganancia_autorreparacion_anios": ideal["vida_util_anios"] - ideal["vida_util_sin_reparacion_anios"],
                           "ideal_costo_m3": ideal["viabilidad"]["costo_m3_pen"],
                           "ideal_disponibilidad": ideal["viabilidad"]["disponibilidad"],
                           "economica_costo_m3": r["recetas"]["economica"]["viabilidad"]["costo_m3_pen"],

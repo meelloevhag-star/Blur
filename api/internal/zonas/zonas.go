@@ -31,7 +31,8 @@ func Nuevo(ruta string) (*Almacen, error) {
 // claves que se conservan en la versión ligera (para pintar el mapa sin descargar todas las recetas)
 var ligeras = []string{"id", "pais", "departamento", "franja", "dist_mar_km", "regimen", "indice_niebla",
 	"deposicion_cl_mg_m2_d", "clase_iso9223", "ideal_cierre_pct", "ideal_vida_anios", "ideal_costo_m3",
-	"ideal_disponibilidad", "economica_costo_m3"}
+	"ideal_disponibilidad", "economica_costo_m3", "ideal_vida_sin_reparacion_anios",
+	"ganancia_autorreparacion_anios"}
 
 func (a *Almacen) Recargar() error {
 	st, err := os.Stat(a.ruta)

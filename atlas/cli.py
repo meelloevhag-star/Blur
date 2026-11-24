@@ -92,13 +92,16 @@ def main(argv=None) -> int:
                 from biocrete_neat.aportes.validar_aportes import main as validar
                 todos = sorted((RAIZ / "biocrete_neat" / "aportes" / "recibidos").glob("*.csv"))
                 validar([str(p) for p in todos])
-        cambios = detectar_cambios(guardar=True)
+        # el estado se guarda solo después de entrenar y construir con éxito: si algo falla,
+        # el próximo sync vuelve a ver las fuentes como nuevas
+        cambios = detectar_cambios(guardar=False)
         print("fuentes cambiadas:", cambios["cambiadas"] or "ninguna")
         if cambios["cambiadas"] or a.forzar:
             from atlas.modelos import entrenar
             r = entrenar(a.gens)
             print(f"modelo v{r['version']}: aceptado={r['aceptado']} · R² conjunto={r['cv']['conjunto']['R2']}")
             construir(a.pais)
+        detectar_cambios(guardar=True)
     return 0
 
 

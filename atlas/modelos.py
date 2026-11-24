@@ -86,12 +86,14 @@ def exportar_xgb(modelo) -> list:
 
 
 def evaluar_xgb_json(arboles, base, x) -> float:
+    """XGBoost compara en float32: se reproduce aquí (y en Go) para obtener exactamente las mismas ramas."""
+    x32 = np.asarray(x, dtype=np.float32)
     s = base
     for t in arboles:
         i = 0
         while t[i][0] >= 0:
             f, u, si, no, _ = t[i]
-            i = si if x[f] < u else no
+            i = si if x32[f] < np.float32(u) else no
         s += t[i][4]
     return s
 

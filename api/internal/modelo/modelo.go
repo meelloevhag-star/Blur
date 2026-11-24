@@ -124,7 +124,7 @@ func EvaluarXGB(arboles [][][5]float64, base float64, x []float64) float64 {
 	for _, t := range arboles {
 		i := 0
 		for t[i][0] >= 0 {
-			if x[int(t[i][0])] < t[i][1] {
+			if float32(x[int(t[i][0])]) < float32(t[i][1]) { // XGBoost compara en float32
 				i = int(t[i][2])
 			} else {
 				i = int(t[i][3])

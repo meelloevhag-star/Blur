@@ -1,0 +1,61 @@
+<div class="app">
+  <header class="barra">
+    <div class="marca">
+      <h1>BioCrete Atlas</h1>
+      <p>Concreto autorreparable para el litoral peruano · recetas por zona a partir de los datos de Blur</p>
+    </div>
+    <label class="selector" for="capa"><span>Capa</span><select id="capa"></select></label>
+  </header>
+  <main class="cuerpo">
+    <section class="lienzo" aria-label="Mapa">
+      <div id="mapa"></div>
+      <aside class="leyenda" aria-live="polite">
+        <p id="leyenda-titulo"></p>
+        <ul id="leyenda-escala"></ul>
+      </aside>
+    </section>
+    <aside id="panel" class="panel">
+      <div id="detalle" class="detalle">
+        <p class="vacio">Toca una zona de la costa para ver su receta ideal, la económica y la de insumos más disponibles.</p>
+      </div>
+      <details class="bloque">
+        <summary>Regímenes de exposición</summary>
+        <ul id="regimenes" class="lista-reg"></ul>
+        <p class="fuente">La niebla salina (garúa, camanchaca) moja y deposita sal tierra adentro: el Atlas la trata como una salpicadura atenuada (clase XS2).</p>
+      </details>
+      <details class="bloque">
+        <summary>Qué tan confiable es</summary>
+        <p id="modelo" class="fuente"></p>
+        <p class="fuente">Las recetas son estimaciones para orientar ensayos, no un diseño estructural firmado. Las combinaciones sin datos en el ambiente de la zona se marcan como extrapoladas. Precios con fuente y fecha en <code>atlas/catalogo/</code>; los marcados ESTIMADO o SUPUESTO deben confirmarse con cotización.</p>
+      </details>
+      <details class="bloque" id="aportar">
+        <summary>Aportar un ensayo</summary>
+        <p class="fuente">Cada ensayo validado entra al siguiente re-entrenamiento y el mapa se regenera.</p>
+        <form id="form-aporte" class="form">
+          <label for="f-autor">Autor<input id="f-autor" name="autor_aporte" required></label>
+          <label for="f-inst">Institución<input id="f-inst" name="institucion" required></label>
+          <label for="f-tipo">Tipo de fuente<select id="f-tipo" name="tipo_fuente"><option>tesis</option><option>articulo</option><option>laboratorio</option><option>dataset</option></select></label>
+          <label for="f-doi">DOI o URL<input id="f-doi" name="doi_o_url" required></label>
+          <label for="f-norma">Norma de ensayo<input id="f-norma" name="norma_ensayo" value="EN 12390-8 + microscopía óptica" required></label>
+          <label for="f-prob">Id de probeta<input id="f-prob" name="id_probeta" required></label>
+          <label for="f-port">Portador<select id="f-port" name="portador"><option>ninguno</option><option>cristalino</option><option>Basilisk</option><option>LWA</option><option>hidrogel</option><option>CNC</option></select></label>
+          <label for="f-niv">Nivel de protección (0–3)<input id="f-niv" name="nivel_proteccion" type="number" min="0" max="3" step="1" value="1" required></label>
+          <label for="f-bac">Con bacterias<select id="f-bac" name="tiene_bacterias"><option value="1">sí</option><option value="0">no</option></select></label>
+          <label for="f-cepa">Cepa<input id="f-cepa" name="cepa" placeholder="Bacillus subtilis"></label>
+          <label for="f-nut">Nutriente<input id="f-nut" name="nutriente" placeholder="lactato"></label>
+          <label for="f-mar">Ambiente marino<select id="f-mar" name="ambiente_marino"><option value="1">sí</option><option value="0">no</option></select></label>
+          <label for="f-ac">a/c<input id="f-ac" name="a_c" type="number" step="0.01" min="0.2" max="0.9"></label>
+          <label for="f-w0">Ancho inicial w0 (mm)<input id="f-w0" name="w0_mm" type="number" step="0.001" min="0" max="2" required></label>
+          <label for="f-edad">Edad (días)<input id="f-edad" name="edad_dias" type="number" step="1" min="0" max="1000" required></label>
+          <label for="f-wt">Ancho final wt (mm)<input id="f-wt" name="wt_mm" type="number" step="0.001" min="0" max="3"></label>
+          <label for="f-lat">Latitud<input id="f-lat" name="lat" type="number" step="0.0001"></label>
+          <label for="f-lon">Longitud<input id="f-lon" name="lon" type="number" step="0.0001"></label>
+          <label for="f-clave" id="clave-fila">Clave de API<input id="f-clave" name="clave" type="password" autocomplete="off"></label>
+          <div class="acciones"><button id="enviar" type="submit">Generar fila CSV</button><button id="copiar" type="button" class="sec">Copiar</button></div>
+          <textarea id="csv-aporte" rows="4" hidden readonly aria-label="Fila CSV generada"></textarea>
+          <p id="estado-aporte" class="fuente" aria-live="polite"></p>
+        </form>
+      </details>
+    </aside>
+  </main>
+</div>

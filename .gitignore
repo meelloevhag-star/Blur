@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .pytest_cache/
 biocrete_neat/datos/literatura/raw/
+web/node_modules/
+web/dist/
+web/dist-artefacto/
+atlas/aportes/pendientes/
+biocrete_neat/aportes/recibidos/
