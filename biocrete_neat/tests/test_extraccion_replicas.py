@@ -72,6 +72,11 @@ def test_cappellesso_ancho_inicial_compatible_con_nominal(cappellesso):
         assert 0.5 * nominal / 1000 < media < 1.5 * nominal / 1000
 
 
+def test_lactato_de_calcio_solo_en_cl(mousa):
+    assert {r["usa_lactato"] for r in mousa if r["nutriente"] == "CL"} == {1}
+    assert {r["usa_lactato"] for r in mousa if r["nutriente"] != "CL"} == {0}
+
+
 def test_grupos_sin_mezcla_de_fuentes(mousa, cappellesso):
     for r in mousa + cappellesso:
         assert r["grupo_probeta"].startswith(r["fuente"])

@@ -56,7 +56,9 @@ def clasificar_etiqueta_mousa(etiqueta: str, hoja: str) -> dict:
         En la serie sin prefijo, las muestras con bacterias usan hidrogel (mismas fisuras que
         'Hydrogel ... with bact' en 'Sides w bact'); sin bacterias, nutriente directo.
       - Nutriente: 'MA' / 'M. A.' -> MA; 'CL' -> CL; 'SL' -> SL; control -> ninguno.
-        Solo se codifican las abreviaturas; su significado químico debe confirmarse en el artículo.
+        Significado (descripción del registro Zenodo 6469122): MA = acetato de magnesio,
+        CL = lactato de calcio, SL = lactato de sodio. usa_lactato = 1 solo para lactato de calcio
+        (misma definición que el meta-dataset).
     """
     e = " ".join(etiqueta.lower().replace(".", " ").split())
     tiene_bact = int(bool(re.search(r"with bact|w bact|\+ bacteria|and bact", e)))
@@ -93,7 +95,7 @@ def clasificar_etiqueta_mousa(etiqueta: str, hoja: str) -> dict:
         "tiene_bacterias": tiene_bact,
         "nutriente": nutriente,
         "concentracion_mM": int(conc.group(1)) if conc else "",
-        "usa_lactato": "",  # CL/SL no confirmados como lactato en el archivo: no se imputa
+        "usa_lactato": int(nutriente == "CL"),
         "ubicacion": "lateral" if hoja.lower().startswith("sides") else "inferior",
     }
 
