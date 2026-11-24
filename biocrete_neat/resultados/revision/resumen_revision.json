@@ -463,6 +463,72 @@
           "NEAT": -1.023
         }
       }
+    },
+    "fuente_detalle": {
+      "Cappellesso2024": {
+        "entrenamiento": "Mousa2022",
+        "prueba": "Cappellesso2024",
+        "n_prueba": 1403,
+        "mae_media_entrenamiento": 0.3765,
+        "edad_entrenamiento": [
+          0.00625,
+          0.058333333333333334
+        ],
+        "edad_prueba": [
+          0.0625,
+          1.0
+        ],
+        "modelos": {
+          "Ridge": {
+            "R2": -0.402,
+            "MAE": 0.2033
+          },
+          "RandomForest": {
+            "R2": -1.408,
+            "MAE": 0.3724
+          },
+          "XGBoost": {
+            "R2": -1.246,
+            "MAE": 0.3639
+          },
+          "NEAT": {
+            "R2": -0.279,
+            "MAE": 0.1969
+          }
+        }
+      },
+      "Mousa2022": {
+        "entrenamiento": "Cappellesso2024",
+        "prueba": "Mousa2022",
+        "n_prueba": 764,
+        "mae_media_entrenamiento": 0.3222,
+        "edad_entrenamiento": [
+          0.0625,
+          1.0
+        ],
+        "edad_prueba": [
+          0.00625,
+          0.058333333333333334
+        ],
+        "modelos": {
+          "Ridge": {
+            "R2": -1.302,
+            "MAE": 0.2747
+          },
+          "RandomForest": {
+            "R2": -1.026,
+            "MAE": 0.2514
+          },
+          "XGBoost": {
+            "R2": -1.08,
+            "MAE": 0.255
+          },
+          "NEAT": {
+            "R2": -0.29,
+            "MAE": 0.207
+          }
+        }
+      }
     }
   },
   "meta": {

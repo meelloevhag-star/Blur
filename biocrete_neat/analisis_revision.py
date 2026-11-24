@@ -255,6 +255,31 @@ def evaluar(X, y, grupos, protocolo, repeticiones, gens, cfg, fuentes=None, k_in
     return salida
 
 
+def loso_detalle(X, y, grupos, fuentes, gens, cfg, lam=8e-4, workers=4) -> dict:
+    """LOSO por sentido: R² y MAE de cada modelo y MAE de predecir la media del laboratorio de entrenamiento.
+
+    También informa del solape de covariables (rango de edad y ancho) entre entrenamiento y prueba.
+    """
+    salida = {}
+    for f_test in np.unique(fuentes):
+        tr, te = np.flatnonzero(fuentes != f_test), np.flatnonzero(fuentes == f_test)
+        internos = list(GroupKFold(n_splits=3, shuffle=True, random_state=SEMILLA).split(X[tr], y[tr], grupos[tr]))
+        bloque = {"entrenamiento": str(np.unique(fuentes[tr])[0]), "prueba": str(f_test), "n_prueba": int(len(te)),
+                  "mae_media_entrenamiento": round(float(mean_absolute_error(y[te], np.full(len(te), y[tr].mean()))), 4),
+                  "edad_entrenamiento": [float(X[tr, 1].min()), float(X[tr, 1].max())],
+                  "edad_prueba": [float(X[te, 1].min()), float(X[te, 1].max())], "modelos": {}}
+        for nombre, (est, rejilla) in REJILLAS.items():
+            gs = GridSearchCV(clone(est), rejilla, cv=internos, scoring="r2", n_jobs=workers).fit(X[tr], y[tr])
+            p = np.clip(gs.predict(X[te]), 0.0, 1.0)
+            bloque["modelos"][nombre] = {"R2": round(float(r2_score(y[te], p)), 3),
+                                         "MAE": round(float(mean_absolute_error(y[te], p)), 4)}
+        p, _ = _neat((X[tr], y[tr], X[te], lam, gens, SEMILLA, cfg))
+        bloque["modelos"]["NEAT"] = {"R2": round(float(r2_score(y[te], p)), 3),
+                                     "MAE": round(float(mean_absolute_error(y[te], p)), 4)}
+        salida[str(f_test)] = bloque
+    return salida
+
+
 def _frecuencias(lista):
     c = Counter(json.dumps(d, sort_keys=True) for d in lista)
     return [{"params": json.loads(k), "veces": v} for k, v in c.most_common(3)]

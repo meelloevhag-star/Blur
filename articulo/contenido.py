@@ -136,7 +136,11 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
     nsem = r["secuencial"]["semillas"]
     exp = r["explicabilidad"]
     nf = exp["neat_final_replicas"]
-    loso_vals = [v for d in rep["fuente"]["por_fuente_de_prueba"].values() for v in d.values()]
+    FD = rep["fuente_detalle"]
+    mc, cm_ = FD["Cappellesso2024"], FD["Mousa2022"]  # Mousa→Cappellesso, Cappellesso→Mousa
+    loso_vals = [m["R2"] for d in FD.values() for m in d["modelos"].values()]
+    red = lambda d, m: 100 * (1 - d["modelos"][m]["MAE"] / d["mae_media_entrenamiento"])
+    gens_sec = r["secuencial"]["generaciones"]
     mejor = lambda M: max(M, key=lambda k: M[k]["R2_medio"])
     lg_best, lf_best, mg_best = mejor(LG), mejor(LF), mejor(MG)
     est = c["estados"]
@@ -171,16 +175,20 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
                 "previa. Se compararon NEAT, XGBoost, Random Forest y Ridge, con ajuste anidado de todos los modelos, "
                 "bajo partición por filas, por grupo (fisura, probeta o estudio) y por laboratorio. Dentro de los mismos "
                 f"laboratorios, Random Forest y XGBoost alcanzaron R² = {pm_(RG['RandomForest'])} y {pm_(RG['XGBoost'])}, "
-                f"y NEAT {pm_(RG['NEAT'])} con una red de {nf['neuronas_ocultas']} neurona oculta. La partición por "
+                f"y NEAT {pm_(RG['NEAT'])} con redes de 0 a 1 neuronas ocultas. La partición por "
                 f"filas elevó el R² del cierre multi-estudio hasta {n_(LF[lf_best]['R2_medio'])}, pero al separar por "
-                f"estudio ningún modelo superó a la media (R² ≤ {n_(LG[lg_best]['R2_medio'])}) y al cambiar de "
-                f"laboratorio todos fallaron (R² entre {n_(min(loso_vals))} y {n_(max(loso_vals))}). La auditoría del "
+                f"estudio ningún modelo superó a la media (R² ≤ {n_(LG[lg_best]['R2_medio'])}). Entre laboratorios, que "
+                f"no comparten rango de edad, el R² fue negativo en ambos sentidos ({n_(min(loso_vals))} a "
+                f"{n_(max(loso_vals))}), aunque NEAT redujo el error absoluto un {red(mc, 'NEAT'):.0f} % y "
+                f"{red(cm_, 'NEAT'):.0f} % frente a predecir la media del laboratorio de entrenamiento, más que los "
+                "árboles. La auditoría del "
                 f"meta-dataset previo exigió correcciones en las {c['filas_verif']} filas verificables. En una "
                 f"actualización secuencial con {nsem} semillas, el modelo congelado falló ante datos nuevos "
-                f"(R² = {n_(s2['campeon']['media'])}) y el re-entrenado se recuperó ({n_(s2['caliente']['media'])}), "
-                "sin ventaja del arranque en caliente de NEAT. Los modelos actuales aprenden el contexto de cada "
-                "laboratorio más que mecanismos transferibles; se proponen requisitos mínimos de validación, "
-                "trazabilidad y calibración local.")
+                f"(R² = {n_(s2['campeon']['media'])} y {n_(s3['campeon']['media'])} en los lotes 2 y 3) y el "
+                f"re-entrenado mejoró ({n_(s2['caliente']['media'])} y {n_(s3['caliente']['media'])}), sin ventaja del "
+                "arranque en caliente de NEAT. Con los datos abiertos actuales no es posible predecir el cierre en "
+                "estudios o laboratorios nuevos; se proponen requisitos mínimos de validación, trazabilidad y "
+                "calibración local.")
         return (
             "Machine learning (ML) models that predict bacterial concrete self-healing report high coefficients of "
             "determination, but whether they generalize to unseen studies or laboratories is rarely tested. This work "
@@ -190,15 +198,19 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
             "studies, rebuilt after auditing the previous version. NEAT, XGBoost, Random Forest and Ridge, all with "
             "nested tuning, were compared under row-wise, group-wise (crack, specimen or study) and laboratory-wise "
             f"splitting. Within the same laboratories, Random Forest and XGBoost reached R² = {pm_(RG['RandomForest'])} "
-            f"and {pm_(RG['XGBoost'])}, and NEAT {pm_(RG['NEAT'])} with a {nf['neuronas_ocultas']}-hidden-neuron "
-            f"network. Row-wise splitting raised multi-study closure R² to {n_(LF[lf_best]['R2_medio'])}, but "
-            f"study-wise splitting left every model below the mean (R² ≤ {n_(LG[lg_best]['R2_medio'])}), and every "
-            f"model failed across laboratories (R² from {n_(min(loso_vals))} to {n_(max(loso_vals))}). Auditing the "
+            f"and {pm_(RG['XGBoost'])}, and NEAT {pm_(RG['NEAT'])} with networks of 0–1 hidden neurons. "
+            f" Row-wise splitting raised multi-study closure R² to {n_(LF[lf_best]['R2_medio'])}, but "
+            f"study-wise splitting left every model below the mean (R² ≤ {n_(LG[lg_best]['R2_medio'])}). Across "
+            f"laboratories, which share no age range, R² was negative in both directions ({n_(min(loso_vals))} to "
+            f"{n_(max(loso_vals))}), although NEAT cut absolute error by {red(mc, 'NEAT'):.0f}% and "
+            f"{red(cm_, 'NEAT'):.0f}% relative to predicting the training-laboratory mean, more than the trees. "
+            "Auditing the "
             f"previous meta-dataset required corrections in all {c['filas_verif']} verifiable rows. In sequential "
-            f"updating over {nsem} seeds, the frozen model failed on new data (R² = {n_(s2['campeon']['media'])}) "
-            f"and retraining recovered it ({n_(s2['caliente']['media'])}), with no benefit from NEAT warm starts. "
-            "Current models learn laboratory context rather than transferable mechanisms; minimum requirements for "
-            "validation, traceability and local calibration are proposed.")
+            f"updating over {nsem} seeds, the frozen model failed on new data (R² = {n_(s2['campeon']['media'])} and "
+            f"{n_(s3['campeon']['media'])} on batches 2 and 3) and retraining improved it "
+            f"({n_(s2['caliente']['media'])} and {n_(s3['caliente']['media'])}), with no benefit from NEAT warm "
+            "starts. With current open data, closure cannot be predicted in new studies or laboratories; minimum "
+            "requirements for validation, traceability and local calibration are proposed.")
 
     B.append(("resumen", L("Resumen", "Abstract"), resumen(es)))
     claves_es = ("concreto autocurativo bacteriano; aprendizaje automático; fuga de datos; validación agrupada; "
@@ -217,8 +229,8 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
               "No model predicts closure in unseen studies or laboratories"),
             L("La auditoría de un meta-dataset previo encontró errores en todas las filas verificables",
               "Auditing a previous meta-dataset found errors in every verifiable row"),
-            L("Dentro de un laboratorio, los árboles superan a NEAT; NEAT empata con la regresión lineal",
-              "Within a laboratory, trees beat NEAT; NEAT ties with linear regression"),
+            L("Dentro de un laboratorio ganan los árboles; entre laboratorios, NEAT extrapola con menor error",
+              "Trees win within a laboratory; across laboratories NEAT extrapolates with lower error"),
             L("Se proponen requisitos mínimos de validación, trazabilidad y calibración local",
               "Minimum requirements for validation, traceability and local calibration are proposed"),
         ]))
@@ -328,7 +340,7 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
         "permutación sobre la red NEAT final. Por último, se simuló la llegada secuencial de tres lotes (Mousa; "
         "Cappellesso con curado previo; Cappellesso con exposición directa) y, sobre los mismos grupos retenidos de "
         "cada lote nuevo, se compararon el modelo congelado, NEAT re-entrenado desde cero y NEAT reanudado desde su "
-        f"población previa ⟦parisi2019⟧, con {nsem} semillas.",
+        f"población previa ⟦parisi2019⟧, con {nsem} semillas y {gens_sec} generaciones por ajuste.",
         "Each model was evaluated with the same code under three protocols: (i) row-wise, random 5-fold KFold; "
         "(ii) group-wise, 5-fold GroupKFold by crack, specimen or study; and (iii) laboratory-wise, training on one "
         f"laboratory and testing on the other. Protocols (i) and (ii) were repeated {rep['grupos']['repeticiones']} "
@@ -337,7 +349,7 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
         "computed with out-of-sample SHAP ⟦lundberg2017⟧ and by permutation on the final NEAT network. Finally, the "
         "sequential arrival of three batches (Mousa; Cappellesso pre-cured; Cappellesso direct exposure) was simulated "
         "and, on the same held-out groups of each new batch, the frozen model, NEAT retrained from scratch and NEAT "
-        f"resumed from its previous population ⟦parisi2019⟧ were compared over {nsem} seeds.")))
+        f"resumed from its previous population ⟦parisi2019⟧ were compared over {nsem} seeds and {gens_sec} generations per fit.")))
 
     # --- 3 Resultados ----------------------------------------------------------
     T = (lambda k: f"Tabla {rom[k]}" if ieee else f"Tabla {k}") if es else \
@@ -384,8 +396,15 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
         "árboles ganan entre 0,06 y 0,08 de R² en las réplicas; en el cierre multi-estudio la diferencia es mucho mayor: "
         f"{nom[lf_best]} pasa de {n(LG[lf_best]['R2_medio'])} a {n(LF[lf_best]['R2_medio'])}. Con partición por "
         f"estudio ningún modelo supera a la media del conjunto (máximo {n(LG[lg_best]['R2_medio'])}), y en α el mejor "
-        f"resultado es {n(MG[mg_best]['R2_medio'])} ({nom[mg_best]}). Al cambiar de laboratorio, todos los modelos "
-        f"obtienen R² negativo, entre {n(min(loso_vals))} y {n(max(loso_vals))}.",
+        f"resultado es {n(MG[mg_best]['R2_medio'])} ({nom[mg_best]}), sin diferencias claras entre protocolos. Entre "
+        f"laboratorios, el R² es negativo en ambos sentidos ({n(min(loso_vals))} a {n(max(loso_vals))}) porque la "
+        "media del cierre cambia y los laboratorios no comparten rango de edad (3–28 frente a 30–480 días): es una "
+        "extrapolación, no una prueba de transferencia en igualdad de condiciones. Aun así, frente a predecir la "
+        "media del laboratorio de entrenamiento, NEAT redujo el error absoluto un "
+        f"{red(mc, 'NEAT'):.0f} % (Mousa→Cappellesso) y {red(cm_, 'NEAT'):.0f} % (Cappellesso→Mousa), y Ridge un "
+        f"{red(mc, 'Ridge'):.0f} % y {red(cm_, 'Ridge'):.0f} %, mientras que Random Forest y XGBoost lograron "
+        f"{red(mc, 'RandomForest'):.0f}–{red(mc, 'XGBoost'):.0f} % y {red(cm_, 'XGBoost'):.0f}–"
+        f"{red(cm_, 'RandomForest'):.0f} %: solo NEAT supera a los árboles en ambos sentidos.",
         f"{T(3)} and Fig. 1 summarize performance. Within the same laboratories (replicates, group-wise split), Random "
         f"Forest ({pm(RG['RandomForest'])}) and XGBoost ({pm(RG['XGBoost'])}) do not differ significantly "
         f"(p = {n(p_xgb, 2)}), while NEAT ({pm(RG['NEAT'])}) and Ridge ({pm(RG['Ridge'])}) are lower (p < 0.001) and "
@@ -393,22 +412,29 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
         f"replicates; on multi-study closure the gap is much larger: {nom[lf_best]} goes from "
         f"{n(LG[lf_best]['R2_medio'])} to {n(LF[lf_best]['R2_medio'])}. With study-wise splits no model beats the "
         f"dataset mean (maximum {n(LG[lg_best]['R2_medio'])}), and for α the best result is "
-        f"{n(MG[mg_best]['R2_medio'])} ({nom[mg_best]}). Across laboratories every model obtains negative R², between "
-        f"{n(min(loso_vals))} and {n(max(loso_vals))}.")))
+        f"{n(MG[mg_best]['R2_medio'])} ({nom[mg_best]}), with no clear difference between protocols. Across "
+        f"laboratories R² is negative in both directions ({n(min(loso_vals))} to {n(max(loso_vals))}) because mean "
+        "closure shifts and the laboratories share no age range (3–28 vs 30–480 days): this is extrapolation, not a "
+        "like-for-like transfer test. Still, relative to predicting the training-laboratory mean, NEAT cut absolute "
+        f"error by {red(mc, 'NEAT'):.0f}% (Mousa→Cappellesso) and {red(cm_, 'NEAT'):.0f}% (Cappellesso→Mousa), and "
+        f"Ridge by {red(mc, 'Ridge'):.0f}% and {red(cm_, 'Ridge'):.0f}%, whereas Random Forest and XGBoost achieved "
+        f"{red(mc, 'RandomForest'):.0f}–{red(mc, 'XGBoost'):.0f}% and {red(cm_, 'XGBoost'):.0f}–"
+        f"{red(cm_, 'RandomForest'):.0f}%: only NEAT beats the trees in both directions.")))
     filas_t3 = [[L("Conjunto", "Dataset"), L("Modelo", "Model"), L("Por filas", "Row-wise"),
                  L("Por grupo", "Group-wise"), L("Por lab.", "Lab-wise")]]
     for conj, G, F_, S in [(L("Réplicas", "Replicates"), RG, RF_, RS), (L("Multi-estudio", "Multi-study"), LG, LF, None),
                            ("α v2", MG, MF, None)]:
         for m in ("RandomForest", "XGBoost", "NEAT", "Ridge"):
-            filas_t3.append([conj, nom[m], pm(F_[m]), pm(G[m]), n(S[m]["R2_medio"]) if S else "—"])
+            filas_t3.append([conj, nom[m], pm(F_[m]), pm(G[m]),
+                             f"{n(mc['modelos'][m]['R2'], 2)} / {n(cm_['modelos'][m]['R2'], 2)}" if S else "—"])
     B.append(("tabla", tab(3, "R² fuera de muestra (media ± DE entre repeticiones)",
                            "Out-of-sample R² (mean ± SD across repetitions)"), filas_t3,
               L(f"Por filas y por grupo: {rep['grupos']['repeticiones']} repeticiones × 5 particiones (réplicas por "
-                f"filas: {rep['filas']['repeticiones']}). Por laboratorio: entrenar en uno y probar en el otro (media de "
-                "ambos sentidos). Ajuste anidado de todos los modelos.",
+                f"filas: {rep['filas']['repeticiones']}). Por laboratorio: R² en cada sentido (Mousa→Cappellesso / "
+                "Cappellesso→Mousa), sin rango de edad común. Ajuste anidado de todos los modelos.",
                 f"Row- and group-wise: {rep['grupos']['repeticiones']} repetitions × 5 folds (replicates row-wise: "
-                f"{rep['filas']['repeticiones']}). Lab-wise: train on one, test on the other (mean of both directions). "
-                "Nested tuning for all models."),
+                f"{rep['filas']['repeticiones']}). Lab-wise: R² in each direction (Mousa→Cappellesso / Cappellesso→Mousa), "
+                "with no common age range. Nested tuning for all models."),
               [1.3, 1.3, 1.25, 1.25, 0.9]))
     B.append(("figura", RES / "revision" / ("fig8v_protocolos.png" if ieee else "fig8_protocolos_filas_vs_grupos.png"),
               L("Fig. 1. R² fuera de muestra con partición por filas (con fuga) y por grupo (sin fuga) para las réplicas, "
@@ -455,14 +481,15 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
         f"{nf['conexiones_activas']} conexiones) usa solo {usadas}. En el cierre multi-estudio domina el nivel de "
         f"protección ({n(sl[0]['shap_medio_abs'])}), seguido del ancho de fisura ({n(sl[1]['shap_medio_abs'])}). Estas "
         "importancias son coherentes con la física —la protección de las esporas y el ancho de fisura limitan el "
-        "cierre ⟦jonkers2010,luo2015⟧—, pero describen correlaciones dentro de los datos de entrenamiento y no bastan "
-        "para predecir otros estudios.",
+        "cierre ⟦jonkers2010,luo2015⟧—, pero en el conjunto multi-estudio el R² agrupado es negativo, por lo que "
+        "esas importancias describen los datos de entrenamiento y carecen de validez predictiva.",
         f"In the replicates, out-of-sample SHAP shows that age dominates ({n(sr[0]['shap_medio_abs'])}), followed by "
         f"initial width ({n(sr[1]['shap_medio_abs'])}); the final NEAT network ({nf['neuronas_ocultas']} hidden neuron, "
         f"{nf['conexiones_activas']} connections) uses only age and protection. In multi-study closure, protection level "
         f"dominates ({n(sl[0]['shap_medio_abs'])}), followed by crack width ({n(sl[1]['shap_medio_abs'])}). These "
         "importances are physically consistent —spore protection and crack width limit closure ⟦jonkers2010,luo2015⟧— "
-        "but describe correlations within the training data and are not enough to predict other studies.")))
+        "but the multi-study grouped R² is negative, so those importances describe the training data and have no "
+        "predictive validity.")))
     fig_sec = 2
     if not ieee:
         B.append(("p", L("La Fig. 2 y la Fig. 3 muestran la distribución de los valores SHAP fuera de muestra en las "
@@ -521,17 +548,19 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
     B.append(("p", L(
         "Con los datos disponibles, la respuesta a la pregunta del título es negativa: los modelos predicen "
         "razonablemente dentro de un laboratorio, pero no transfieren a estudios ni laboratorios nuevos. La partición "
-        "por filas oculta este problema y produce valores de R² comparables a los publicados "
-        "⟦zhuang2019,huang2022,khosravi2025⟧, lo que sugiere que parte de esa literatura mide la capacidad de reconocer "
-        "el contexto experimental más que la de predecir el cierre de una formulación nueva. NEAT no aportó precisión "
-        "frente a los árboles; su red mínima equivale en la práctica a un modelo casi lineal, aunque es fácil de "
-        "inspeccionar.",
+        "por filas oculta este problema y produce valores de R² del orden de los publicados "
+        "⟦zhuang2019,huang2022,khosravi2025⟧. Planteamos como hipótesis —no verificada aquí, porque no se reanalizaron "
+        "esos conjuntos— que parte de esa literatura podría estar midiendo la capacidad de reconocer el contexto "
+        "experimental. NEAT no aportó precisión dentro de un laboratorio, pero extrapoló mejor que los árboles entre "
+        "laboratorios en términos de error absoluto en ambos sentidos (Ridge, en uno), lo que favorece modelos "
+        "suaves y parsimoniosos cuando el objetivo es transferir.",
         "With the available data, the answer to the title question is negative: the models predict reasonably within a "
         "laboratory but do not transfer to new studies or laboratories. Row-wise splitting hides this problem and yields "
-        "R² values comparable to published ones ⟦zhuang2019,huang2022,khosravi2025⟧, suggesting that part of that "
-        "literature measures the ability to recognize the experimental context rather than to predict the closure of a "
-        "new formulation. NEAT added no accuracy over trees; its minimal network is in practice almost linear, although "
-        "easy to inspect.")))
+        "R² values of the order of published ones ⟦zhuang2019,huang2022,khosravi2025⟧. We hypothesize —not tested here, "
+        "since those datasets were not reanalysed— that part of that literature may be measuring the ability to "
+        "recognize the experimental context. NEAT added no accuracy within a laboratory but extrapolated better than "
+        "trees across laboratories in absolute error in both directions (Ridge in one), which favours smooth, "
+        "parsimonious models when the goal is transfer.")))
     B.append(("p", L(
         "Se proponen cinco requisitos mínimos para futuros modelos: (1) partición por estudio o laboratorio y, si es "
         "posible, prueba en un laboratorio externo; (2) trazabilidad por fila (DOI, tabla o figura de origen y "
@@ -548,34 +577,32 @@ def bloques(lang: str, formato: str) -> tuple[list, dict]:
         "be verified, and the sequential simulation uses historical batches. The Paita-Piura 28-, 56- and 90-day tests "
         "will enable local calibration and a real external test.")))
     if not ieee:
-        pa = r["paita"]
         B.append(("p", L(
-            "Como ilustración, un ensamble XGBoost monótono con bootstrap por grupos predice para Paita (90 días, agua de "
-            f"mar, lactato de calcio, fisura de 0,2 mm) un cierre de {n(pa[0]['cierre_medio_pct'], 1)} % "
-            f"[{n(pa[0]['cierre_IC95_pct'][0], 1)}–{n(pa[0]['cierre_IC95_pct'][1], 1)}]; sin embargo, ninguna fila de "
-            "entrenamiento combina agua de mar y lactato de calcio, y los anchos mayores de "
-            f"{n(pa[0]['w0_max_marino_mm'], 3)} mm quedan fuera del rango marino, por lo que esta cifra no debe usarse "
-            "para diseño.",
-            "As an illustration, a monotonic XGBoost ensemble with group bootstrap predicts for Paita (90 days, seawater, "
-            f"calcium lactate, 0.2 mm crack) a closure of {n(pa[0]['cierre_medio_pct'], 1)}% "
-            f"[{n(pa[0]['cierre_IC95_pct'][0], 1)}–{n(pa[0]['cierre_IC95_pct'][1], 1)}]; however, no training row "
-            f"combines seawater and calcium lactate, and widths above {n(pa[0]['w0_max_marino_mm'], 3)} mm are outside "
-            "the marine range, so this figure must not be used for design.")))
+            "No se reportan predicciones para las mezclas de Paita: ninguna fila de entrenamiento combina agua de mar y "
+            "lactato de calcio, y los anchos de 0,5 y 1,0 mm quedan fuera del rango marino disponible, por lo que "
+            "cualquier cifra sería una extrapolación no validada.",
+            "No predictions are reported for the Paita mixes: no training row combines seawater and calcium lactate, "
+            "and the 0.5 and 1.0 mm widths fall outside the available marine range, so any figure would be an "
+            "unvalidated extrapolation.")))
 
     # --- 5 Conclusiones -----------------------------------------------------------
     B.append(sec(5, "Conclusiones", "Conclusions"))
     B.append(("p", L(
         "(1) Dentro de los mismos laboratorios, Random Forest y XGBoost explican cerca de dos tercios de la varianza del "
         f"cierre (R² ≈ {n(RG['RandomForest']['R2_medio'], 2)}), y NEAT y Ridge cerca del 40 %. (2) Ningún modelo "
-        "generaliza a estudios o laboratorios no vistos (R² ≤ 0). (3) La partición por filas infla el desempeño, sobre "
-        "todo en conjuntos multi-estudio. (4) El meta-dataset previo tenía errores en todas las filas verificables, y "
+        f"predice estudios no vistos (R² agrupado ≤ {n(max(LG[lg_best]['R2_medio'], MG[mg_best]['R2_medio']), 2)}), y "
+        "entre laboratorios sin rango común todos extrapolan mal, aunque NEAT reduce el error absoluto más que los "
+        "árboles en ambos sentidos (Ridge, solo en uno). (3) La partición por filas infla el desempeño en las réplicas y, sobre "
+        "todo, en el cierre multi-estudio; en α ningún protocolo muestra señal. (4) El meta-dataset previo tenía errores en todas las filas verificables, y "
         "los resultados basados en él se retiran. (5) Actualizar el modelo con datos del nuevo contexto es "
         "imprescindible; reanudar la población de NEAT no aporta ventaja. El código, los datos auditados y los "
         f"resultados están disponibles en {REPO_URL}.",
         "(1) Within the same laboratories, Random Forest and XGBoost explain about two thirds of closure variance "
-        f"(R² ≈ {n(RG['RandomForest']['R2_medio'], 2)}), and NEAT and Ridge about 40%. (2) No model generalizes to unseen "
-        "studies or laboratories (R² ≤ 0). (3) Row-wise splitting inflates performance, especially on multi-study "
-        "datasets. (4) The previous meta-dataset had errors in every verifiable row, and results based on it are "
+        f"(R² ≈ {n(RG['RandomForest']['R2_medio'], 2)}), and NEAT and Ridge about 40%. (2) No model predicts unseen "
+        f"studies (grouped R² ≤ {n(max(LG[lg_best]['R2_medio'], MG[mg_best]['R2_medio']), 2)}), and across laboratories "
+        "without common range all extrapolate poorly, although NEAT cuts absolute error more than trees in both "
+        "directions (Ridge in only one). (3) Row-wise splitting inflates performance on the replicates and, above all, on multi-study "
+        "closure; for α neither protocol shows signal. (4) The previous meta-dataset had errors in every verifiable row, and results based on it are "
         "withdrawn. (5) Updating the model with data from the new context is essential; resuming the NEAT population "
         f"adds no benefit. Code, audited data and results are available at {REPO_URL}.")))
 
