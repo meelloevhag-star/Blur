@@ -24,8 +24,8 @@ from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import KFold
 
-BASE_ZENODO = Path(r"C:\Users\ecv_0\Desktop\Art\datasets_reales_zenodo")
-RUTA_NEAT = Path(r"C:\Users\ecv_0\Desktop\Art\biocrete_neat")
+RUTA_NEAT = Path(__file__).resolve().parent
+BASE_ZENODO = RUTA_NEAT.parent / "datasets_reales_zenodo"
 RUTA_DATOS = RUTA_NEAT / "datos"
 RUTA_RES = RUTA_NEAT / "resultados"
 

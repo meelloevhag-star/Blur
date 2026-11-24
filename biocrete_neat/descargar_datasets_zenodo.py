@@ -13,7 +13,7 @@ from pathlib import Path
 
 import openpyxl
 
-DESTINO = Path(r"C:\Users\ecv_0\Desktop\Art\datasets_reales_zenodo")
+DESTINO = Path(__file__).resolve().parent.parent / "datasets_reales_zenodo"
 
 REGISTROS = [
     ("11305154", "Cappellesso2024_Marine_CAB_Cloruros"),

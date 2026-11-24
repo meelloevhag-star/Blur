@@ -3,7 +3,7 @@ import zipfile
 from pathlib import Path
 import openpyxl
 
-BASE = Path(r"C:\Users\ecv_0\Desktop\Art\datasets_reales_zenodo")
+BASE = Path(__file__).resolve().parent.parent / "datasets_reales_zenodo"
 
 # Descomprimir Zenodo 6469122 (Mousa et al. LSU)
 z_mousa = BASE / "Encapsulated_Bacteria_Optimal_SH" / "All_methods_info.zip"
