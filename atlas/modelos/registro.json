@@ -1,0 +1,41 @@
+[
+  {
+    "version": 1,
+    "fecha": "2026-11-24T19:03:55+00:00",
+    "n_registros": 2167,
+    "n_grupos": 310,
+    "fuentes": {
+      "Cappellesso2024": 1403,
+      "Mousa2022": 764
+    },
+    "huellas_datos": {
+      "replicas_blur": "764b6967c544ebc7",
+      "aportes_validados": "431cf2e20aec0803",
+      "dryad_rcm": "f55ef6d611e8fa31",
+      "cappellesso_agno3": "7200fbecd0f282ad",
+      "meta_v2": "4cc1fe05bc9a20e5",
+      "literatura_extraida": "2cf97bec0ef525ea",
+      "zenodo": "c7339b15402af6ad"
+    },
+    "cv": {
+      "xgb": {
+        "R2": 0.651,
+        "MAE_pct": 12.72
+      },
+      "neat": {
+        "R2": 0.185,
+        "MAE_pct": 21.21
+      },
+      "conjunto": {
+        "R2": 0.634,
+        "MAE_pct": 13.62
+      },
+      "pesos": {
+        "xgb": 0.779,
+        "neat": 0.221
+      }
+    },
+    "aceptado": true,
+    "archivo": "modelo_cierre.json"
+  }
+]

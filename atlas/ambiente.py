@@ -67,6 +67,10 @@ def descargar(pais="PER", anio=2024, pausa=2.0):
                 if e.code != 429 or intento == 4:
                     raise
                 time.sleep(30 * (intento + 1))
+            except (urllib.error.URLError, TimeoutError, ConnectionError):
+                if intento == 4:
+                    raise
+                time.sleep(10 * (intento + 1))
         res = res if isinstance(res, list) else [res]
         for z, d in zip(lote, res):
             cache[z.id] = _resumir(d["hourly"], d.get("elevation"))
