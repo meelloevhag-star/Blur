@@ -1,0 +1,1463 @@
+{
+  "semilla": 2026,
+  "generaciones_neat": 50,
+  "lambdas_rejilla": [
+    0.0002,
+    0.0008,
+    0.0016
+  ],
+  "confusion_fuente": {
+    "Cappellesso2024": {
+      "n": 1403,
+      "ambiente_marino": [
+        1
+      ],
+      "edad_dias": [
+        30.0,
+        480.0
+      ],
+      "w0_mm": [
+        0.05,
+        0.375
+      ],
+      "niveles_proteccion": {
+        "0": 938,
+        "1": 465
+      },
+      "lactato_calcio": 0,
+      "curado_previo": 884,
+      "agente_cristalino": 479,
+      "pct_cierre_100": 40.0,
+      "pct_cierre_0": 0.6
+    },
+    "Mousa2022": {
+      "n": 764,
+      "ambiente_marino": [
+        0
+      ],
+      "edad_dias": [
+        3.0,
+        28.0
+      ],
+      "w0_mm": [
+        0.032,
+        0.962
+      ],
+      "niveles_proteccion": {
+        "0": 424,
+        "2": 144,
+        "3": 196
+      },
+      "lactato_calcio": 216,
+      "curado_previo": 0,
+      "agente_cristalino": 0,
+      "pct_cierre_100": 0.8,
+      "pct_cierre_0": 3.9
+    }
+  },
+  "replicas": {
+    "grupos": {
+      "protocolo": "grupos",
+      "repeticiones": 5,
+      "n": 2167,
+      "modelos": {
+        "Ridge": {
+          "R2_medio": 0.405,
+          "R2_de": 0.006,
+          "R2_por_repeticion": [
+            0.409,
+            0.403,
+            0.403,
+            0.398,
+            0.413
+          ],
+          "MAE_medio": 0.1824,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "alpha": 1.0
+              },
+              "veces": 17
+            },
+            {
+              "params": {
+                "alpha": 10.0
+              },
+              "veces": 4
+            },
+            {
+              "params": {
+                "alpha": 0.1
+              },
+              "veces": 4
+            }
+          ]
+        },
+        "RandomForest": {
+          "R2_medio": 0.674,
+          "R2_de": 0.007,
+          "R2_por_repeticion": [
+            0.683,
+            0.68,
+            0.668,
+            0.669,
+            0.67
+          ],
+          "MAE_medio": 0.1251,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 3
+              },
+              "veces": 17
+            },
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 10
+              },
+              "veces": 5
+            },
+            {
+              "params": {
+                "max_depth": null,
+                "min_samples_leaf": 10
+              },
+              "veces": 2
+            }
+          ]
+        },
+        "XGBoost": {
+          "R2_medio": 0.664,
+          "R2_de": 0.011,
+          "R2_por_repeticion": [
+            0.672,
+            0.669,
+            0.67,
+            0.644,
+            0.666
+          ],
+          "MAE_medio": 0.1286,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 12
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 6,
+                "n_estimators": 200
+              },
+              "veces": 12
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 500
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "NEAT": {
+          "R2_medio": 0.406,
+          "R2_de": 0.01,
+          "R2_por_repeticion": [
+            0.4,
+            0.407,
+            0.423,
+            0.402,
+            0.398
+          ],
+          "MAE_medio": 0.1768,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "lambda": 0.0008
+              },
+              "veces": 10
+            },
+            {
+              "params": {
+                "lambda": 0.0002
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "lambda": 0.0016
+              },
+              "veces": 6
+            }
+          ],
+          "neuronas_ocultas_prom": 0.2
+        }
+      },
+      "mejor": "RandomForest",
+      "nadeau_bengio_vs_mejor": {
+        "Ridge": {
+          "t": 12.835,
+          "p": 0.0,
+          "dif_mse_media": 0.02403
+        },
+        "XGBoost": {
+          "t": 0.972,
+          "p": 0.3407,
+          "dif_mse_media": 0.00091
+        },
+        "NEAT": {
+          "t": 9.466,
+          "p": 0.0,
+          "dif_mse_media": 0.02399
+        }
+      }
+    },
+    "filas": {
+      "protocolo": "filas",
+      "repeticiones": 3,
+      "n": 2167,
+      "modelos": {
+        "Ridge": {
+          "R2_medio": 0.417,
+          "R2_de": 0.002,
+          "R2_por_repeticion": [
+            0.417,
+            0.419,
+            0.415
+          ],
+          "MAE_medio": 0.1807,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "alpha": 1.0
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "alpha": 0.1
+              },
+              "veces": 6
+            }
+          ]
+        },
+        "RandomForest": {
+          "R2_medio": 0.731,
+          "R2_de": 0.005,
+          "R2_por_repeticion": [
+            0.733,
+            0.725,
+            0.734
+          ],
+          "MAE_medio": 0.1109,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 1
+              },
+              "veces": 15
+            }
+          ]
+        },
+        "XGBoost": {
+          "R2_medio": 0.741,
+          "R2_de": 0.002,
+          "R2_por_repeticion": [
+            0.743,
+            0.739,
+            0.742
+          ],
+          "MAE_medio": 0.1092,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 6,
+                "n_estimators": 200
+              },
+              "veces": 7
+            },
+            {
+              "params": {
+                "learning_rate": 0.1,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 5
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 500
+              },
+              "veces": 2
+            }
+          ]
+        },
+        "NEAT": {
+          "R2_medio": 0.41,
+          "R2_de": 0.012,
+          "R2_por_repeticion": [
+            0.423,
+            0.406,
+            0.4
+          ],
+          "MAE_medio": 0.1755,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "lambda": 0.0002
+              },
+              "veces": 7
+            },
+            {
+              "params": {
+                "lambda": 0.0008
+              },
+              "veces": 7
+            },
+            {
+              "params": {
+                "lambda": 0.0016
+              },
+              "veces": 1
+            }
+          ],
+          "neuronas_ocultas_prom": 0.2
+        }
+      },
+      "mejor": "XGBoost",
+      "nadeau_bengio_vs_mejor": {
+        "Ridge": {
+          "t": 16.725,
+          "p": 0.0,
+          "dif_mse_media": 0.02895
+        },
+        "RandomForest": {
+          "t": 1.983,
+          "p": 0.0673,
+          "dif_mse_media": 0.00092
+        },
+        "NEAT": {
+          "t": 12.006,
+          "p": 0.0,
+          "dif_mse_media": 0.02959
+        }
+      }
+    },
+    "fuente": {
+      "protocolo": "fuente",
+      "repeticiones": 1,
+      "n": 2167,
+      "modelos": {
+        "Ridge": {
+          "R2_medio": -0.257,
+          "R2_de": 0.0,
+          "R2_por_repeticion": [
+            -0.257
+          ],
+          "MAE_medio": 0.2296,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "alpha": 0.1
+              },
+              "veces": 2
+            }
+          ]
+        },
+        "RandomForest": {
+          "R2_medio": -0.705,
+          "R2_de": 0.0,
+          "R2_por_repeticion": [
+            -0.705
+          ],
+          "MAE_medio": 0.3285,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "max_depth": 4,
+                "min_samples_leaf": 1
+              },
+              "veces": 1
+            },
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 10
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "XGBoost": {
+          "R2_medio": -0.66,
+          "R2_de": 0.0,
+          "R2_por_repeticion": [
+            -0.66
+          ],
+          "MAE_medio": 0.3255,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 2,
+                "n_estimators": 200
+              },
+              "veces": 1
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "NEAT": {
+          "R2_medio": -0.112,
+          "R2_de": 0.0,
+          "R2_por_repeticion": [
+            -0.112
+          ],
+          "MAE_medio": 0.222,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "lambda": 0.0016
+              },
+              "veces": 1
+            },
+            {
+              "params": {
+                "lambda": 0.0008
+              },
+              "veces": 1
+            }
+          ],
+          "neuronas_ocultas_prom": 0.0
+        }
+      },
+      "por_fuente_de_prueba": {
+        "Cappellesso2024": {
+          "Ridge": -0.402,
+          "RandomForest": -1.349,
+          "XGBoost": -1.246,
+          "NEAT": -0.261
+        },
+        "Mousa2022": {
+          "Ridge": -1.349,
+          "RandomForest": -1.026,
+          "XGBoost": -1.08,
+          "NEAT": -1.023
+        }
+      }
+    }
+  },
+  "meta": {
+    "info": {
+      "n_candidatas": 28,
+      "n_completas": 28,
+      "n_estudios": 7,
+      "n_marino": 6,
+      "por_estudio": {
+        "Doostkami et al. (reextraccion)": 7,
+        "Tan et al. (carbonation, Bath)": 6,
+        "Cappellesso et al.": 4,
+        "Ersan et al. (Front. Microbiol., ACDC nitrate-reducing)": 4,
+        "Recycled coarse and fine aggregates as microbial carriers (Materials)": 4,
+        "Palin et al.": 2,
+        "Ersan et al. (Front. Built Environ.)": 1
+      }
+    },
+    "grupos": {
+      "protocolo": "grupos",
+      "repeticiones": 5,
+      "n": 28,
+      "modelos": {
+        "Ridge": {
+          "R2_medio": -0.379,
+          "R2_de": 0.38,
+          "R2_por_repeticion": [
+            -0.255,
+            -1.034,
+            -0.039,
+            -0.293,
+            -0.274
+          ],
+          "MAE_medio": 0.2722,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "alpha": 10.0
+              },
+              "veces": 15
+            },
+            {
+              "params": {
+                "alpha": 1.0
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "alpha": 0.1
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "RandomForest": {
+          "R2_medio": -0.184,
+          "R2_de": 0.177,
+          "R2_por_repeticion": [
+            -0.273,
+            -0.387,
+            -0.16,
+            -0.19,
+            0.09
+          ],
+          "MAE_medio": 0.2569,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "max_depth": 4,
+                "min_samples_leaf": 3
+              },
+              "veces": 11
+            },
+            {
+              "params": {
+                "max_depth": 4,
+                "min_samples_leaf": 10
+              },
+              "veces": 7
+            },
+            {
+              "params": {
+                "max_depth": 4,
+                "min_samples_leaf": 1
+              },
+              "veces": 4
+            }
+          ]
+        },
+        "XGBoost": {
+          "R2_medio": 0.053,
+          "R2_de": 0.092,
+          "R2_por_repeticion": [
+            0.14,
+            0.023,
+            -0.064,
+            0.013,
+            0.152
+          ],
+          "MAE_medio": 0.2285,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 2,
+                "n_estimators": 200
+              },
+              "veces": 14
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "learning_rate": 0.1,
+                "max_depth": 4,
+                "n_estimators": 500
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "NEAT": {
+          "R2_medio": -1.511,
+          "R2_de": 0.551,
+          "R2_por_repeticion": [
+            -1.157,
+            -1.505,
+            -0.85,
+            -1.77,
+            -2.275
+          ],
+          "MAE_medio": 0.3633,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "lambda": 0.0008
+              },
+              "veces": 11
+            },
+            {
+              "params": {
+                "lambda": 0.0016
+              },
+              "veces": 8
+            },
+            {
+              "params": {
+                "lambda": 0.0002
+              },
+              "veces": 6
+            }
+          ],
+          "neuronas_ocultas_prom": 0.12
+        }
+      },
+      "mejor": "XGBoost",
+      "nadeau_bengio_vs_mejor": {
+        "Ridge": {
+          "t": 1.015,
+          "p": 0.3204,
+          "dif_mse_media": 0.02786
+        },
+        "RandomForest": {
+          "t": 1.123,
+          "p": 0.2725,
+          "dif_mse_media": 0.01768
+        },
+        "NEAT": {
+          "t": 1.817,
+          "p": 0.0817,
+          "dif_mse_media": 0.12006
+        }
+      }
+    },
+    "filas": {
+      "protocolo": "filas",
+      "repeticiones": 5,
+      "n": 28,
+      "modelos": {
+        "Ridge": {
+          "R2_medio": -0.178,
+          "R2_de": 0.176,
+          "R2_por_repeticion": [
+            -0.111,
+            -0.331,
+            -0.389,
+            -0.095,
+            0.033
+          ],
+          "MAE_medio": 0.2552,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "alpha": 1.0
+              },
+              "veces": 12
+            },
+            {
+              "params": {
+                "alpha": 10.0
+              },
+              "veces": 7
+            },
+            {
+              "params": {
+                "alpha": 0.1
+              },
+              "veces": 6
+            }
+          ]
+        },
+        "RandomForest": {
+          "R2_medio": -0.011,
+          "R2_de": 0.12,
+          "R2_por_repeticion": [
+            0.191,
+            -0.127,
+            -0.064,
+            -0.038,
+            -0.015
+          ],
+          "MAE_medio": 0.2287,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "max_depth": 4,
+                "min_samples_leaf": 3
+              },
+              "veces": 16
+            },
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 1
+              },
+              "veces": 3
+            },
+            {
+              "params": {
+                "max_depth": 4,
+                "min_samples_leaf": 1
+              },
+              "veces": 3
+            }
+          ]
+        },
+        "XGBoost": {
+          "R2_medio": -0.047,
+          "R2_de": 0.079,
+          "R2_por_repeticion": [
+            -0.074,
+            -0.005,
+            0.06,
+            -0.064,
+            -0.151
+          ],
+          "MAE_medio": 0.2238,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 2,
+                "n_estimators": 200
+              },
+              "veces": 15
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 7
+            },
+            {
+              "params": {
+                "learning_rate": 0.1,
+                "max_depth": 2,
+                "n_estimators": 200
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "NEAT": {
+          "R2_medio": -0.158,
+          "R2_de": 0.173,
+          "R2_por_repeticion": [
+            -0.092,
+            -0.359,
+            -0.302,
+            0.069,
+            -0.104
+          ],
+          "MAE_medio": 0.2462,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "lambda": 0.0008
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "lambda": 0.0002
+              },
+              "veces": 8
+            },
+            {
+              "params": {
+                "lambda": 0.0016
+              },
+              "veces": 8
+            }
+          ],
+          "neuronas_ocultas_prom": 0.48
+        }
+      },
+      "mejor": "RandomForest",
+      "nadeau_bengio_vs_mejor": {
+        "Ridge": {
+          "t": 0.582,
+          "p": 0.5659,
+          "dif_mse_media": 0.0119
+        },
+        "XGBoost": {
+          "t": 0.132,
+          "p": 0.8957,
+          "dif_mse_media": 0.00266
+        },
+        "NEAT": {
+          "t": 0.459,
+          "p": 0.6507,
+          "dif_mse_media": 0.0113
+        }
+      }
+    }
+  },
+  "literatura_cierre": {
+    "info": {
+      "n_candidatas": 163,
+      "n_completas": 142,
+      "n_estudios": 16,
+      "n_marino": 16,
+      "por_estudio": {
+        "Enhancement of bacterial survival ... alumina hollow spheres (Materials)": 24,
+        "Risdanareni et al. (alkali-activated LWA carrier)": 24,
+        "Cappellesso et al.": 20,
+        "Tran-SET 18CLSU02 (LSU) encapsulated bacterial spores, hot subtropical climate": 16,
+        "Tan et al. (carbonation, Bath)": 10,
+        "Recycled coarse and fine aggregates as microbial carriers (Materials)": 10,
+        "Aerobic-anaerobic composite microbial self-healing recycled concrete (AEM)": 9,
+        "Bacterial viability in self-healing concrete: non-ureolytic Bacillus (Microorganisms)": 5,
+        "Liu, Xu, Lv y Xing (JACT, recycled aggregate carrier)": 5,
+        "Doostkami et al. (reextraccion)": 4,
+        "Mohammed et al. (reextraccion)": 4,
+        "Ersan et al. (Front. Built Environ.)": 3,
+        "Coated expanded clay particles for biological concrete (Materials)": 3,
+        "Cappellesso et al. (frost salt)": 2,
+        "Evaluation of microencapsulation techniques for MICP spores (Sci Rep)": 2,
+        "Mohammed et al.": 1
+      }
+    },
+    "grupos": {
+      "protocolo": "grupos",
+      "repeticiones": 5,
+      "n": 142,
+      "modelos": {
+        "Ridge": {
+          "R2_medio": -0.124,
+          "R2_de": 0.043,
+          "R2_por_repeticion": [
+            -0.057,
+            -0.159,
+            -0.165,
+            -0.117,
+            -0.122
+          ],
+          "MAE_medio": 0.3141,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "alpha": 10.0
+              },
+              "veces": 23
+            },
+            {
+              "params": {
+                "alpha": 1.0
+              },
+              "veces": 2
+            }
+          ]
+        },
+        "RandomForest": {
+          "R2_medio": -0.091,
+          "R2_de": 0.084,
+          "R2_por_repeticion": [
+            -0.222,
+            -0.012,
+            -0.111,
+            -0.082,
+            -0.026
+          ],
+          "MAE_medio": 0.302,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "max_depth": 4,
+                "min_samples_leaf": 10
+              },
+              "veces": 21
+            },
+            {
+              "params": {
+                "max_depth": null,
+                "min_samples_leaf": 1
+              },
+              "veces": 1
+            },
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 1
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "XGBoost": {
+          "R2_medio": -0.212,
+          "R2_de": 0.045,
+          "R2_por_repeticion": [
+            -0.285,
+            -0.207,
+            -0.191,
+            -0.214,
+            -0.165
+          ],
+          "MAE_medio": 0.3111,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 2,
+                "n_estimators": 200
+              },
+              "veces": 15
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 6,
+                "n_estimators": 200
+              },
+              "veces": 5
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 4
+            }
+          ]
+        },
+        "NEAT": {
+          "R2_medio": -0.297,
+          "R2_de": 0.101,
+          "R2_por_repeticion": [
+            -0.215,
+            -0.449,
+            -0.299,
+            -0.327,
+            -0.196
+          ],
+          "MAE_medio": 0.3314,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "lambda": 0.0016
+              },
+              "veces": 10
+            },
+            {
+              "params": {
+                "lambda": 0.0008
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "lambda": 0.0002
+              },
+              "veces": 6
+            }
+          ],
+          "neuronas_ocultas_prom": 0.48
+        }
+      },
+      "mejor": "RandomForest",
+      "nadeau_bengio_vs_mejor": {
+        "Ridge": {
+          "t": 0.018,
+          "p": 0.9858,
+          "dif_mse_media": 0.00036
+        },
+        "XGBoost": {
+          "t": 1.07,
+          "p": 0.2952,
+          "dif_mse_media": 0.01834
+        },
+        "NEAT": {
+          "t": 0.685,
+          "p": 0.5,
+          "dif_mse_media": 0.01902
+        }
+      }
+    },
+    "filas": {
+      "protocolo": "filas",
+      "repeticiones": 5,
+      "n": 142,
+      "modelos": {
+        "Ridge": {
+          "R2_medio": 0.125,
+          "R2_de": 0.026,
+          "R2_por_repeticion": [
+            0.118,
+            0.116,
+            0.146,
+            0.09,
+            0.155
+          ],
+          "MAE_medio": 0.2738,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "alpha": 10.0
+              },
+              "veces": 11
+            },
+            {
+              "params": {
+                "alpha": 1.0
+              },
+              "veces": 11
+            },
+            {
+              "params": {
+                "alpha": 0.1
+              },
+              "veces": 3
+            }
+          ]
+        },
+        "RandomForest": {
+          "R2_medio": 0.476,
+          "R2_de": 0.063,
+          "R2_por_repeticion": [
+            0.506,
+            0.364,
+            0.489,
+            0.516,
+            0.502
+          ],
+          "MAE_medio": 0.1937,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 1
+              },
+              "veces": 15
+            },
+            {
+              "params": {
+                "max_depth": null,
+                "min_samples_leaf": 1
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "max_depth": 8,
+                "min_samples_leaf": 3
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "XGBoost": {
+          "R2_medio": 0.494,
+          "R2_de": 0.073,
+          "R2_por_repeticion": [
+            0.537,
+            0.369,
+            0.544,
+            0.526,
+            0.492
+          ],
+          "MAE_medio": 0.1881,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 6,
+                "n_estimators": 200
+              },
+              "veces": 11
+            },
+            {
+              "params": {
+                "learning_rate": 0.03,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 9
+            },
+            {
+              "params": {
+                "learning_rate": 0.1,
+                "max_depth": 4,
+                "n_estimators": 200
+              },
+              "veces": 1
+            }
+          ]
+        },
+        "NEAT": {
+          "R2_medio": 0.096,
+          "R2_de": 0.053,
+          "R2_por_repeticion": [
+            0.054,
+            0.16,
+            0.056,
+            0.064,
+            0.149
+          ],
+          "MAE_medio": 0.274,
+          "hiperparametros_elegidos": [
+            {
+              "params": {
+                "lambda": 0.0002
+              },
+              "veces": 12
+            },
+            {
+              "params": {
+                "lambda": 0.0008
+              },
+              "veces": 7
+            },
+            {
+              "params": {
+                "lambda": 0.0016
+              },
+              "veces": 6
+            }
+          ],
+          "neuronas_ocultas_prom": 0.48
+        }
+      },
+      "mejor": "XGBoost",
+      "nadeau_bengio_vs_mejor": {
+        "Ridge": {
+          "t": 4.398,
+          "p": 0.0002,
+          "dif_mse_media": 0.04327
+        },
+        "RandomForest": {
+          "t": 0.446,
+          "p": 0.6593,
+          "dif_mse_media": 0.00209
+        },
+        "NEAT": {
+          "t": 3.781,
+          "p": 0.0009,
+          "dif_mse_media": 0.04664
+        }
+      }
+    }
+  },
+  "explicabilidad": {
+    "shap_oof_replicas": [
+      {
+        "variable": "Edad (d)",
+        "shap_medio_abs": 0.173
+      },
+      {
+        "variable": "Ancho fisura w0 (mm)",
+        "shap_medio_abs": 0.0588
+      },
+      {
+        "variable": "Protección bio (0-3)",
+        "shap_medio_abs": 0.0479
+      },
+      {
+        "variable": "Curado previo",
+        "shap_medio_abs": 0.0447
+      },
+      {
+        "variable": "Agente cristalino",
+        "shap_medio_abs": 0.0273
+      },
+      {
+        "variable": "Ambiente marino",
+        "shap_medio_abs": 0.0252
+      },
+      {
+        "variable": "Lactato de calcio",
+        "shap_medio_abs": 0.0129
+      }
+    ],
+    "shap_oof_meta": [
+      {
+        "variable": "Ancho fisura (mm)",
+        "shap_medio_abs": 0.0962
+      },
+      {
+        "variable": "Edad (d)",
+        "shap_medio_abs": 0.0753
+      },
+      {
+        "variable": "Protección bio (0-3)",
+        "shap_medio_abs": 0.0622
+      },
+      {
+        "variable": "Lactato de calcio",
+        "shap_medio_abs": 0.0335
+      },
+      {
+        "variable": "a/c",
+        "shap_medio_abs": 0.017
+      },
+      {
+        "variable": "Ambiente marino",
+        "shap_medio_abs": 0.0001
+      }
+    ],
+    "shap_oof_literatura_cierre": [
+      {
+        "variable": "Protección bio (0-3)",
+        "shap_medio_abs": 0.1611
+      },
+      {
+        "variable": "Ancho fisura (mm)",
+        "shap_medio_abs": 0.117
+      },
+      {
+        "variable": "a/c",
+        "shap_medio_abs": 0.0789
+      },
+      {
+        "variable": "Edad (d)",
+        "shap_medio_abs": 0.062
+      },
+      {
+        "variable": "Ambiente marino",
+        "shap_medio_abs": 0.0176
+      },
+      {
+        "variable": "Lactato de calcio",
+        "shap_medio_abs": 0.0143
+      }
+    ],
+    "neat_final_replicas": {
+      "lambda": 0.0008,
+      "neuronas_ocultas": 1,
+      "conexiones_activas": 3,
+      "entradas_usadas": [
+        "Edad (d)",
+        "Protección bio (0-3)"
+      ],
+      "importancia_permutacion": [
+        {
+          "variable": "Edad (d)",
+          "delta_rmse": 0.1279
+        },
+        {
+          "variable": "Protección bio (0-3)",
+          "delta_rmse": 0.0071
+        },
+        {
+          "variable": "Ancho fisura w0 (mm)",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Ambiente marino",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Lactato de calcio",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Curado previo",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Agente cristalino",
+          "delta_rmse": 0.0
+        }
+      ]
+    },
+    "neat_final_meta": {
+      "lambda": 0.0008,
+      "neuronas_ocultas": 1,
+      "conexiones_activas": 2,
+      "entradas_usadas": [
+        "Lactato de calcio"
+      ],
+      "importancia_permutacion": [
+        {
+          "variable": "Lactato de calcio",
+          "delta_rmse": 0.0739
+        },
+        {
+          "variable": "a/c",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Ancho fisura (mm)",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Edad (d)",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Protección bio (0-3)",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Ambiente marino",
+          "delta_rmse": 0.0
+        }
+      ]
+    },
+    "neat_final_literatura_cierre": {
+      "lambda": 0.0016,
+      "neuronas_ocultas": 2,
+      "conexiones_activas": 7,
+      "entradas_usadas": [
+        "Ancho fisura (mm)",
+        "Edad (d)",
+        "Protección bio (0-3)",
+        "Ambiente marino"
+      ],
+      "importancia_permutacion": [
+        {
+          "variable": "Protección bio (0-3)",
+          "delta_rmse": 0.0899
+        },
+        {
+          "variable": "Ambiente marino",
+          "delta_rmse": 0.0542
+        },
+        {
+          "variable": "Edad (d)",
+          "delta_rmse": 0.0188
+        },
+        {
+          "variable": "a/c",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Lactato de calcio",
+          "delta_rmse": 0.0
+        },
+        {
+          "variable": "Ancho fisura (mm)",
+          "delta_rmse": -0.005
+        }
+      ]
+    }
+  },
+  "secuencial": {
+    "semillas": 10,
+    "generaciones": 40,
+    "lotes": {
+      "2": {
+        "campeon": {
+          "media": -0.371,
+          "de": 0.173
+        },
+        "caliente": {
+          "media": 0.342,
+          "de": 0.039
+        },
+        "frio": {
+          "media": 0.316,
+          "de": 0.032
+        },
+        "caliente_menos_frio": {
+          "media": 0.025,
+          "de": 0.053,
+          "semillas_caliente_mejor": 5,
+          "p_wilcoxon": 0.3223
+        }
+      },
+      "3": {
+        "campeon": {
+          "media": -0.14,
+          "de": 0.315
+        },
+        "caliente": {
+          "media": 0.159,
+          "de": 0.137
+        },
+        "frio": {
+          "media": 0.196,
+          "de": 0.076
+        },
+        "caliente_menos_frio": {
+          "media": -0.037,
+          "de": 0.17,
+          "semillas_caliente_mejor": 5,
+          "p_wilcoxon": 0.6953
+        }
+      }
+    }
+  },
+  "paita": [
+    {
+      "escenario": "Directa · 0,2 mm",
+      "cierre_medio_pct": 78.0,
+      "cierre_IC95_pct": [
+        69.3,
+        86.0
+      ],
+      "avisos": [
+        "a"
+      ],
+      "w0_max_marino_mm": 0.375
+    },
+    {
+      "escenario": "Directa · 0,5 mm",
+      "cierre_medio_pct": 57.5,
+      "cierre_IC95_pct": [
+        48.3,
+        65.3
+      ],
+      "avisos": [
+        "a",
+        "c"
+      ],
+      "w0_max_marino_mm": 0.375
+    },
+    {
+      "escenario": "Directa · 1,0 mm",
+      "cierre_medio_pct": 57.2,
+      "cierre_IC95_pct": [
+        47.8,
+        65.3
+      ],
+      "avisos": [
+        "a",
+        "c"
+      ],
+      "w0_max_marino_mm": 0.375
+    },
+    {
+      "escenario": "Portador · 0,3 mm",
+      "cierre_medio_pct": 71.8,
+      "cierre_IC95_pct": [
+        65.7,
+        80.3
+      ],
+      "avisos": [
+        "a",
+        "b"
+      ],
+      "w0_max_marino_mm": 0.375
+    },
+    {
+      "escenario": "Encapsulación · 0,3 mm",
+      "cierre_medio_pct": 59.2,
+      "cierre_IC95_pct": [
+        47.6,
+        71.9
+      ],
+      "avisos": [
+        "a",
+        "b"
+      ],
+      "w0_max_marino_mm": 0.375
+    }
+  ]
+}
