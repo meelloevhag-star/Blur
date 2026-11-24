@@ -33,7 +33,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-texto); fon
 .marca p { margin: 2px 0 0; color: var(--fg-suave); font-size: 0.85rem; text-wrap: balance; }
 .selector { display: flex; gap: 8px; align-items: center; font-size: 0.8rem; color: var(--fg-suave); text-transform: uppercase; letter-spacing: 0.06em; }
 select, input, textarea { font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--linea); border-radius: 4px; padding: 6px 8px; min-width: 0; }
-.selector select { text-transform: none; letter-spacing: 0; font-size: 0.9rem; }
+.selector { min-width: 0; max-width: 100%; }
+.selector select { text-transform: none; letter-spacing: 0; font-size: 0.9rem; max-width: 100%; min-width: 0; flex: 1; }
+.lienzo { overflow: hidden; }
 :focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
 .cuerpo { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 420px; min-height: 0; }
 .lienzo { position: relative; min-width: 0; }

@@ -1,7 +1,7 @@
 [
   {
     "version": 1,
-    "fecha": "2026-11-24T19:03:55+00:00",
+    "fecha": "2026-11-24T19:29:51+00:00",
     "n_registros": 2167,
     "n_grupos": 310,
     "fuentes": {
@@ -36,6 +36,10 @@
       }
     },
     "aceptado": true,
+    "verificacion_exportacion": {
+      "xgb_dif_max": 1.2210443056659415e-06,
+      "neat_dif_max": 0.0
+    },
     "archivo": "modelo_cierre.json"
   }
 ]
