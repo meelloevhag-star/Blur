@@ -46,13 +46,13 @@ RUTA_APORTES = RUTA_BASE / "datos" / "aportes_validados.csv"
 # NEAT con estado reanudable
 # ---------------------------------------------------------------------------
 
-def evolucionar(X, y, gens, semilla, estado=None, lam=LAMBDA_PARSIMONIA_ALTA):
+def evolucionar(X, y, gens, semilla, estado=None, lam=LAMBDA_PARSIMONIA_ALTA, ruta_cfg=RUTA_CFG):
     """Evoluciona NEAT; si `estado` = (config, población, especies, generación) continúa desde ahí."""
     random.seed(semilla)
     np.random.seed(semilla)
     if estado is None:
         config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet,
-                             neat.DefaultStagnation, str(RUTA_CFG))
+                             neat.DefaultStagnation, str(ruta_cfg))
         pop = neat.Population(config, seed=semilla)
     else:
         config, poblacion, especies, generacion = pickle.loads(pickle.dumps(estado))  # copia independiente
