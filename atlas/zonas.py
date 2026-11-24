@@ -1,4 +1,4 @@
-"""Zonas costeras: celdas de ~20 km a lo largo de la costa y 3 franjas tierra adentro.
+"""Zonas costeras: tramos de ~10 km a lo largo de la costa y 6 franjas tierra adentro.
 
 La línea de costa se obtiene una sola vez de Natural Earth 10m (dominio público) y se guarda
 recortada y simplificada en atlas/datos/geo/. Todo está parametrizado por país (ISO-3) para
@@ -15,10 +15,10 @@ from dataclasses import dataclass, asdict
 
 from atlas.rutas import GEO
 
-# Franjas de distancia al mar (km). La 1.ª concentra mareas/salpicadura; la 3.ª cubre el
-# cinturón de nieblas y lomas costeras (≈ 5–25 km tierra adentro).
-FRANJAS_KM = [(0.0, 0.5), (0.5, 5.0), (5.0, 25.0)]
-PASO_KM = 20.0
+# Franjas de distancia al mar (km). La 1.ª concentra mareas/salpicadura; las siguientes cubren la
+# costa urbana, los cerros y las lomas (cinturón de niebla, ≈ 2–30 km tierra adentro).
+FRANJAS_KM = [(0.0, 0.5), (0.5, 2.0), (2.0, 5.0), (5.0, 10.0), (10.0, 20.0), (20.0, 35.0)]
+PASO_KM = 10.0
 R_TIERRA = 6371.0
 
 
@@ -32,6 +32,10 @@ class Zona:
     lat: float
     lon: float
     poligono: list               # [[lon, lat], ...] cerrado
+    tramo: int = 0
+    provincia: str = ""
+    distrito: str = ""
+    ubigeo: str = ""
 
 
 def _km(lat0):
@@ -109,6 +113,7 @@ def generar_zonas(pais: str = "PER") -> list[Zona]:
     poli = shape(json.loads((GEO / f"pais_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"])
     deptos = [(f["properties"]["nombre"], shape(f["geometry"])) for f in
               json.loads((GEO / f"departamentos_{pais.lower()}.geojson").read_text(encoding="utf-8"))["features"]]
+    distritos = _distritos(pais)
 
     pts = _remuestrear(costa, PASO_KM / 2)   # puntos a medio paso: pares = centros, impares = bordes
     # normales hacia tierra
@@ -136,10 +141,54 @@ def generar_zonas(pais: str = "PER") -> list[Zona]:
             depto = next((n for n, g in deptos if g.contains(Point(c))), None)
             if depto is None:  # punto de la 1.ª franja cae en el mar por la simplificación
                 depto = min(deptos, key=lambda d: d[1].distance(Point(c)))[0]
+            dist = _distrito_de(distritos, c)
             zonas.append(Zona(id=f"{pais}-{k:03d}-{f}", pais=pais, departamento=depto, franja=f,
                               dist_mar_km=round(dm, 2), lat=round(c[1], 4), lon=round(c[0], 4),
-                              poligono=[[round(x, 5), round(y, 5)] for x, y in anillo]))
+                              poligono=[[round(x, 5), round(y, 5)] for x, y in anillo], tramo=k,
+                              provincia=dist[1], distrito=dist[0], ubigeo=dist[2]))
     return zonas
+
+
+def _distritos(pais: str):
+    """Límites distritales (UBIGEO) desde GEO/distritos_<pais>.geojson si existe (ver construir_costa)."""
+    from shapely.geometry import shape
+    from shapely.strtree import STRtree
+    ruta = GEO / f"distritos_{pais.lower()}.geojson"
+    if not ruta.exists():
+        return None
+    feats = json.loads(ruta.read_text(encoding="utf-8"))["features"]
+    geoms = [shape(f["geometry"]) for f in feats]
+    return STRtree(geoms), geoms, [f["properties"] for f in feats]
+
+
+def _distrito_de(distritos, c):
+    from shapely.geometry import Point
+    if distritos is None:
+        return ("", "", "")
+    arbol, geoms, props = distritos
+    p = Point(c)
+    cand = [i for i in arbol.query(p) if geoms[i].contains(p)]
+    i = cand[0] if cand else int(arbol.nearest(p))
+    pr = props[i]
+    return (pr.get("distrito", ""), pr.get("provincia", ""), pr.get("ubigeo", ""))
+
+
+def importar_distritos(ruta_geojson: str, pais: str = "PER"):
+    """Distritos de INEI (juaneladio/peru-geojson, campos IDDIST/NOMBDIST/NOMBPROV/NOMBDEP) → GEO, simplificados."""
+    from shapely.geometry import shape, mapping
+    src = json.loads(open(ruta_geojson, encoding="utf-8").read())
+    feats = []
+    for f in src["features"]:
+        if not f.get("geometry"):
+            continue
+        p = f["properties"]
+        feats.append({"type": "Feature", "properties": {
+            "ubigeo": p["IDDIST"], "distrito": p["NOMBDIST"].title(), "provincia": p["NOMBPROV"].title(),
+            "departamento": p["NOMBDEP"].title()},
+            "geometry": mapping(shape(f["geometry"]).simplify(0.002))})
+    (GEO / f"distritos_{pais.lower()}.geojson").write_text(json.dumps(
+        {"type": "FeatureCollection", "fuente": "INEI vía github.com/juaneladio/peru-geojson", "features": feats},
+        ensure_ascii=False), encoding="utf-8")
 
 
 def guardar_zonas(zonas: list[Zona], pais: str = "PER"):
@@ -156,8 +205,11 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--ne", help="carpeta con los shapefiles de Natural Earth descomprimidos")
     ap.add_argument("--pais", default="PER")
+    ap.add_argument("--distritos", help="GeoJSON de distritos (UBIGEO) a importar")
     a = ap.parse_args()
     if a.ne:
         construir_costa(a.ne, a.pais)
+    if a.distritos:
+        importar_distritos(a.distritos, a.pais)
     z = generar_zonas(a.pais)
     print(f"{len(z)} zonas → {guardar_zonas(z, a.pais)}")
