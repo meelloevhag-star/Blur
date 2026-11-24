@@ -267,7 +267,9 @@ def construir() -> Path:
         "lactato de calcio y lactato de sodio). En Cappellesso et al. [11] se procesaron las mediciones de "
         "microscopía por probeta y zona en agua de mar ASTM D1141 y las mediciones de penetración de cloruros "
         "por nitrato de plata. El meta-dataset multi-estudio reúne condiciones de estudios revisados por pares "
-        "[1], [2], [14]–[18]. Cada registro conserva su DOI, la hoja de origen y un identificador de grupo."))
+        "[1], [2], [14]–[18]. El conjunto de aplicación manual de agentes en ambiente rico en cloruros [13] se "
+        "descargó y queda reservado para la siguiente actualización del marco. Cada registro conserva su DOI, la "
+        "hoja de origen y un identificador de grupo."))
     llenar_tabla(doc.tables[1], [
         ["Conjunto / Fuente", "DOI oficial", "Registros", "Uso en este trabajo"],
         ["Mousa et al. réplicas [12]", "10.5281/zenodo.6469122", f"{n_mousa} reg. ({n_mousa // 4} fisuras)",
@@ -292,8 +294,8 @@ def construir() -> Path:
 
     poner(buscar(doc, "La neuroevolución se implementó"), (
         "La neuroevolución se implementó en Python con neat-python 2.0.0, red estrictamente feed-forward, activación "
-        "sigmoide y topología inicial sin neuronas ocultas. La aptitud incorpora una penalización explícita de "
-        "parsimonia:"))
+        "sigmoide y topología inicial sin neuronas ocultas (Tabla II). La aptitud incorpora una penalización "
+        "explícita de parsimonia:"))
     poner(buscar(doc, "donde MSE(g)"), (
         "donde MSE(g) es el error cuadrático medio del genoma g en el entrenamiento, N_ocultas y N_conex son las "
         "neuronas ocultas y conexiones activas y λ_p controla la parsimonia (8×10⁻⁴ o 1,2×10⁻⁴). Para no sesgar la "
@@ -483,7 +485,12 @@ def construir() -> Path:
         "tesis, y el registro de versiones, BioCrete-NEAT queda preparado para mejorar con cada ensayo que aporten la "
         "comunidad y el programa de Paita-Piura."))
 
-    # --- Referencias nuevas --------------------------------------------------
+    # --- Referencias: correcciones verificadas (F6) y nuevas ------------------
+    from correcciones_referencias import corregir
+
+    for p in doc.paragraphs:
+        if p.text.startswith("[") and corregir(p.text) != p.text:
+            poner(p, corregir(p.text))
     ultima = buscar(doc, "[18]")
     nuevas = [
         "[19]\tT. Chen and C. Guestrin, “XGBoost: A scalable tree boosting system,” in Proc. 22nd ACM SIGKDD Int. "

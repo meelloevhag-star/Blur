@@ -53,7 +53,10 @@ def cifras() -> dict:
 
 def referencias_originales() -> list[str]:
     d = docx.Document(str(ORIGINAL))
-    return [re.sub(r"^\[\d+\]\s*", "", p.text).strip() for p in d.paragraphs if re.match(r"^\[\d+\]", p.text)]
+    from correcciones_referencias import corregir
+
+    return [corregir(re.sub(r"^\[\d+\]\s*", "", p.text).strip())
+            for p in d.paragraphs if re.match(r"^\[\d+\]", p.text)]
 
 
 REF_NUEVAS = [
