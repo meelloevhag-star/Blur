@@ -24,10 +24,11 @@ COLUMNAS_BASE = ["autor_aporte", "institucion", "tipo_fuente", "doi_o_url", "nor
 
 
 # propiedades que bastan para pintar el mapa (el detalle de cada zona se pide aparte)
-LIGERAS = ["id", "pais", "departamento", "provincia", "distrito", "franja", "dist_mar_km", "regimen",
+LIGERAS = ["id", "pais", "departamento", "provincia", "distrito", "franja", "tramo", "lat", "lon", "dist_mar_km", "regimen",
            "indice_niebla", "deposicion_cl_mg_m2_d", "clase_iso9223", "elevacion_media_m", "frac_loma",
            "poblacion", "clase_urbana", "severidad", "prioridad", "ideal_cierre_pct", "ideal_vida_anios",
-           "ideal_costo_m3", "ideal_disponibilidad", "economica_costo_m3", "ganancia_autorreparacion_anios"]
+           "ideal_costo_m3", "ideal_disponibilidad", "economica_costo_m3", "ganancia_autorreparacion_anios",
+           "vida_util_concreto_comun_anios", "ideal_agente", "ideal_cemento", "ideal_a_c"]
 
 
 def _slug(texto: str) -> str:
@@ -47,8 +48,11 @@ def escribir_web(g: dict, pais="PER"):
     for f in g["features"]:
         p = f["properties"]
         slug = _slug(p["departamento"])
+        ide = p["recetas"]["ideal"]
+        extra = {"detalle": slug, "ideal_agente": ide["agente"], "ideal_cemento": ide["dosificacion"]["cemento_tipo"],
+                 "ideal_a_c": ide["dosificacion"]["a_c"]}
         ligero["features"].append({"type": "Feature", "id": f["id"], "geometry": f["geometry"],
-                                   "properties": {k: p.get(k) for k in LIGERAS} | {"detalle": slug}})
+                                   "properties": {k: p.get(k) for k in LIGERAS} | extra})
         por_depto.setdefault(slug, {})[p["id"]] = f
     sep = (",", ":")
     (web / f"zonas_ligero_{pais.lower()}.geojson").write_text(json.dumps(ligero, ensure_ascii=False, separators=sep), encoding="utf-8")
@@ -63,6 +67,8 @@ def construir(pais="PER"):
     ruta = SALIDA / f"zonas_{pais.lower()}.geojson"
     ruta.write_text(json.dumps(g, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     escribir_web(g, pais)
+    from atlas import terreno
+    terreno.generar(pais)
     print(f"{len(g['features'])} zonas → {ruta.relative_to(RAIZ)} (modelo v{g['metadata']['modelo_version']})")
     return ruta
 

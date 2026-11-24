@@ -1,40 +1,39 @@
-import type { Coleccion, Zona } from "./tipos";
+import type { Coleccion, Terreno, Zona } from "./tipos";
 
-/** Dos modos: con API (Go) o estático (GeoJSON publicado junto a la página). */
+/** Datos estáticos publicados junto a la página (o servidos por la API en Go con ?api=). */
 export interface Fuente {
   modo: "api" | "estatico";
   zonas(): Promise<Coleccion>;
-  zona(id: string): Promise<Zona>;
+  zona(id: string, slug: string): Promise<Zona>;
+  terreno(tramo: number, slug: string): Promise<Terreno | null>;
   enviarAportes?(csv: string, clave: string): Promise<any>;
 }
 
+const json = async (u: string) => {
+  const r = await fetch(u);
+  if (!r.ok) throw new Error(`No se pudo cargar ${u} (${r.status})`);
+  return r.json();
+};
+
 export function crearFuente(): Fuente {
-  const base = new URLSearchParams(location.search).get("api") ?? (window as any).ATLAS_API ?? "";
-  if (base) {
-    const url = base.replace(/\/$/, "");
-    return {
-      modo: "api",
-      zonas: async () => (await fetch(`${url}/api/zonas`)).json(),
-      zona: async (id) => (await fetch(`${url}/api/zonas/${encodeURIComponent(id)}`)).json(),
-      enviarAportes: async (csv, clave) =>
-        (await fetch(`${url}/api/aportes`, { method: "POST", headers: { "Content-Type": "text/csv", "X-API-Key": clave }, body: csv })).json(),
-    };
-  }
-  // estático: GeoJSON ligero para el mapa + un archivo de detalle por departamento, pedido al abrir una zona
-  let cache: Promise<Coleccion> | null = null;
-  const detalles = new Map<string, Promise<Record<string, Zona>>>();
-  const todo = () => (cache ??= fetch("zonas_ligero_per.geojson").then((r) => {
-    if (!r.ok) throw new Error(`No se pudo cargar zonas_ligero_per.geojson (${r.status})`);
-    return r.json();
-  }));
+  const base = (new URLSearchParams(location.search).get("api") ?? (window as any).ATLAS_API ?? "").replace(/\/$/, "");
+  const cacheDet = new Map<string, Promise<Record<string, Zona>>>();
+  const cacheTer = new Map<string, Promise<Record<string, Terreno>>>();
+  const detalle = (slug: string) => {
+    if (!cacheDet.has(slug)) cacheDet.set(slug, json(`detalle/${slug}.json`));
+    return cacheDet.get(slug)!;
+  };
+  const terreno = (slug: string) => {
+    if (!cacheTer.has(slug)) cacheTer.set(slug, json(`terreno/${slug}.json`).catch(() => ({})));
+    return cacheTer.get(slug)!;
+  };
+  let todo: Promise<Coleccion> | null = null;
   return {
-    modo: "estatico",
-    zonas: todo,
-    zona: async (id) => {
-      const lig = (await todo()).features.find((f: Zona) => f.properties.id === id) as Zona;
-      const slug = lig.properties.detalle!;
-      if (!detalles.has(slug)) detalles.set(slug, fetch(`detalle/${slug}.json`).then((r) => r.json()));
-      return (await detalles.get(slug)!)[id];
-    },
+    modo: base ? "api" : "estatico",
+    zonas: () => (todo ??= json("zonas_ligero_per.geojson")),
+    zona: async (id, slug) => base ? json(`${base}/api/zonas/${encodeURIComponent(id)}`) : (await detalle(slug))[id],
+    terreno: async (tramo, slug) => (await terreno(slug))[String(tramo)] ?? null,
+    enviarAportes: base ? async (csv, clave) => (await fetch(`${base}/api/aportes`, {
+      method: "POST", headers: { "Content-Type": "text/csv", "X-API-Key": clave }, body: csv })).json() : undefined,
   };
 }
