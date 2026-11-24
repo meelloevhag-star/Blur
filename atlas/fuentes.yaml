@@ -6,6 +6,12 @@
 #       cloruros_rcm     → D_RCM vs a/c (calibran el modelo de difusión)
 #       cloruros_agno3   → penetración de cloruros con/sin agente (efecto del agente)
 #       referencia       → se registran para trazabilidad pero no entrenan
+#
+# Comodines: `ruta` admite `*` y `**`. Cada archivo que coincida es una fuente aparte. Úsalos para las
+# carpetas donde los agentes de Blur dejan datasets nuevos; basta con respetar las columnas mapeadas.
+# Esquema mínimo de una réplica de cierre: w0_mm, edad_dias, cierre_pct (0-100), portador
+# (ninguno|cristalino|Basilisk|LWA|hidrogel|CNC), tiene_bacterias (0/1), nutriente, ambiente_marino (0/1),
+# regimen (curado_previo|exposicion_directa|vacío), grupo_probeta (id de fisura/probeta), fuente.
 fuentes:
   - id: replicas_blur
     ruta: biocrete_neat/datos/replicas_cierre_fisuras.csv
@@ -24,6 +30,21 @@ fuentes:
       fuente: fuente
   - id: aportes_validados
     ruta: biocrete_neat/datos/aportes_validados.csv
+    tipo: replicas_cierre
+    entrena: true
+    columnas:
+      w0_mm: w0_mm
+      edad_dias: edad_dias
+      cierre_pct: cierre_pct
+      portador: portador
+      tiene_bacterias: tiene_bacterias
+      nutriente: nutriente
+      ambiente_marino: ambiente_marino
+      regimen: regimen
+      grupo: grupo_probeta
+      fuente: fuente
+  - id: replicas_agentes
+    ruta: biocrete_neat/datos/replicas/**/*.csv     # datasets nuevos de los agentes de Blur (vía PR)
     tipo: replicas_cierre
     entrena: true
     columnas:

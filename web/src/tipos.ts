@@ -14,7 +14,12 @@ export interface Receta {
   en_dominio: boolean; avisos: string[]; puntaje_desempeno: number; origen: Record<string, string>;
 }
 export interface PropsZona {
-  id: string; pais: string; departamento: string; franja: number; dist_mar_km: number; regimen: string;
+  id: string; pais: string; departamento: string; provincia: string; distrito: string; franja: number;
+  dist_mar_km: number; regimen: string; detalle?: string;
+  elevacion_media_m: number | null; frac_loma: number; poblacion: number; clase_urbana: string;
+  severidad: number; prioridad: number; vida_util_concreto_comun_anios?: number;
+  relieve?: Record<string, number> | null;
+  urbano?: Record<string, number | string> | null;
   indice_niebla: number; deposicion_cl_mg_m2_d: number; clase_iso9223: string;
   ideal_cierre_pct: number; ideal_vida_anios: number; ideal_costo_m3: number; ideal_disponibilidad: number;
   economica_costo_m3: number; ideal_vida_sin_reparacion_anios: number; ganancia_autorreparacion_anios: number;

@@ -83,3 +83,64 @@ def test_geojson_recetas_completas():
             assert r["agente"] != "ninguno"
             assert r["dosificacion"]["a_c"] <= p["reglas"]["a_c_max"] + 1e-9
             assert r["viabilidad"]["costo_m3_pen"] > 0
+
+
+# --------------------------------------------------------------------------- v2: relieve, urbano, fuentes
+
+class _DEMSintetico:
+    """Ladera que sube hacia el este (tierra adentro, mar al oeste): 0 m en lon −77,0 → 1 200 m en lon −76,8."""
+
+    def muestrear(self, lon, lat):
+        return np.clip((np.asarray(lon) + 77.0) / 0.2 * 1200, 0, None).astype(np.float32)
+
+
+def _zona(lon0, lon1, lat0=-12.05, lat1=-11.95):
+    from atlas.zonas import Zona
+    pol = [[lon0, lat0], [lon1, lat0], [lon1, lat1], [lon0, lat1], [lon0, lat0]]
+    return Zona(id="T", pais="PER", departamento="X", franja=3, dist_mar_km=7.5,
+                lat=(lat0 + lat1) / 2, lon=(lon0 + lon1) / 2, poligono=pol)
+
+
+def test_ladera_al_mar_en_cinturon_sube_la_niebla():
+    from atlas.relieve import estadisticas_zona
+    costa = (-77.05, -12.0)
+    loma = estadisticas_zona(_DEMSintetico(), _zona(-76.95, -76.88), costa)      # 300–720 m, mira al mar
+    llano = estadisticas_zona(_DEMSintetico(), _zona(-77.04, -77.01), costa)     # 0–0 m
+    assert loma["frac_loma"] > 0.8 and llano["frac_loma"] == 0
+    amb = {"frac_horas_niebla": 0.03, "nubes_bajas_media_pct": 20, "frac_horas_hr85": 0.4, "viento_medio_ms": 4}
+    assert nb.indice_niebla_orografica(amb, loma) > nb.indice_niebla_orografica(amb, llano) == nb.indice_niebla(amb)
+    assert nb.regimen(3, 50, nb.indice_niebla_orografica(amb, loma), loma) == "niebla_orografica"
+
+
+def test_cresta_atenua_cloruros():
+    amb = {"viento_medio_ms": 5, "frac_horas_niebla": 0.05, "nubes_bajas_media_pct": 20, "frac_horas_hr85": 0.5}
+    assert nb.deposicion_cloruros(8, amb, 0.5, barrera_m=800) < 0.1 * nb.deposicion_cloruros(8, amb, 0.5, barrera_m=0)
+
+
+def test_clase_urbana_umbrales():
+    from atlas.urbano import clase_urbana
+    assert [clase_urbana(d) for d in (5000, 800, 50, 3)] == ["urbano", "periurbano", "rural", "deshabitado"]
+
+
+def test_comodines_de_fuentes(tmp_path, monkeypatch):
+    import atlas.ingesta as ing
+    (tmp_path / "datos" / "replicas" / "lote1").mkdir(parents=True)
+    (tmp_path / "datos" / "replicas" / "lote1" / "nuevo.csv").write_text("w0_mm,edad_dias,cierre_pct\n0.2,28,50\n")
+    monkeypatch.setattr(ing, "RAIZ", tmp_path)
+    f = ing.expandir({"id": "agentes", "ruta": "datos/replicas/**/*.csv", "tipo": "replicas_cierre"})
+    assert [x["id"] for x in f] == ["agentes:datos/replicas/lote1/nuevo.csv"]
+
+
+@pytest.mark.skipif(not (SALIDA / "zonas_per.geojson").exists(), reason="sin salida construida")
+def test_malla_v2_sin_solapes_y_territorio():
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+    g = json.loads((SALIDA / "zonas_per.geojson").read_text(encoding="utf-8"))
+    P = [Polygon(f["geometry"]["coordinates"][0]) for f in g["features"]]
+    assert all(p.is_valid for p in P)
+    assert unary_union(P).area == pytest.approx(sum(p.area for p in P), rel=1e-4)
+    props = {f["properties"]["distrito"]: f["properties"] for f in g["features"]}
+    assert g["metadata"]["poblacion_total_zonas"] == sum(f["properties"]["poblacion"] for f in g["features"])
+    lima = [f["properties"] for f in g["features"] if f["properties"]["distrito"] in ("Lima", "Callao")]
+    assert any(p["clase_urbana"] == "urbano" for p in lima)
+    assert "Atiquipa" in props

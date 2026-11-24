@@ -9,6 +9,8 @@ CLASES = {
     #  régimen            clase   a/c_max  cem_min  fc_min_MPa  recubrimiento_mm  cementos_permitidos
     "salpicadura":        ("XS3", 0.40, 340, 35, 65, ("HS", "IP")),
     "niebla_salina":      ("XS2", 0.45, 320, 32, 50, ("HS", "IP", "I", "GU")),
+    # lomas/cerros con niebla orográfica: humedad casi permanente + aerosol salino atenuado
+    "niebla_orografica":  ("XS2", 0.45, 320, 32, 50, ("HS", "IP", "I", "GU")),
     "atmosferico_marino": ("XS1", 0.50, 300, 28, 50, ("HS", "IP", "I", "GU")),
     "seco":               ("XC",  0.55, 280, 21, 40, ("HS", "IP", "I", "GU")),
 }

@@ -4,7 +4,10 @@
       <h1>BioCrete Atlas</h1>
       <p>Concreto autorreparable para el litoral peruano · recetas por zona a partir de los datos de Blur</p>
     </div>
-    <label class="selector" for="capa"><span>Capa</span><select id="capa"></select></label>
+    <div class="controles">
+      <label class="selector" for="capa"><span>Capa</span><select id="capa"></select></label>
+      <label class="check" for="solo-urbano"><input type="checkbox" id="solo-urbano"> Solo zonas urbanas</label>
+    </div>
   </header>
   <main class="cuerpo">
     <section class="lienzo" aria-label="Mapa">
@@ -21,7 +24,7 @@
       <details class="bloque">
         <summary>Regímenes de exposición</summary>
         <ul id="regimenes" class="lista-reg"></ul>
-        <p class="fuente">La niebla salina (garúa, camanchaca) moja y deposita sal tierra adentro: el Atlas la trata como una salpicadura atenuada (clase XS2).</p>
+        <p class="fuente">La niebla salina (garúa, camanchaca) moja y deposita sal tierra adentro: el Atlas la trata como una salpicadura atenuada (clase XS2). En los cerros y lomas que miran al mar entre 300 y 1 000 m, la capa de nubes toca el suelo (niebla orográfica) y la humedad es casi permanente; las crestas altas, en cambio, frenan la sal hacia el interior.</p>
       </details>
       <details class="bloque">
         <summary>Qué tan confiable es</summary>

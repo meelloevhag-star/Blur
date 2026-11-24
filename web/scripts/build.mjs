@@ -2,7 +2,7 @@
 //   dist/            página completa (para servir con la API en Go: -web ../web/dist)
 //   dist-artefacto/  fragmento para publicar como página estática (Leaflet desde cdnjs, todo lo demás en línea)
 import { build } from "esbuild";
-import { cpSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -17,11 +17,13 @@ const js = (await build({ entryPoints: [join(raiz, "src/main.ts")], bundle: true
   target: "es2020", write: false })).outputFiles[0].text;
 const css = readFileSync(join(raiz, "node_modules/leaflet/dist/leaflet.css"), "utf8") + "\n" + readFileSync(join(raiz, "src/estilos.css"), "utf8");
 const cuerpo = readFileSync(join(raiz, "src/cuerpo.html"), "utf8");
-const datos = [["atlas/salida/zonas_per.geojson", "zonas_per.geojson"], ["atlas/datos/geo/departamentos_per.geojson", "departamentos_per.geojson"]];
+const datos = [["atlas/salida/web/zonas_ligero_per.geojson", "zonas_ligero_per.geojson"],
+  ["atlas/salida/web/detalle", "detalle"], ["atlas/datos/geo/departamentos_per.geojson", "departamentos_per.geojson"]];
 
 const salida = join(raiz, artefacto ? "dist-artefacto" : "dist");
 mkdirSync(salida, { recursive: true });
-for (const [o, d] of datos) cpSync(join(repo, o), join(salida, d));
+rmSync(join(salida, "detalle"), { recursive: true, force: true });
+for (const [o, d] of datos) cpSync(join(repo, o), join(salida, d), { recursive: true });
 const cabeza = `<title>${TITULO}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

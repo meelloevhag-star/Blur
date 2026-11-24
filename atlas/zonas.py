@@ -142,11 +142,40 @@ def generar_zonas(pais: str = "PER") -> list[Zona]:
             if depto is None:  # punto de la 1.ª franja cae en el mar por la simplificación
                 depto = min(deptos, key=lambda d: d[1].distance(Point(c)))[0]
             dist = _distrito_de(distritos, c)
-            zonas.append(Zona(id=f"{pais}-{k:03d}-{f}", pais=pais, departamento=depto, franja=f,
+            zonas.append(Zona(id=f"{pais}-{k:03d}-{f}", pais=pais, departamento=dist[3] or depto, franja=f,
                               dist_mar_km=round(dm, 2), lat=round(c[1], 4), lon=round(c[0], 4),
                               poligono=[[round(x, 5), round(y, 5)] for x, y in anillo], tramo=k,
                               provincia=dist[1], distrito=dist[0], ubigeo=dist[2]))
-    return zonas
+    return _sin_solapes(zonas, poli)
+
+
+def _sin_solapes(zonas: list[Zona], pais_poli) -> list[Zona]:
+    """En curvas cerradas de la costa las franjas de tramos vecinos se cruzan. Se corrige así:
+    polígonos válidos, recortados a tierra, y cada zona pierde el área ya asignada a otra
+    (las franjas más cercanas al mar tienen prioridad). Las zonas que quedan vacías se descartan."""
+    from shapely.geometry import Polygon, Point
+    from shapely.ops import unary_union
+    tierra = pais_poli.buffer(0.004)
+    ocupado = None
+    salida = []
+    for z in sorted(zonas, key=lambda z: (z.franja, z.tramo)):
+        g = Polygon(z.poligono).buffer(0).intersection(tierra)
+        if ocupado is not None:
+            g = g.difference(ocupado)
+        if g.is_empty or g.area < 1e-6:
+            continue
+        parte = max(getattr(g, "geoms", [g]), key=lambda x: x.area)
+        if parte.geom_type != "Polygon":
+            continue
+        ocupado = parte if ocupado is None else unary_union([ocupado, parte])
+        c = parte.representative_point() if not parte.contains(Point(z.lon, z.lat)) else Point(z.lon, z.lat)
+        # redondear puede volver inválido el anillo: se repara y se guarda la parte mayor
+        r = Polygon([(round(x, 5), round(y, 5)) for x, y in parte.exterior.coords]).buffer(0)
+        r = max(getattr(r, "geoms", [r]), key=lambda x: x.area)
+        z.poligono = [[x, y] for x, y in r.exterior.coords]
+        z.lat, z.lon = round(c.y, 4), round(c.x, 4)
+        salida.append(z)
+    return sorted(salida, key=lambda z: (z.tramo, z.franja))
 
 
 def _distritos(pais: str):
@@ -164,13 +193,13 @@ def _distritos(pais: str):
 def _distrito_de(distritos, c):
     from shapely.geometry import Point
     if distritos is None:
-        return ("", "", "")
+        return ("", "", "", "")
     arbol, geoms, props = distritos
     p = Point(c)
     cand = [i for i in arbol.query(p) if geoms[i].contains(p)]
     i = cand[0] if cand else int(arbol.nearest(p))
     pr = props[i]
-    return (pr.get("distrito", ""), pr.get("provincia", ""), pr.get("ubigeo", ""))
+    return (pr.get("distrito", ""), pr.get("provincia", ""), pr.get("ubigeo", ""), pr.get("departamento", ""))
 
 
 def importar_distritos(ruta_geojson: str, pais: str = "PER"):

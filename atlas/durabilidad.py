@@ -60,12 +60,20 @@ def drcm0(a_c: float, cemento: str) -> float:
     return math.exp(aj["a"] + aj["b"] * a_c) * FACTOR_CEMENTO.get(cemento, 1.0)   # ×1e-12 m²/s
 
 
+# A de DuraCrete en función de la deposición de cloruros (mg/m²·d, escala log): 3 → 0,5 (seco);
+# 60 → 2,565 (atmosférico marino, límite ISO S1/S2); 300 → 5,0; ≥ 1500 → 7,758 (equivalente a salpicadura).
+_DEP = [3.0, 60.0, 300.0, 1500.0]
+_A = [0.5, A_CS["atmosferico_marino"], 5.0, A_CS["salpicadura"]]
+HUMECTACION_NIEBLA = 1.25   # la superficie mojada por niebla mantiene el cloruro móvil (supuesto)
+
+
 def cs(regimen: str, a_c: float, dep: float) -> float:
-    if regimen == "niebla_salina":
-        f = min(max(math.log10(max(dep, 1)) / math.log10(300), 0), 1)   # 1 mg → 0 ; 300 mg → 1
-        A = A_CS["atmosferico_marino"] + f * (A_CS["salpicadura"] - A_CS["atmosferico_marino"])
+    if regimen == "salpicadura":
+        A = A_CS["salpicadura"]
     else:
-        A = A_CS[regimen]
+        A = float(np.interp(math.log10(max(dep, 0.1)), np.log10(_DEP), _A))
+        if regimen in ("niebla_salina", "niebla_orografica"):
+            A = min(A * HUMECTACION_NIEBLA, A_CS["salpicadura"])
     return A * a_c
 
 

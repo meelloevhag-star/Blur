@@ -20,14 +20,21 @@ export function crearFuente(): Fuente {
         (await fetch(`${url}/api/aportes`, { method: "POST", headers: { "Content-Type": "text/csv", "X-API-Key": clave }, body: csv })).json(),
     };
   }
+  // estático: GeoJSON ligero para el mapa + un archivo de detalle por departamento, pedido al abrir una zona
   let cache: Promise<Coleccion> | null = null;
-  const todo = () => (cache ??= fetch("zonas_per.geojson").then((r) => {
-    if (!r.ok) throw new Error(`No se pudo cargar zonas_per.geojson (${r.status})`);
+  const detalles = new Map<string, Promise<Record<string, Zona>>>();
+  const todo = () => (cache ??= fetch("zonas_ligero_per.geojson").then((r) => {
+    if (!r.ok) throw new Error(`No se pudo cargar zonas_ligero_per.geojson (${r.status})`);
     return r.json();
   }));
   return {
     modo: "estatico",
     zonas: todo,
-    zona: async (id) => (await todo()).features.find((f: Zona) => f.properties.id === id) as Zona,
+    zona: async (id) => {
+      const lig = (await todo()).features.find((f: Zona) => f.properties.id === id) as Zona;
+      const slug = lig.properties.detalle!;
+      if (!detalles.has(slug)) detalles.set(slug, fetch(`detalle/${slug}.json`).then((r) => r.json()));
+      return (await detalles.get(slug)!)[id];
+    },
   };
 }

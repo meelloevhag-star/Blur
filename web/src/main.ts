@@ -32,15 +32,20 @@ async function iniciar() {
   let capa: Capa = CAPAS.find((c) => c.id === leerCapa()) ?? CAPAS[0];
   let seleccion: L.Path | null = null;
 
+  let soloUrbano = false;
+  const tip = (p: PropsZona) => `<strong>${p.distrito || p.departamento}</strong> · ${REGIMENES[p.regimen]?.corto ?? p.regimen}<br>${capa.nombre}: ${fmt(capa, capa.valor(p))}`;
+  const visible = (p: PropsZona) => !soloUrbano || p.clase_urbana === "urbano" || p.clase_urbana === "periurbano";
   const estilo = (f?: GeoJSON.Feature<GeoJSON.Polygon, PropsZona>) => ({
-    color: tok("--borde-zona"), weight: 0.5, fillOpacity: 0.85,
+    color: tok("--borde-zona"), weight: 0.4,
+    fillOpacity: f && !visible(f.properties) ? 0.06 : 0.85,
+    opacity: f && !visible(f.properties) ? 0.15 : 1,
     fillColor: f ? color(capa, capa.valor(f.properties)) : "#999",
   });
   const capaZonas = L.geoJSON(col as any, {
     style: estilo as any,
     onEachFeature: (f: any, l: any) => {
       const p = f.properties as PropsZona;
-      l.bindTooltip(`<strong>${p.departamento}</strong> · ${REGIMENES[p.regimen]?.corto ?? p.regimen}<br>${capa.nombre}: ${fmt(capa, capa.valor(p))}`, { sticky: true });
+      l.bindTooltip(tip(p), { sticky: true });
       l.on("click", async () => {
         if (seleccion) capaZonas.resetStyle(seleccion as any);
         seleccion = l;
@@ -51,7 +56,7 @@ async function iniciar() {
         $("#panel").classList.add("con-zona");
         try { history.replaceState(null, "", `#${p.id}`); } catch { /* ignorar */ }
       });
-      l.on("mouseover", () => l.setTooltipContent(`<strong>${p.departamento}</strong> · ${REGIMENES[p.regimen]?.corto ?? p.regimen}<br>${capa.nombre}: ${fmt(capa, capa.valor(p))}`));
+      l.on("mouseover", () => l.setTooltipContent(tip(p)));
     },
   }).addTo(mapa);
   mapa.fitBounds(capaZonas.getBounds(), { padding: [10, 10] });
@@ -74,6 +79,12 @@ async function iniciar() {
     pintarLeyenda();
   });
   pintarLeyenda();
+  const chk = $<HTMLInputElement>("#solo-urbano");
+  chk.addEventListener("change", () => {
+    soloUrbano = chk.checked;
+    capaZonas.setStyle(estilo as any);
+    if (seleccion) (seleccion as any).setStyle({ weight: 2.5, color: tok("--acento") });
+  });
 
   // resumen del modelo
   const cv = meta.cv_modelo;
@@ -81,14 +92,15 @@ async function iniciar() {
     (XGBoost ${cv.xgb.R2.toLocaleString("es-PE")}, NEAT ${cv.neat.R2.toLocaleString("es-PE")}),
     error medio ±${cv.conjunto.MAE_pct.toLocaleString("es-PE")} puntos de cierre.
     Difusión de cloruros: ${meta.durabilidad.drcm.n} ensayos RCM (R² log ${meta.durabilidad.drcm.r2_log.toLocaleString("es-PE")}).
-    ${meta.zonas_con_clima_propio} de ${meta.zonas} zonas con clima propio.`;
+    Malla: ${meta.zonas} zonas (tramos de ${meta.malla?.paso_km ?? 10} km, franjas hasta ${meta.malla?.franjas_km?.at(-1)?.[1] ?? 35} km del mar),
+    ${meta.celdas_era5} celdas ERA5 con corrección por altitud; ${Math.round((meta.poblacion_total_zonas ?? 0) / 1e6 * 10) / 10} millones de habitantes en las zonas.`;
   const conteo: Record<string, number> = {};
   col.features.forEach((f) => (conteo[f.properties.regimen] = (conteo[f.properties.regimen] ?? 0) + 1));
   $("#regimenes").innerHTML = Object.entries(REGIMENES).map(([k, r]) =>
     `<li><span class="muestra" style="background:${r.color}"></span>${r.nombre}<span class="num">${conteo[k] ?? 0}</span></li>`).join("");
 
   // abrir la zona del enlace o una de Paita por defecto
-  const inicial = location.hash.slice(1) || col.features.find((f) => f.properties.departamento === "Piura" && f.properties.franja === 0 && Math.abs((f.geometry.coordinates[0][0][1]) + 5.08) < 0.15)?.properties.id;
+  const inicial = location.hash.slice(1) || col.features.find((f) => f.properties.distrito === "Paita" && f.properties.franja === 0)?.properties.id;
   capaZonas.eachLayer((l: any) => { if (l.feature.properties.id === inicial) l.fire("click"); });
 
   iniciarAportes();
@@ -98,6 +110,9 @@ function fmt(c: Capa, v: number) {
   if (c.id === "regimen") return c.etiquetas![v];
   if (c.id === "ganancia") return `+${Math.round(v)} años`;
   if (c.id === "cloruros") return `${Math.round(v)} mg/m²·d`;
+  if (c.id === "urbano") return c.etiquetas![v];
+  if (c.id === "prioridad") return `${Math.round(v).toLocaleString("es-PE")} personas`;
+  if (c.id === "relieve") return `${Math.round(v)} m`;
   if (c.id === "costo") return `S/ ${Math.round(v)}/m³`;
   if (c.unidad === "%") return `${Math.round(v)} %`;
   return v.toFixed(2);

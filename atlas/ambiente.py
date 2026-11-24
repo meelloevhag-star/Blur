@@ -1,8 +1,10 @@
-"""Clima por zona desde el archivo histórico de Open-Meteo (reanálisis ERA5/ERA5-Land, CC BY 4.0).
+"""Clima por celda ERA5 (0,25°) desde el archivo histórico de Open-Meteo (ERA5/ERA5-Land, CC BY 4.0).
 
-Por cada centro de zona se descarga un año horario y se resume en indicadores para durabilidad
-y niebla. Se guarda en caché (atlas/datos/ambiente_<pais>.json) y solo se descargan las zonas que
-faltan, así que se puede re-ejecutar sin coste.
+ERA5 no resuelve detalles más finos que su celda, así que el clima se descarga una vez por celda
+(en el centro de la zona más cercano al centro de la celda) y todas las zonas de la celda lo
+comparten; el relieve (DEM de 90 m) aporta luego la variación local: corrección de temperatura por
+altitud y niebla orográfica. Caché en atlas/datos/ambiente_<pais>.json: {"celdas": {...}}; solo se
+descarga lo que falta.
 
     python -m atlas.ambiente --pais PER --anio 2024
 """
@@ -50,12 +52,55 @@ def _resumir(h: dict, elev: float) -> dict:
     }
 
 
+GRADO_CELDA = 0.25
+GRADIENTE_T = -6.5 / 1000      # °C/m (atmósfera estándar)
+
+
+def celda(lat: float, lon: float) -> str:
+    return f"{round(lat / GRADO_CELDA) * GRADO_CELDA:.2f},{round(lon / GRADO_CELDA) * GRADO_CELDA:.2f}"
+
+
+def _leer_cache(ruta):
+    c = json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}
+    return c if "celdas" in c else {"celdas": {}}
+
+
+def migrar_v1(ruta_zonas_v1: str, pais="PER"):
+    """Convierte la caché v1 (por id de zona de 20 km) a celdas sin volver a descargar."""
+    ruta = DATOS / f"ambiente_{pais.lower()}.json"
+    viejo = json.loads(ruta.read_text(encoding="utf-8"))
+    if "celdas" in viejo:
+        return
+    zonas_v1 = json.loads(open(ruta_zonas_v1, encoding="utf-8").read())
+    celdas = {}
+    for z in zonas_v1:
+        if z["id"] not in viejo:
+            continue
+        k = celda(z["lat"], z["lon"])
+        cla, clo = map(float, k.split(","))
+        d = (z["lat"] - cla) ** 2 + (z["lon"] - clo) ** 2
+        if k not in celdas or d < celdas[k]["_d"]:
+            celdas[k] = viejo[z["id"]] | {"lat": z["lat"], "lon": z["lon"], "_d": d}
+    for v in celdas.values():
+        v.pop("_d")
+    ruta.write_text(json.dumps({"celdas": celdas}, ensure_ascii=False), encoding="utf-8")
+
+
 def descargar(pais="PER", anio=2024, pausa=2.0):
     ruta = DATOS / f"ambiente_{pais.lower()}.json"
-    cache = json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}
-    pend = [z for z in cargar_zonas(pais) if z.id not in cache]
+    cache = _leer_cache(ruta)
+    # punto representativo de cada celda: centro de zona más cercano al centro de la celda
+    rep = {}
+    for z in cargar_zonas(pais):
+        k = celda(z.lat, z.lon)
+        cla, clo = map(float, k.split(","))
+        d = (z.lat - cla) ** 2 + (z.lon - clo) ** 2
+        if k not in rep or d < rep[k][0]:
+            rep[k] = (d, z)
+    pend = [(k, z) for k, (_, z) in rep.items() if k not in cache["celdas"]]
     for k in range(0, len(pend), LOTE):
-        lote = pend[k:k + LOTE]
+        lote = [z for _, z in pend[k:k + LOTE]]
+        claves = [c for c, _ in pend[k:k + LOTE]]
         q = (f"{URL}?latitude={','.join(str(z.lat) for z in lote)}&longitude={','.join(str(z.lon) for z in lote)}"
              f"&start_date={anio}-01-01&end_date={anio}-12-31&hourly={','.join(VARIABLES)}&timezone=GMT")
         for intento in range(5):
@@ -72,22 +117,42 @@ def descargar(pais="PER", anio=2024, pausa=2.0):
                     raise
                 time.sleep(10 * (intento + 1))
         res = res if isinstance(res, list) else [res]
-        for z, d in zip(lote, res):
-            cache[z.id] = _resumir(d["hourly"], d.get("elevation"))
-            cache[z.id]["fuente"] = f"Open-Meteo Historical Weather API (ERA5), {anio}"
-        ruta.write_text(json.dumps(cache, ensure_ascii=False, indent=0), encoding="utf-8")
-        print(f"{len(cache)} zonas con clima", flush=True)
+        for c, z, d in zip(claves, lote, res):
+            cache["celdas"][c] = _resumir(d["hourly"], d.get("elevation")) | {
+                "lat": z.lat, "lon": z.lon, "fuente": f"Open-Meteo Historical Weather API (ERA5), {anio}"}
+        ruta.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+        print(f"{len(cache['celdas'])} celdas con clima", flush=True)
         time.sleep(pausa)
     return cache
 
 
 def cargar(pais="PER") -> dict:
-    return json.loads((DATOS / f"ambiente_{pais.lower()}.json").read_text(encoding="utf-8"))
+    return _leer_cache(DATOS / f"ambiente_{pais.lower()}.json")["celdas"]
+
+
+def clima_zona(z, celdas: dict, elev_zona_m: float | None) -> dict:
+    """Clima de la celda de la zona (o de la celda más cercana) corregido por altitud con el DEM."""
+    k = celda(z.lat, z.lon)
+    origen = k
+    if k not in celdas:
+        origen = min(celdas, key=lambda c: (float(c.split(",")[0]) - z.lat) ** 2 + (float(c.split(",")[1]) - z.lon) ** 2)
+    a = dict(celdas[origen])
+    a["celda_era5"] = origen
+    a["celda_propia"] = origen == k
+    if elev_zona_m is not None and a.get("elevacion_m") is not None:
+        dz = elev_zona_m - a["elevacion_m"]
+        a["t_media_c"] = round(a["t_media_c"] + GRADIENTE_T * dz, 2)
+        a["t_min_c"] = round(a["t_min_c"] + GRADIENTE_T * dz, 1)
+        a["correccion_altitud_c"] = round(GRADIENTE_T * dz, 2)
+    return a
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--pais", default="PER")
     ap.add_argument("--anio", type=int, default=2024)
+    ap.add_argument("--migrar-v1", help="zonas_per.json de la malla v1 para convertir la caché")
     a = ap.parse_args()
+    if a.migrar_v1:
+        migrar_v1(a.migrar_v1, a.pais)
     descargar(a.pais, a.anio)

@@ -14,7 +14,7 @@ const TIPOS: [keyof NonNullable<Zona["properties"]["recetas"]> | "referencia", s
 ];
 
 const PARTIDAS: Record<string, string> = {
-  cemento: "Cemento", flete_cemento: "Flete del cemento", arena: "Arena gruesa", piedra: "Piedra chancada",
+  cemento: "Cemento", flete_cemento: "Flete del cemento", acceso_ultimo_tramo: "Acceso desde la vía principal", arena: "Arena gruesa", piedra: "Piedra chancada",
   superplastificante: "Superplastificante", cristalizante: "Cristalizante", agente_autorreparador: "Agente autorreparador",
 };
 
@@ -77,15 +77,18 @@ export function mostrarZona(cont: HTMLElement, z: Zona, meta: Coleccion["metadat
   const reg = REGIMENES[p.regimen];
   const a = p.ambiente ?? {};
   const rg = p.reglas!;
-  const franjas = ["0–0,5 km del mar", "0,5–5 km del mar", "5–25 km del mar"];
+  const franjas = ["0–0,5 km del mar", "0,5–2 km del mar", "2–5 km del mar", "5–10 km del mar", "10–20 km del mar", "20–35 km del mar"];
+  const rel = p.relieve ?? {};
+  const urb = p.urbano ?? {};
   cont.innerHTML = `
     <header class="zona-cab">
-      <p class="eyebrow">${esc(p.departamento)} · ${franjas[p.franja]}</p>
-      <h2>${esc(p.id)}</h2>
+      <p class="eyebrow">${esc(p.provincia)}, ${esc(p.departamento)} · ${franjas[p.franja] ?? ""}</p>
+      <h2>${esc(p.distrito || p.id)} <small class="id">${esc(p.id)}</small></h2>
       <div class="chips">
         <span class="chip" style="--c:${reg.color}">${reg.nombre}</span>
         <span class="chip neutro">Clase ${rg.clase}</span>
         <span class="chip neutro">ISO 9223 ${esc(p.clase_iso9223)}</span>
+        <span class="chip neutro">${esc(p.clase_urbana)}</span>
       </div>
     </header>
     <section class="ambiente">
@@ -96,10 +99,19 @@ export function mostrarZona(cont: HTMLElement, z: Zona, meta: Coleccion["metadat
         <dt>Humedad relativa</dt><dd>${n0(Number(a.hr_media_pct))} <small>%</small></dd>
         <dt>Horas de niebla</dt><dd>${n1(Number(a.frac_horas_niebla) * 100)} <small>% del año</small></dd>
         <dt>Viento medio</dt><dd>${n1(Number(a.viento_medio_ms))} <small>m/s</small></dd>
+        <dt>Elevación media</dt><dd>${n0(Number(rel.elev_media_m ?? 0))} <small>m</small></dd>
+        <dt>En cinturón de niebla</dt><dd>${n0(Number(rel.frac_cinturon_niebla ?? 0) * 100)} <small>% del área</small></dd>
+        <dt>Ladera al mar en el cinturón</dt><dd>${n0(Number(rel.frac_loma ?? 0) * 100)} <small>% del área</small></dd>
+        <dt>Cresta entre mar y zona</dt><dd>${n0(Number(rel.barrera_m ?? 0))} <small>m</small></dd>
+        <dt>Población 2022</dt><dd>${n0(p.poblacion)} <small>hab</small></dd>
+        <dt>Densidad</dt><dd>${n0(Number(urb.densidad_hab_km2 ?? 0))} <small>hab/km²</small></dd>
+        <dt>Concreto común</dt><dd>${n0(Number(p.vida_util_concreto_comun_anios ?? 0))} <small>años sin corrosión</small></dd>
+        <dt>Vía principal</dt><dd>${n1(Number(urb.dist_via_principal_km ?? 0))} <small>km</small></dd>
       </dl>
       <p class="fuente">Norma aplicada: a/c ≤ ${n2(rg.a_c_max)}, cemento ≥ ${rg.cemento_min_kg} kg/m³,
         f′c ≥ ${rg.fc_min_mpa} MPa, recubrimiento ${rg.recubrimiento_mm} mm (${esc(rg.fuente)}).
-        Clima: ${esc(a.fuente)}${a.zona_origen !== p.id ? ` (tomado de la zona vecina ${esc(a.zona_origen)})` : ""}.</p>
+        Clima: ${esc(a.fuente)}, celda ${esc(a.celda_era5)}${a.correccion_altitud_c ? `, temperatura corregida ${n1(Number(a.correccion_altitud_c))} °C por altitud` : ""}${a.celda_propia ? "" : " (celda vecina)"}.
+        Concreto común = Tipo I, a/c 0,55, recubrimiento 40 mm, sin agente. Ciudad cercana: ${esc(urb.ciudad_cercana ?? "—")} (${n0(Number(urb.dist_ciudad_km ?? 0))} km).</p>
     </section>
     <nav class="pestanas" role="tablist" aria-label="Recetas">
       ${TIPOS.map(([k, nombre, desc], i) => `<button role="tab" id="tab-${k}" aria-selected="${i === 0}" data-tipo="${k}" title="${desc}">${nombre}</button>`).join("")}

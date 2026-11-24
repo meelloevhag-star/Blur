@@ -33,6 +33,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-texto); fon
 .marca p { margin: 2px 0 0; color: var(--fg-suave); font-size: 0.85rem; text-wrap: balance; }
 .selector { display: flex; gap: 8px; align-items: center; font-size: 0.8rem; color: var(--fg-suave); text-transform: uppercase; letter-spacing: 0.06em; }
 select, input, textarea { font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--linea); border-radius: 4px; padding: 6px 8px; min-width: 0; }
+.controles { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; min-width: 0; max-width: 100%; }
+.check { display: flex; gap: 6px; align-items: center; font-size: 0.85rem; color: var(--fg-suave); }
+.zona-cab h2 small.id { font-size: 0.75rem; color: var(--fg-suave); font-weight: 400; margin-left: 6px; }
 .selector { min-width: 0; max-width: 100%; }
 .selector select { text-transform: none; letter-spacing: 0; font-size: 0.9rem; max-width: 100%; min-width: 0; flex: 1; }
 .lienzo { overflow: hidden; }
@@ -60,7 +63,7 @@ select, input, textarea { font: inherit; color: var(--fg); background: var(--bg)
 .detalle { padding: 16px 20px; display: grid; gap: 14px; }
 .vacio { color: var(--fg-suave); margin: 0; }
 .eyebrow { margin: 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-suave); }
-.zona-cab h2 { margin: 2px 0 8px; font-family: var(--f-datos); font-weight: 600; font-size: 1.15rem; }
+.zona-cab h2 { margin: 2px 0 8px; font-family: var(--f-display); font-weight: 700; font-size: 1.2rem; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--c, var(--linea));
   background: color-mix(in srgb, var(--c, var(--sutil)) 18%, transparent); }

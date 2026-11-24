@@ -12,7 +12,10 @@ import itertools
 import json
 import math
 
+from atlas import ambiente as amb_mod
 from atlas import niebla as nb
+from atlas import relieve as rel_mod
+from atlas import urbano as urb_mod
 from atlas.diseno_mezcla import dosificar
 from atlas.durabilidad import VIDA_MAX, vida_util, ajuste_drcm, efecto_agentes_cloruros
 from atlas.ingesta import vector_cierre
@@ -29,27 +32,12 @@ TMN_GRID = (12.5, 19.0)
 VIDA_OBJ = 50
 
 
-def _clima(pais="PER"):
-    ruta = DATOS / f"ambiente_{pais.lower()}.json"
-    return json.loads(ruta.read_text(encoding="utf-8")) if ruta.exists() else {}
-
-
-def _clima_zona(z, clima, zonas_por_id):
-    if z.id in clima:
-        return clima[z.id], z.id
-    # sin descarga aún: zona más cercana con clima (se marca en la salida)
-    cand = [zonas_por_id[i] for i in clima]
-    if not cand:
-        raise RuntimeError("no hay datos climáticos: ejecute python -m atlas.ambiente")
-    cerca = min(cand, key=lambda o: (o.lat - z.lat) ** 2 + (o.lon - z.lon) ** 2)
-    return clima[cerca.id], cerca.id
-
-
-def evaluar_zona(z, amb, modelo: ModeloCierre) -> dict:
+def evaluar_zona(z, amb, modelo: ModeloCierre, rel: dict | None = None, urb: dict | None = None) -> dict:
     cat = catalogo()
-    idx_n = nb.indice_niebla(amb)
-    dep = nb.deposicion_cloruros(z.dist_mar_km, amb, idx_n)
-    reg = nb.regimen(z.franja, dep, idx_n)
+    idx_n = nb.indice_niebla_orografica(amb, rel)
+    dep = nb.deposicion_cloruros(z.dist_mar_km, amb, idx_n, (rel or {}).get("barrera_m", 0.0))
+    reg = nb.regimen(z.franja, dep, idx_n, rel)
+    acceso_km = (urb or {}).get("dist_via_principal_km", 0.0)
     rg = reglas(reg)
     marino = 1 if reg != "seco" else 0
     agregados = {"arena": cat["agregados"]["arena"]}
@@ -79,7 +67,7 @@ def evaluar_zona(z, amb, modelo: ModeloCierre) -> dict:
                          cem["n"], pred["cierre_pct"] / 100, agente_id)
         vida_sin = vida_util(receta["a_c"], tipo, reg, dep, amb["t_media_c"], rg["recubrimiento_mm"],
                              cem["n"], 0.0, "ninguno")
-        econ = costo_y_disponibilidad(receta, agente_id, z.lat, z.lon)
+        econ = costo_y_disponibilidad(receta, agente_id, z.lat, z.lon, acceso_km)
         en_dominio = pred["n_datos_combinacion"] > 0
         avisos = []
         if not en_dominio:
@@ -107,7 +95,11 @@ def evaluar_zona(z, amb, modelo: ModeloCierre) -> dict:
     economica = min(ok, key=lambda c: (c["viabilidad"]["costo_m3_pen"], -c["puntaje_desempeno"]))
     disponible = max(ok, key=lambda c: (c["viabilidad"]["disponibilidad"], c["puntaje_desempeno"]))
     pareto = _pareto(validas)
-    return {"regimen": reg, "reglas": rg, "indice_niebla": idx_n, "deposicion_cl_mg_m2_d": dep,
+    # concreto común de la zona (Tipo I, a/c 0,55, recubrimiento de obra 40 mm, sin fisurar, sin agente):
+    # mide qué tan agresivo es el ambiente para lo que hoy se construye → severidad para la prioridad
+    vida_comun = vida_util(0.55, "I", reg, dep, amb["t_media_c"], 40,
+                           cat["cementos"]["I"]["n"], 0.0, "ninguno", fisurado=False)
+    return {"regimen": reg, "vida_util_concreto_comun_anios": vida_comun, "reglas": rg, "indice_niebla": idx_n, "deposicion_cl_mg_m2_d": dep,
             "clase_iso9223": nb.clase_iso9223(dep), "ambiente_marino_modelo": marino,
             "recetas": {"ideal": ideal, "economica": economica, "disponible": disponible},
             "referencia_sin_agente": referencia,
@@ -124,20 +116,35 @@ def _pareto(c):
 
 def construir(pais="PER") -> dict:
     zonas = cargar_zonas(pais)
-    por_id = {z.id: z for z in zonas}
-    clima = _clima(pais)
+    celdas = amb_mod.cargar(pais)
+    if not celdas:
+        raise RuntimeError("no hay datos climáticos: ejecute python -m atlas.ambiente")
+    relieve = rel_mod.cargar(pais)
+    urbano = urb_mod.cargar(pais)
     modelo = ModeloCierre()
     feats = []
     for z in zonas:
-        amb, origen_clima = _clima_zona(z, clima, por_id)
-        r = evaluar_zona(z, amb, modelo)
+        rel = relieve.get(z.id)
+        urb = urbano.get(z.id)
+        amb = amb_mod.clima_zona(z, celdas, rel["elev_media_m"] if rel else None)
+        r = evaluar_zona(z, amb, modelo, rel, urb)
+        # escala logarítmica: 1 año → 1; 10 años → 0,54; 50 → 0,22; ≥ 150 → 0
+        sev = max(0.0, min(1.0, 1 - math.log(max(r["vida_util_concreto_comun_anios"], 1)) / math.log(VIDA_MAX)))
+        pob = (urb or {}).get("poblacion", 0)
         ideal = r["recetas"]["ideal"]
         feats.append({"type": "Feature", "id": z.id,
                       "geometry": {"type": "Polygon", "coordinates": [z.poligono]},
                       "properties": {
                           "id": z.id, "pais": z.pais, "departamento": z.departamento, "franja": z.franja,
+                          "provincia": z.provincia, "distrito": z.distrito, "ubigeo": z.ubigeo, "tramo": z.tramo,
                           "dist_mar_km": z.dist_mar_km, "lat": z.lat, "lon": z.lon,
-                          "ambiente": amb | {"zona_origen": origen_clima},
+                          "ambiente": amb, "relieve": rel, "urbano": urb,
+                          "elevacion_media_m": (rel or {}).get("elev_media_m"),
+                          "frac_loma": (rel or {}).get("frac_loma", 0.0),
+                          "poblacion": pob, "clase_urbana": (urb or {}).get("clase_urbana", "sin dato"),
+                          "severidad": round(sev, 3),
+                          # población que vive donde el concreto común dura menos: dónde rinde más el autorreparable
+                          "prioridad": round(pob * sev),
                           **{k: v for k, v in r.items() if k not in ("recetas", "referencia_sin_agente")},
                           "referencia_sin_agente": r["referencia_sin_agente"],
                           "recetas": r["recetas"],
@@ -153,5 +160,9 @@ def construir(pais="PER") -> dict:
     meta = {"modelo_version": modelo.p["version"], "cv_modelo": modelo.p["cv"],
             "durabilidad": {"drcm": ajuste_drcm(), "agentes": efecto_agentes_cloruros()},
             "w0_diseno_mm": W0_DISENO, "edad_diseno_dias": EDAD_DISENO, "vida_objetivo": VIDA_OBJ,
-            "zonas_con_clima_propio": sum(1 for z in zonas if z.id in clima), "zonas": len(zonas)}
+            "zonas_con_clima_propio": sum(1 for f in feats if f["properties"]["ambiente"]["celda_propia"]),
+            "zonas": len(zonas), "celdas_era5": len(celdas),
+            "malla": {"paso_km": 10, "franjas_km": [list(f) for f in __import__("atlas.zonas", fromlist=["x"]).FRANJAS_KM]},
+            "poblacion_total_zonas": sum(f["properties"]["poblacion"] for f in feats),
+            "fuentes_territorio": {"relieve": relieve.get("_meta"), "urbano": urbano.get("_meta")}}
     return {"type": "FeatureCollection", "metadata": meta, "features": feats}

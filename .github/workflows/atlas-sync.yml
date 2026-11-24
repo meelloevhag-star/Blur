@@ -14,6 +14,10 @@ on:
         description: "Re-entrenar aunque no haya fuentes nuevas"
         type: boolean
         default: false
+      territorio:
+        description: "Recalcular relieve (DEM), población (WorldPop) y clima (tras cambiar la malla)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -33,7 +37,10 @@ jobs:
       - run: pip install -r biocrete_neat/requirements.txt -r atlas/requirements.txt
       - name: Pruebas
         run: python -m pytest -q atlas/tests biocrete_neat/tests
-      - name: Clima de zonas nuevas (solo descarga lo que falta)
+      - name: Territorio (relieve, población y clima; solo si se pide)
+        if: ${{ inputs.territorio }}
+        run: python -m atlas territorio
+      - name: Clima de celdas nuevas (solo descarga lo que falta)
         run: python -m atlas.ambiente
       - name: Sincronizar (ingesta → entrenar → recetas)
         run: python -m atlas sync ${{ inputs.forzar && '--forzar' || '' }}
