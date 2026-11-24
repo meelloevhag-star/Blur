@@ -1,0 +1,59 @@
+[
+  {
+    "version": 1,
+    "fecha": "2026-11-24T07:15:57+00:00",
+    "lote": "v1 · Mousa 2022 (subtropical)",
+    "n_registros_total": 764,
+    "n_registros_nuevos": 764,
+    "n_grupos_nuevos": 191,
+    "huella_datos": "2d61a821118cd14c",
+    "generaciones": 40,
+    "lambda_parsimonia": 0.0008,
+    "r2_prospectivo": {
+      "campeon_vigente": null,
+      "candidato_caliente": 0.224,
+      "referencia_frio": 0.224
+    },
+    "aceptado": true,
+    "rmse_final_entrenamiento": 0.2041,
+    "archivo_estado": "version_001.pkl"
+  },
+  {
+    "version": 2,
+    "fecha": "2026-11-24T07:16:55+00:00",
+    "lote": "v2 · + Cappellesso marino, curado previo",
+    "n_registros_total": 1648,
+    "n_registros_nuevos": 884,
+    "n_grupos_nuevos": 84,
+    "huella_datos": "4899cabcb52efdc9",
+    "generaciones": 40,
+    "lambda_parsimonia": 0.0008,
+    "r2_prospectivo": {
+      "campeon_vigente": -0.076,
+      "candidato_caliente": 0.32,
+      "referencia_frio": 0.299
+    },
+    "aceptado": true,
+    "rmse_final_entrenamiento": 0.2225,
+    "archivo_estado": "version_002.pkl"
+  },
+  {
+    "version": 3,
+    "fecha": "2026-11-24T07:18:15+00:00",
+    "lote": "v3 · + Cappellesso marino, exposición directa",
+    "n_registros_total": 2167,
+    "n_registros_nuevos": 519,
+    "n_grupos_nuevos": 35,
+    "huella_datos": "07b5871db01514d3",
+    "generaciones": 40,
+    "lambda_parsimonia": 0.0008,
+    "r2_prospectivo": {
+      "campeon_vigente": -0.961,
+      "candidato_caliente": 0.286,
+      "referencia_frio": 0.32
+    },
+    "aceptado": true,
+    "rmse_final_entrenamiento": 0.2258,
+    "archivo_estado": "version_003.pkl"
+  }
+]
