@@ -1,0 +1,4 @@
+id,nombre,funcion,dosis_min_pct_cemento,dosis_max_pct_cemento,dosis_min_kg_m3,dosis_max_kg_m3,precio_pen_kg,fuente_dosis,fuente_precio,disponibilidad_pe,notas
+cristalino,Cristalizante integral (tipo Xypex Admix C-500 NF),autorreparación autógena mejorada + impermeabilidad,1.0,1.5,3,6,25.0,https://cdn.xypex.com/s3fs-public/media/document/2025-06-24_Admix_C-500_C-500_NF_(A4)-SPANISH_MX.pdf,ESTIMADO (sin precio publicado en Perú),media,distribuidores Sika/Xypex en Lima; en los datos de Blur es el portador 'cristalino' (Cappellesso 2024)
+superplastificante,Superplastificante policarboxilato,reduce agua (permite a/c bajo sin perder trabajabilidad),0.5,1.5,,,12.0,ficha típica de fabricante (rango usual 0.5-1.5 % del cemento),ESTIMADO,alta,necesario para a/c ≤ 0.45
+inhibidor,Inhibidor de corrosión (nitrito de calcio),protege el acero frente a cloruros,,,10,20,8.0,ACI 222R (rango de dosis habitual por litro/m3),ESTIMADO,media,opcional en exposición severa

@@ -1,0 +1,5 @@
+id,nombre,tipo_astm,adicion,densidad,factor_envejecimiento_n,precio_bolsa_pen,bolsa_kg,fuente_precio,fecha_precio,notas
+I,Portland Tipo I (Sol / Pacasmayo / Yura),C150 Tipo I,ninguna,3.15,0.30,30.90,42.5,https://www.sodimac.com.pe/sodimac-pe/category/cat20030/cemento,2026-11-24,precio minorista Lima; n=0.30 OPC (fib Bulletin 34)
+GU,Portland Tipo GU (APU / Pacasmayo),C1157 GU,ninguna,3.10,0.30,28.60,42.5,https://www.sodimac.com.pe/sodimac-pe/articulo/113535211/cemento-apu-tipo-gu-42-5kg,2026-11-24,uso general; n asumido igual a OPC
+HS,Portland Tipo HS (Andino Ultra HS),C1157 HS,puzolana/escoria,3.00,0.45,33.50,42.5,https://www.sodimac.com.pe/sodimac-pe/category/cat20030/cemento,2026-11-24,alta resistencia a sulfatos; n=0.45 (tipo escoria/puzolana; fib B34 aprox.)
+IP,Portland Puzolánico Tipo IP (Yura IP / Atlas),C595 IP,puzolana 15-40%,2.85,0.50,30.00,42.5,ESTIMADO (sin precio publicado encontrado),2026-11-24,precio por verificar con distribuidor; n entre OPC (0.30) y ceniza volante (0.60)
