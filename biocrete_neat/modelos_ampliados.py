@@ -223,6 +223,9 @@ ESCENARIOS_PAITA = [
 ]
 
 
+RESTRICCIONES_MONOTONAS = "(-1,1,0,0,0,0)"  # orden de VARS_REPLICAS
+
+
 def predicciones_paita(X, y, B=100) -> list[dict]:
     """Ensamble bootstrap de XGBoost entrenado en réplicas: media e IC 95 % del cierre a 90 d en mar."""
     rng = np.random.default_rng(SEMILLA)
@@ -232,7 +235,9 @@ def predicciones_paita(X, y, B=100) -> list[dict]:
     preds = []
     for b in range(B):
         idx = rng.integers(0, len(y), len(y))
-        m = _xgb().set_params(random_state=SEMILLA + b).fit(Xn[idx], y[idx])
+        # Restricciones físicas: más ancho inicial -> menos cierre; más edad -> más cierre
+        m = _xgb().set_params(random_state=SEMILLA + b, monotone_constraints=RESTRICCIONES_MONOTONAS)\
+            .fit(Xn[idx], y[idx])
         preds.append(np.clip(m.predict(Xe), 0, 1) * 100)
     preds = np.array(preds)
     w0_max = float(X[:, 0].max())
@@ -244,6 +249,8 @@ def predicciones_paita(X, y, B=100) -> list[dict]:
             avisos.append(f"w0 fuera del rango entrenado (máx {w0_max:.2f} mm)")
         if not marino_nivel.any():
             avisos.append("sin datos marinos con este nivel de protección")
+        if not ((X[:, 3] == 1) & (X[:, 4] == 1)).any():
+            avisos.append("sin datos que combinen ambiente marino y lactato de calcio")
         salida.append({"escenario": f"90 d · mar · lactato Ca · {nombre}",
                        "cierre_medio_pct": round(float(preds[:, k].mean()), 1),
                        "cierre_IC95_pct": [round(float(np.percentile(preds[:, k], 2.5)), 1),

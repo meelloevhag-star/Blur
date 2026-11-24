@@ -1,0 +1,320 @@
+{
+  "semilla": 2026,
+  "generaciones_neat": 75,
+  "replicas": {
+    "n_registros": 2167,
+    "n_grupos": 310,
+    "fuentes": {
+      "Cappellesso2024": 1403,
+      "Mousa2022": 764
+    },
+    "modelos": {
+      "Ridge": {
+        "R2": 0.393,
+        "MAE": 18.488,
+        "RMSE": 23.274,
+        "R2_IC95": [
+          0.342,
+          0.44
+        ],
+        "MAE_IC95": [
+          17.445,
+          19.592
+        ]
+      },
+      "RandomForest": {
+        "R2": 0.586,
+        "MAE": 14.025,
+        "RMSE": 19.233,
+        "R2_IC95": [
+          0.535,
+          0.628
+        ],
+        "MAE_IC95": [
+          13.093,
+          14.959
+        ]
+      },
+      "XGBoost": {
+        "R2": 0.572,
+        "MAE": 14.358,
+        "RMSE": 19.553,
+        "R2_IC95": [
+          0.521,
+          0.615
+        ],
+        "MAE_IC95": [
+          13.414,
+          15.362
+        ]
+      },
+      "NEAT λ=0.0008": {
+        "R2": 0.417,
+        "MAE": 17.516,
+        "RMSE": 22.807,
+        "R2_IC95": [
+          0.362,
+          0.471
+        ],
+        "MAE_IC95": [
+          16.3,
+          18.73
+        ],
+        "neuronas_ocultas_prom": 0.2
+      },
+      "NEAT λ=0.00012": {
+        "R2": 0.409,
+        "MAE": 17.492,
+        "RMSE": 22.971,
+        "R2_IC95": [
+          0.346,
+          0.466
+        ],
+        "MAE_IC95": [
+          16.247,
+          18.77
+        ],
+        "neuronas_ocultas_prom": 0.2
+      }
+    }
+  },
+  "meta": {
+    "n_registros": 36,
+    "n_estudios": 12,
+    "modelos": {
+      "Ridge": {
+        "R2": 0.569,
+        "MAE": 0.104,
+        "RMSE": 0.121,
+        "R2_IC95": [
+          0.445,
+          0.656
+        ],
+        "MAE_IC95": [
+          0.086,
+          0.121
+        ]
+      },
+      "RandomForest": {
+        "R2": 0.506,
+        "MAE": 0.108,
+        "RMSE": 0.129,
+        "R2_IC95": [
+          0.227,
+          0.652
+        ],
+        "MAE_IC95": [
+          0.092,
+          0.127
+        ]
+      },
+      "XGBoost": {
+        "R2": 0.672,
+        "MAE": 0.084,
+        "RMSE": 0.105,
+        "R2_IC95": [
+          0.443,
+          0.819
+        ],
+        "MAE_IC95": [
+          0.06,
+          0.109
+        ]
+      },
+      "NEAT λ=0.0008": {
+        "R2": 0.46,
+        "MAE": 0.105,
+        "RMSE": 0.135,
+        "R2_IC95": [
+          0.098,
+          0.756
+        ],
+        "MAE_IC95": [
+          0.074,
+          0.132
+        ],
+        "neuronas_ocultas_prom": 0.2
+      },
+      "NEAT λ=0.00012": {
+        "R2": 0.495,
+        "MAE": 0.104,
+        "RMSE": 0.131,
+        "R2_IC95": [
+          0.182,
+          0.73
+        ],
+        "MAE_IC95": [
+          0.079,
+          0.13
+        ],
+        "neuronas_ocultas_prom": 0.6
+      },
+      "NEAT (λ anidado)": {
+        "R2": 0.47,
+        "MAE": 0.111,
+        "RMSE": 0.134,
+        "R2_IC95": [
+          0.213,
+          0.677
+        ],
+        "MAE_IC95": [
+          0.082,
+          0.138
+        ]
+      }
+    },
+    "lambdas_elegidos_cv_anidada": [
+      0.00012,
+      0.0008,
+      0.0008,
+      0.00012,
+      0.0008
+    ]
+  },
+  "shap": {
+    "replicas": [
+      {
+        "variable": "Edad (d)",
+        "shap_medio_abs": 0.1582
+      },
+      {
+        "variable": "Ancho fisura w0 (mm)",
+        "shap_medio_abs": 0.0646
+      },
+      {
+        "variable": "Protección bio (0-3)",
+        "shap_medio_abs": 0.0389
+      },
+      {
+        "variable": "Ambiente marino",
+        "shap_medio_abs": 0.0358
+      },
+      {
+        "variable": "Curado previo",
+        "shap_medio_abs": 0.0351
+      },
+      {
+        "variable": "Lactato de calcio",
+        "shap_medio_abs": 0.0131
+      }
+    ],
+    "meta": [
+      {
+        "variable": "Protección bio (0-3)",
+        "shap_medio_abs": 0.1275
+      },
+      {
+        "variable": "Ancho fisura (mm)",
+        "shap_medio_abs": 0.0521
+      },
+      {
+        "variable": "Ambiente marino",
+        "shap_medio_abs": 0.0502
+      },
+      {
+        "variable": "Edad curado (d)",
+        "shap_medio_abs": 0.0421
+      },
+      {
+        "variable": "a/c",
+        "shap_medio_abs": 0.013
+      },
+      {
+        "variable": "Usa lactato",
+        "shap_medio_abs": 0.009
+      }
+    ]
+  },
+  "curva_aprendizaje": {
+    "n_registros": [
+      177,
+      465,
+      1100,
+      1592,
+      2167
+    ],
+    "n_grupos": [
+      31,
+      78,
+      155,
+      232,
+      310
+    ],
+    "Ridge": [
+      0.208,
+      0.149,
+      0.368,
+      0.384,
+      0.393
+    ],
+    "RandomForest": [
+      0.079,
+      0.257,
+      0.52,
+      0.587,
+      0.586
+    ],
+    "XGBoost": [
+      0.011,
+      0.139,
+      0.498,
+      0.542,
+      0.572
+    ],
+    "NEAT λ=0.0008": [
+      0.116,
+      0.198,
+      0.39,
+      0.389,
+      0.367
+    ]
+  },
+  "paita": [
+    {
+      "escenario": "90 d · mar · lactato Ca · Directa · fisura 0,2 mm",
+      "cierre_medio_pct": 74.7,
+      "cierre_IC95_pct": [
+        68.9,
+        79.9
+      ],
+      "extrapolacion": "sin datos que combinen ambiente marino y lactato de calcio"
+    },
+    {
+      "escenario": "90 d · mar · lactato Ca · Directa · fisura 0,5 mm",
+      "cierre_medio_pct": 60.0,
+      "cierre_IC95_pct": [
+        54.7,
+        64.5
+      ],
+      "extrapolacion": "sin datos que combinen ambiente marino y lactato de calcio"
+    },
+    {
+      "escenario": "90 d · mar · lactato Ca · Directa · fisura 1,0 mm",
+      "cierre_medio_pct": 59.9,
+      "cierre_IC95_pct": [
+        54.4,
+        64.5
+      ],
+      "extrapolacion": "w0 fuera del rango entrenado (máx 0.96 mm); sin datos que combinen ambiente marino y lactato de calcio"
+    },
+    {
+      "escenario": "90 d · mar · lactato Ca · Portador · fisura 0,3 mm",
+      "cierre_medio_pct": 70.5,
+      "cierre_IC95_pct": [
+        64.4,
+        77.3
+      ],
+      "extrapolacion": "sin datos marinos con este nivel de protección; sin datos que combinen ambiente marino y lactato de calcio"
+    },
+    {
+      "escenario": "90 d · mar · lactato Ca · Encapsulación · fisura 0,3 mm",
+      "cierre_medio_pct": 57.3,
+      "cierre_IC95_pct": [
+        49.0,
+        66.3
+      ],
+      "extrapolacion": "sin datos marinos con este nivel de protección; sin datos que combinen ambiente marino y lactato de calcio"
+    }
+  ],
+  "paita_restricciones_monotonas": "(-1,1,0,0,0,0)"
+}
