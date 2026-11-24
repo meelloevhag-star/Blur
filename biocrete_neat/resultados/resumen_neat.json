@@ -2,10 +2,11 @@
   "n_ensayos_meta_dataset": 36,
   "cv_5fold_alpha": {
     "objetivo": "Reducción de cloruros/permeabilidad (alpha)",
+    "lambda_parsimonia": 0.0008,
     "NEAT": {
-      "R2": 0.366,
-      "MAE": 0.123,
-      "RMSE": 0.146
+      "R2": 0.54,
+      "MAE": 0.104,
+      "RMSE": 0.125
     },
     "Ridge": {
       "R2": 0.523,
@@ -17,10 +18,54 @@
       "MAE": 0.109,
       "RMSE": 0.128
     },
-    "neat_neuronas_ocultas_promedio": 1.4
+    "neat_neuronas_ocultas_promedio": 0.0
   },
+  "cv_5fold_alpha_por_lambda": {
+    "0.0008": {
+      "objetivo": "Reducción de cloruros/permeabilidad (alpha)",
+      "lambda_parsimonia": 0.0008,
+      "NEAT": {
+        "R2": 0.54,
+        "MAE": 0.104,
+        "RMSE": 0.125
+      },
+      "Ridge": {
+        "R2": 0.523,
+        "MAE": 0.11,
+        "RMSE": 0.127
+      },
+      "RandomForest": {
+        "R2": 0.514,
+        "MAE": 0.109,
+        "RMSE": 0.128
+      },
+      "neat_neuronas_ocultas_promedio": 0.0
+    },
+    "0.00012": {
+      "objetivo": "Reducción de cloruros/permeabilidad (alpha)",
+      "lambda_parsimonia": 0.00012,
+      "NEAT": {
+        "R2": 0.366,
+        "MAE": 0.123,
+        "RMSE": 0.146
+      },
+      "Ridge": {
+        "R2": 0.523,
+        "MAE": 0.11,
+        "RMSE": 0.127
+      },
+      "RandomForest": {
+        "R2": 0.514,
+        "MAE": 0.109,
+        "RMSE": 0.128
+      },
+      "neat_neuronas_ocultas_promedio": 1.4
+    }
+  },
+  "modelo_final_lambda_parsimonia": 0.00012,
   "cv_5fold_cierre_pct": {
     "objetivo": "Cierre óptico de fisuras (%)",
+    "lambda_parsimonia": 0.00012,
     "NEAT": {
       "R2": 0.047,
       "MAE": 14.359,

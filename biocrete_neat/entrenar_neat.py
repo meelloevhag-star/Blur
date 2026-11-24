@@ -115,7 +115,12 @@ def evolucionar_neat(X_tr: np.ndarray, y_tr: np.ndarray, generaciones: int = 110
     return ganador, red_ganadora, config, historia_rmse
 
 
-def evaluar_validacion_cruzada(X_norm: np.ndarray, y: np.ndarray, etiqueta_obj: str, escala: float = 1.0) -> dict:
+LAMBDA_PARSIMONIA_ALTA = 8e-4      # Tabla IV: NEAT parsimonia alta (0 ocultas)
+LAMBDA_PARSIMONIA_MODERADA = 1.2e-4  # Tabla IV: NEAT con nodos ocultos permitidos
+
+
+def evaluar_validacion_cruzada(X_norm: np.ndarray, y: np.ndarray, etiqueta_obj: str, escala: float = 1.0,
+                               penalizar_complejidad: float = LAMBDA_PARSIMONIA_MODERADA) -> dict:
     """
     Validación cruzada 5-fold justa: compara NEAT frente a Ridge y Random Forest
     sobre datos NO vistos durante el entrenamiento (out-of-fold).
@@ -128,7 +133,8 @@ def evaluar_validacion_cruzada(X_norm: np.ndarray, y: np.ndarray, etiqueta_obj: 
 
     for fold_idx, (tr, te) in enumerate(kf.split(X_norm)):
         # 1. NEAT
-        ganador, red, cfg, _ = evolucionar_neat(X_norm[tr], y[tr], generaciones=75, semilla=100 + fold_idx)
+        ganador, red, cfg, _ = evolucionar_neat(X_norm[tr], y[tr], generaciones=75, semilla=100 + fold_idx,
+                                                penalizar_complejidad=penalizar_complejidad)
         pred_neat[te] = [red.activate(x)[0] for x in X_norm[te]]
         n_oc = len([n for n in ganador.nodes if n >= cfg.genome_config.num_outputs])
         ocultos_por_fold.append(n_oc)
@@ -152,6 +158,7 @@ def evaluar_validacion_cruzada(X_norm: np.ndarray, y: np.ndarray, etiqueta_obj: 
 
     return {
         "objetivo": etiqueta_obj,
+        "lambda_parsimonia": penalizar_complejidad,
         "NEAT": metricas(y, pred_neat),
         "Ridge": metricas(y, pred_ridge),
         "RandomForest": metricas(y, pred_rf),
@@ -266,7 +273,12 @@ def main() -> None:
     print("=" * 72)
 
     # 1. Validación cruzada 5-fold (honesta, datos fuera de muestra)
-    cv_alpha = evaluar_validacion_cruzada(X_norm, y_alpha, "Reducción de cloruros/permeabilidad (alpha)", escala=1.0)
+    cv_alpha_por_lambda = {
+        str(lam): evaluar_validacion_cruzada(X_norm, y_alpha, "Reducción de cloruros/permeabilidad (alpha)",
+                                             escala=1.0, penalizar_complejidad=lam)
+        for lam in (LAMBDA_PARSIMONIA_ALTA, LAMBDA_PARSIMONIA_MODERADA)
+    }
+    cv_alpha = cv_alpha_por_lambda[str(LAMBDA_PARSIMONIA_ALTA)]
     cv_cierre = evaluar_validacion_cruzada(X_norm, y_cierre, "Cierre óptico de fisuras (%)", escala=100.0)
 
     print("\n[1] Comparación justa en Validación Cruzada 5-fold (α de cloruros):")
@@ -328,6 +340,11 @@ def main() -> None:
     resumen = {
         "n_ensayos_meta_dataset": len(X_raw),
         "cv_5fold_alpha": {k: v for k, v in cv_alpha.items() if not isinstance(v, np.ndarray)},
+        "cv_5fold_alpha_por_lambda": {
+            lam: {k: v for k, v in cv.items() if not isinstance(v, np.ndarray)}
+            for lam, cv in cv_alpha_por_lambda.items()
+        },
+        "modelo_final_lambda_parsimonia": LAMBDA_PARSIMONIA_MODERADA,
         "cv_5fold_cierre_pct": {k: v for k, v in cv_cierre.items() if not isinstance(v, np.ndarray)},
         "topologia_final_alpha": {"neuronas_ocultas": n_oc_a, "conexiones_activas": n_cx_a},
         "importancia_permutacion_alpha": imp_alpha,
