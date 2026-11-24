@@ -1,0 +1,5 @@
+parametro,valor,unidad,fuente,notas
+tarifa_flete,0.25,PEN/(t·km),SUPUESTO por calibrar con DS 020-2021-MTC Anexo II (https://busquedas.elperuano.pe/dispositivo/NL/1962212-2),carga a granel en camión; reemplazar por el valor del anexo vigente
+sinuosidad_carretera,1.3,factor,SUPUESTO (distancia por carretera ≈ 1.3 × geodésica en la costa peruana),mejorable con OSRM
+radio_cantera_km,40,km,SUPUESTO (hay canteras de agregados a lo largo de toda la Panamericana),el agregado se cobra a precio local sin flete largo
+tipo_cambio,3.75,PEN/USD,SUPUESTO,actualizar con BCRP
