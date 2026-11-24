@@ -139,11 +139,22 @@ def entrenar(gens_neat=40, rapido=False) -> dict:
         grupos_u = np.unique(g)
         idx_por_g = {k: np.flatnonzero(g == k) for k in grupos_u}
         boot = []
+        muestra = Xn[rng.choice(len(y), min(200, len(y)), replace=False)]
+        dif_max = 0.0
         for b in range(4 if rapido else B_BOOT):
             gs = rng.choice(grupos_u, len(grupos_u), replace=True)
             idx = np.concatenate([idx_por_g[k] for k in gs])
-            boot.append(exportar_xgb(_xgb(SEMILLA + b).fit(Xn[idx], y[idx])))
+            m = _xgb(SEMILLA + b).fit(Xn[idx], y[idx])
+            arboles = exportar_xgb(m)
+            nativo = m.predict(muestra)
+            exp = np.array([evaluar_xgb_json(arboles, 0.5, x) for x in muestra])
+            dif_max = max(dif_max, float(np.abs(nativo - exp).max()))
+            boot.append(arboles)
+        assert dif_max < 1e-4, f"exportación XGBoost no reproduce al modelo nativo (dif {dif_max})"
         _, red, _, _ = _neat(Xn, y, gens_neat if not rapido else 10, SEMILLA)
+        dif_neat = max(abs(red.activate(list(x))[0] - evaluar_neat_json(exportar_neat(red), x)) for x in muestra)
+        assert dif_neat < 1e-12, f"exportación NEAT no reproduce a neat-python (dif {dif_neat})"
+        entrada["verificacion_exportacion"] = {"xgb_dif_max": dif_max, "neat_dif_max": dif_neat}
         # soporte del dominio: combinaciones observadas (portador, bacterias, marino, curado)
         soporte = {}
         for x in X:
