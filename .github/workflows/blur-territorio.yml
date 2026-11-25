@@ -1,0 +1,54 @@
+# Blur recoge los datos del territorio (geografía, clima ERA5, relieve, población y capas GIS del
+# Estado y OpenStreetMap) desde los servidores de GitHub y los guarda en biocrete_neat/datos/territorio/.
+# El Atlas no descarga nada: cuando esto cambia, atlas-sync recalcula las zonas y el mapa.
+name: blur-territorio
+on:
+  workflow_dispatch:
+    inputs:
+      que:
+        description: "Qué recoger (vacío = todo): geo clima relieve poblacion gis"
+        default: ""
+      solo_gis:
+        description: "Solo estas fuentes GIS (vacío = todas): ingemmet minam osm"
+        default: ""
+  push:
+    paths:
+      - "biocrete_neat/territorio/**"
+      - ".github/workflows/blur-territorio.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: blur-territorio-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  recoger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r biocrete_neat/requirements.txt -r atlas/requirements.txt
+      - name: Recoger
+        run: |
+          QUE="${{ inputs.que }}"
+          SOLO="${{ inputs.solo_gis }}"
+          python -m biocrete_neat.territorio ${QUE:-todo} ${SOLO:+--solo $SOLO} | tee -a $GITHUB_STEP_SUMMARY
+      - name: Guardar en la rama
+        run: |
+          git config user.name "blur-territorio"
+          git config user.email "blur-territorio@users.noreply.github.com"
+          git add biocrete_neat/datos/territorio
+          git diff --cached --quiet && exit 0
+          git commit -m "data(blur): datos del territorio recogidos por blur-territorio"
+          RAMA="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          for i in 1 2 3 4; do
+            # otra corrida (atlas-sync / blur-territorio) pudo subir antes: cada una escribe su carpeta, no chocan
+            git pull --rebase --autostash origin "$RAMA" && git push origin "HEAD:$RAMA" && exit 0
+            sleep $((i * 10))
+          done
+          exit 1

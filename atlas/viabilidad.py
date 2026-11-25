@@ -53,7 +53,8 @@ def planta_cercana(lat, lon, tipo):
     return p, dist_km((lat, lon), (p["lat"], p["lon"])) * c["transporte"]["sinuosidad_carretera"]
 
 
-def costo_y_disponibilidad(receta: dict, agente_id: str, lat: float, lon: float) -> dict:
+def costo_y_disponibilidad(receta: dict, agente_id: str, lat: float, lon: float, acceso_km: float = 0.0) -> dict:
+    """acceso_km: distancia de la zona a la carretera principal más cercana (último tramo)."""
     c = catalogo()
     t = c["transporte"]
     cem = c["cementos"][receta["cemento_tipo"]]
@@ -63,6 +64,8 @@ def costo_y_disponibilidad(receta: dict, agente_id: str, lat: float, lon: float)
     partidas = {
         "cemento": receta["cemento_kg"] * cem["precio_kg"],
         "flete_cemento": receta["cemento_kg"] / 1000 * d_planta * t["tarifa_flete"],
+        # último tramo sin vía principal: cemento + agregados (≈ 2,3 t/m³) a tarifa doble (supuesto)
+        "acceso_ultimo_tramo": 2.3 * acceso_km * t["sinuosidad_carretera"] * 2 * t["tarifa_flete"],
         "arena": receta["arena_kg"] / arena["peso_unitario_kg_m3"] * arena["precio_pen_m3"],
         "piedra": receta["piedra_kg"] / piedra["peso_unitario_kg_m3"] * piedra["precio_pen_m3"],
         "superplastificante": receta["superplastificante_kg"] * float(c["aditivos"]["superplastificante"]["precio_pen_kg"]),
@@ -71,9 +74,11 @@ def costo_y_disponibilidad(receta: dict, agente_id: str, lat: float, lon: float)
     base = sum(partidas.values())
     ag = c["agentes"][agente_id]
     if agente_id == "basilisk":
-        partidas["agente_autorreparador"] = 0.5 * base           # ENR: +50 % del m³
+        # ENR: +50 % del m³ con la dosis alta (15 kg/m³); se escala con la dosis real (ESTIMADO, cotizar)
+        partidas["agente_autorreparador"] = 0.5 * base * receta["agente_kg"] / 15
     elif agente_id in ("lwa_bacterias", "hidrogel_bacterias", "consorcio_agricola"):
-        lactato_kg = 0.015 * receta["cemento_kg"]                # ~1,5 % del cemento (supuesto de literatura)
+        # Wiktor y Jonkers 2011: ~15 kg de lactato por m³ en el LWA; hidrogel/consorcio ~1,5 % del cemento
+        lactato_kg = 15.0 if agente_id == "lwa_bacterias" else 0.015 * receta["cemento_kg"]
         partidas["agente_autorreparador"] = lactato_kg * 5.2 * t["tipo_cambio"] + (
             60.0 if agente_id == "lwa_bacterias" else 120.0 if agente_id == "hidrogel_bacterias" else 25.0)
     total = sum(partidas.values())
@@ -85,8 +90,9 @@ def costo_y_disponibilidad(receta: dict, agente_id: str, lat: float, lon: float)
         disp_ag *= math.exp(-d_lima / 1500)
     disp_cris = (float(c["aditivos"]["cristalino"]["disponibilidad_pe"].replace("media", "0.7").replace("alta", "0.9"))
                  * math.exp(-d_lima / 1500)) if receta["cristalino_kg"] > 0 else 1.0
-    disponibilidad = disp_cem * disp_ag * disp_cris
+    disp_acceso = math.exp(-acceso_km / 40)
+    disponibilidad = disp_cem * disp_ag * disp_cris * disp_acceso
     return {"costo_m3_pen": round(total, 0), "partidas_pen": {k: round(v, 1) for k, v in partidas.items()},
             "planta_cemento": f"{planta['empresa']} · {planta['planta']}", "dist_planta_km": round(d_planta, 0),
-            "disponibilidad": round(disponibilidad, 3),
+            "disponibilidad": round(disponibilidad, 3), "dist_via_principal_km": round(acceso_km, 1),
             "proveedor_agente": ag["proveedor_ciudad"] or "—"}

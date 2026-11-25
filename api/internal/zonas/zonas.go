@@ -29,10 +29,25 @@ func Nuevo(ruta string) (*Almacen, error) {
 }
 
 // claves que se conservan en la versión ligera (para pintar el mapa sin descargar todas las recetas)
-var ligeras = []string{"id", "pais", "departamento", "franja", "dist_mar_km", "regimen", "indice_niebla",
-	"deposicion_cl_mg_m2_d", "clase_iso9223", "ideal_cierre_pct", "ideal_vida_anios", "ideal_costo_m3",
-	"ideal_disponibilidad", "economica_costo_m3", "ideal_vida_sin_reparacion_anios",
-	"ganancia_autorreparacion_anios"}
+var ligeras = []string{"id", "pais", "departamento", "provincia", "distrito", "anillo", "q", "r", "frente_marino",
+	"lat", "lon", "dist_mar_km", "regimen", "indice_niebla", "deposicion_cl_mg_m2_d", "clase_iso9223",
+	"elevacion_media_m", "frac_loma", "poblacion", "clase_urbana", "severidad", "prioridad", "ideal_cierre_pct",
+	"ideal_vida_anios", "ideal_costo_m3", "ideal_disponibilidad", "economica_costo_m3",
+	"ideal_cumple_anios", "comun_cumple_anios", "vida_util_concreto_comun_anios"}
+
+// atajos de la receta ideal que la web usa para colorear (igual que atlas/cli.py escribir_web)
+func atajosIdeal(props map[string]any, p map[string]any) {
+	rec, _ := props["recetas"].(map[string]any)
+	ide, _ := rec["ideal"].(map[string]any)
+	if ide == nil {
+		return
+	}
+	p["ideal_agente"] = ide["agente"]
+	if d, ok := ide["dosificacion"].(map[string]any); ok {
+		p["ideal_cemento"] = d["cemento_tipo"]
+		p["ideal_a_c"] = d["a_c"]
+	}
+}
 
 func (a *Almacen) Recargar() error {
 	st, err := os.Stat(a.ruta)
@@ -60,6 +75,7 @@ func (a *Almacen) Recargar() error {
 		for _, k := range ligeras {
 			p[k] = props[k]
 		}
+		atajosIdeal(props, p)
 		lig.Features = append(lig.Features, map[string]any{"type": "Feature", "id": id, "geometry": f["geometry"], "properties": p})
 	}
 	lb, _ := json.Marshal(lig)

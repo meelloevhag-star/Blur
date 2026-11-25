@@ -8,10 +8,18 @@ on:
       - "atlas/catalogo/**"
       - "atlas/datos/**"
       - "atlas/fuentes.yaml"
+  # los commits que hace blur-territorio con GITHUB_TOKEN no disparan "push": se encadena aquí
+  workflow_run:
+    workflows: ["blur-territorio"]
+    types: [completed]
   workflow_dispatch:
     inputs:
       forzar:
         description: "Re-entrenar aunque no haya fuentes nuevas"
+        type: boolean
+        default: false
+      territorio:
+        description: "Recalcular relieve y población por zona (tras cambiar la malla)"
         type: boolean
         default: false
 
@@ -25,16 +33,34 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch || github.ref }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install -r biocrete_neat/requirements.txt -r atlas/requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Dependencias web (la prueba de paridad Fick compila web/src/fick.ts)
+        run: cd web && npm ci
       - name: Pruebas
         run: python -m pytest -q atlas/tests biocrete_neat/tests
-      - name: Clima de zonas nuevas (solo descarga lo que falta)
-        run: python -m atlas.ambiente
+      # rásters de Blur que no se versionan (DEM ~1 GB, WorldPop): caché entre corridas
+      - uses: actions/cache@v4
+        with:
+          path: |
+            biocrete_neat/datos/territorio/dem
+            biocrete_neat/datos/territorio/worldpop
+          key: blur-rasters-${{ hashFiles('biocrete_neat/territorio/relieve.py', 'biocrete_neat/territorio/poblacion.py') }}
+      - name: Rásters de Blur (relieve y población; solo baja lo que falta)
+        run: python -m biocrete_neat.territorio relieve poblacion
+      - name: Zonas (relieve y población por zona; solo si se pide)
+        if: ${{ inputs.territorio }}
+        run: python -m atlas territorio
       - name: Sincronizar (ingesta → entrenar → recetas)
         run: python -m atlas sync ${{ inputs.forzar && '--forzar' || '' }}
       - uses: actions/setup-go@v5
@@ -42,15 +68,20 @@ jobs:
           go-version: "1.22"
       - name: Paridad Go ↔ Python
         run: cd api && go test ./...
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
       - name: Compilar el mapa
-        run: cd web && npm ci && npm run build && npm run artefacto
+        run: cd web && npm run build && npm run artefacto
       - name: Guardar resultados
         run: |
           git config user.name "atlas-sync"
           git config user.email "atlas-sync@users.noreply.github.com"
+          git checkout -- biocrete_neat/datos/territorio/registro.json 2>/dev/null || true
           git add atlas/modelos atlas/salida atlas/datos atlas/tests/fixture_paridad.json
-          git diff --cached --quiet || git commit -m "chore(atlas): re-entrenamiento automático con datos nuevos de Blur"
-          git push
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(atlas): re-entrenamiento automático con datos nuevos de Blur"
+          RAMA="${{ github.event.workflow_run.head_branch || github.ref_name }}"
+          for i in 1 2 3 4; do
+            # otra corrida (atlas-sync / blur-territorio) pudo subir antes: cada una escribe su carpeta, no chocan
+            git pull --rebase --autostash origin "$RAMA" && git push origin "HEAD:$RAMA" && exit 0
+            sleep $((i * 10))
+          done
+          exit 1

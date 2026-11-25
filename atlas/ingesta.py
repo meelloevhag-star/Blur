@@ -35,14 +35,32 @@ def huella(ruta: Path) -> str | None:
     return h.hexdigest()[:16]
 
 
+def expandir(f: dict) -> list[dict]:
+    """Una entrada con comodines (`*`, `**`) se expande en una fuente por archivo, con id `<id>:<ruta>`.
+    Así, los CSV que agreguen los agentes de Blur (tras aprobar su PR) entran sin editar este archivo."""
+    if not any(c in f["ruta"] for c in "*?["):
+        return [f]
+    out = []
+    for p in sorted(RAIZ.glob(f["ruta"])):
+        if p.is_file():
+            rel = p.relative_to(RAIZ).as_posix()
+            out.append(f | {"id": f"{f['id']}:{rel}", "ruta": rel})
+    return out
+
+
+def fuentes_expandidas() -> list[dict]:
+    return [g for f in cargar_fuentes() for g in expandir(f)]
+
+
 def detectar_cambios(guardar: bool = True) -> dict:
     previo = json.loads(RUTA_ESTADO.read_text(encoding="utf-8")) if RUTA_ESTADO.exists() else {}
     actual, cambios = {}, []
-    for f in cargar_fuentes():
+    for f in fuentes_expandidas():
         h = huella(RAIZ / f["ruta"])
         actual[f["id"]] = h
         if h != previo.get(f["id"]):
             cambios.append(f["id"])
+    cambios += [k for k in previo if k not in actual]      # fuentes que desaparecieron
     if guardar:
         DATOS.mkdir(parents=True, exist_ok=True)
         RUTA_ESTADO.write_text(json.dumps(actual, indent=2), encoding="utf-8")
@@ -61,7 +79,7 @@ def _leer(f: dict) -> list[dict]:
 
 def filas_por_tipo(tipo: str) -> list[dict]:
     out = []
-    for f in cargar_fuentes():
+    for f in fuentes_expandidas():
         if f["tipo"] == tipo and f.get("entrena"):
             out += _leer(f)
     return out

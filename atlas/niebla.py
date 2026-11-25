@@ -16,6 +16,10 @@ from __future__ import annotations
 import math
 
 D0_COSTA = 400.0      # mg/m²·d en la línea de costa con viento de 5 m/s (supuesto)
+# Relieve (v2): niebla orográfica y apantallamiento del aerosol por crestas (supuestos a calibrar)
+A_OROGRAFICO = 2.0    # con frac_loma ≥ 1/A la zona alcanza el máximo (todo lo que le falta al índice regional)
+H_BARRERA_M = 300.0   # escala de atenuación del aerosol salino tras una cresta
+UMBRAL_LOMA = 0.15    # fracción mínima de "ladera al mar en el cinturón" para el régimen de loma
 L_RAPIDA_KM = 0.4
 D0_COLA = 40.0
 L_COLA_KM = 8.0
@@ -30,22 +34,37 @@ def indice_niebla(amb: dict) -> float:
     return round(max(0.0, min(1.0, 0.45 * fn + 0.35 * cl + 0.2 * h85)), 3)
 
 
-def deposicion_cloruros(dist_km: float, amb: dict, niebla: float) -> float:
+def indice_niebla_orografica(amb: dict, rel: dict | None) -> float:
+    """Índice regional (ERA5) amplificado donde los cerros cortan la capa de estratos a barlovento.
+    En el desierto llano no cambia; en las lomas (ladera al mar entre 300 y 1000 m) puede saturar."""
+    base = indice_niebla(amb)
+    if not rel:
+        return base
+    # acerca el índice a 1 en proporción a la ladera al mar dentro del cinturón (no satura en llano)
+    return round(base + (1 - base) * min(1.0, A_OROGRAFICO * rel.get("frac_loma", 0.0)), 3)
+
+
+def deposicion_cloruros(dist_km: float, amb: dict, niebla: float, barrera_m: float = 0.0) -> float:
     v = max(amb.get("viento_medio_ms", 4.0), 0.5)
     fv = (v / 5.0) ** 2
     rapida = D0_COSTA * fv * math.exp(-dist_km / L_RAPIDA_KM)
     cola = D0_COLA * fv * (1.0 + 2.0 * niebla) * math.exp(-dist_km / (L_COLA_KM * (1.0 + niebla)))
-    return round(rapida + cola, 1)
+    return round((rapida + cola) * math.exp(-max(barrera_m, 0.0) / H_BARRERA_M), 1)
 
 
 def clase_iso9223(dep: float) -> str:
     return "S0" if dep <= 3 else "S1" if dep <= 60 else "S2" if dep <= 300 else "S3"
 
 
-def regimen(franja: int, dep: float, niebla: float) -> str:
-    """Régimen de exposición ampliado."""
-    if franja == 0:
+SALPICADURA_KM = 0.5
+
+
+def regimen(dist_mar_km: float, dep: float, niebla: float, rel: dict | None = None) -> str:
+    """Régimen de exposición ampliado (dist_mar_km: distancia de la obra al mar)."""
+    if dist_mar_km <= SALPICADURA_KM:
         return "salpicadura"            # mareas / salpicadura directa
+    if rel and rel.get("frac_loma", 0) >= UMBRAL_LOMA and niebla >= 0.45:
+        return "niebla_orografica"      # cerros/lomas dentro del cinturón de niebla, a barlovento
     if niebla >= 0.45 and dep >= 30:
         return "niebla_salina"          # garúa/camanchaca con aerosol: spray atenuado
     if dep >= 15:

@@ -2,7 +2,9 @@
 
     python -m atlas ingest              # ¿qué fuentes de Blur cambiaron?
     python -m atlas entrenar            # re-entrena el conjunto (campeón/candidato)
-    python -m atlas construir           # recetas por zona → atlas/salida/zonas.geojson
+    python -m atlas construir           # recetas por zona → atlas/salida/zonas_<pais>.geojson (+ web/)
+    python -m atlas territorio          # relieve y población por zona, con los datos que recoge Blur
+                                        # (antes: python -m biocrete_neat.territorio)
     python -m atlas sync [--aportes DIR] [--forzar]
         1) importa aportes exportados por la API (CSV en DIR) → validar_aportes de Blur
         2) si alguna fuente cambió (o --forzar): entrenar → construir
@@ -22,12 +24,53 @@ COLUMNAS_BASE = ["autor_aporte", "institucion", "tipo_fuente", "doi_o_url", "nor
                  "w0_mm", "edad_dias", "wt_mm", "cierre_pct", "notas"]
 
 
+# propiedades que bastan para pintar el mapa (el detalle de cada zona se pide aparte)
+LIGERAS = ["id", "pais", "departamento", "provincia", "distrito", "anillo", "q", "r", "frente_marino", "lat", "lon", "dist_mar_km", "regimen",
+           "indice_niebla", "deposicion_cl_mg_m2_d", "clase_iso9223", "elevacion_media_m", "frac_loma",
+           "poblacion", "clase_urbana", "severidad", "prioridad", "ideal_cierre_pct", "ideal_vida_anios",
+           "ideal_costo_m3", "ideal_disponibilidad", "economica_costo_m3", "ideal_cumple_anios", "comun_cumple_anios",
+           "vida_util_concreto_comun_anios", "ideal_agente", "ideal_cemento", "ideal_a_c"]
+
+
+def _slug(texto: str) -> str:
+    import unicodedata
+    t = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode().lower()
+    return "".join(c if c.isalnum() else "-" for c in t).strip("-")
+
+
+def escribir_web(g: dict, pais="PER"):
+    """Salida para la web estática: GeoJSON ligero + detalle por departamento (carga bajo demanda)."""
+    import shutil
+    web = SALIDA / "web"
+    shutil.rmtree(web / "detalle", ignore_errors=True)      # departamentos de una corrida anterior
+    (web / "detalle").mkdir(parents=True, exist_ok=True)
+    ligero = {"type": "FeatureCollection", "metadata": g["metadata"], "features": []}
+    por_depto: dict[str, dict] = {}
+    for f in g["features"]:
+        p = f["properties"]
+        slug = _slug(p["departamento"])
+        ide = p["recetas"]["ideal"]
+        extra = {"detalle": slug, "ideal_agente": ide["agente"], "ideal_cemento": ide["dosificacion"]["cemento_tipo"],
+                 "ideal_a_c": ide["dosificacion"]["a_c"]}
+        ligero["features"].append({"type": "Feature", "id": f["id"], "geometry": f["geometry"],
+                                   "properties": {k: p.get(k) for k in LIGERAS} | extra})
+        por_depto.setdefault(slug, {})[p["id"]] = f
+    sep = (",", ":")
+    (web / f"zonas_ligero_{pais.lower()}.geojson").write_text(json.dumps(ligero, ensure_ascii=False, separators=sep), encoding="utf-8")
+    for slug, zonas in por_depto.items():
+        (web / "detalle" / f"{slug}.json").write_text(json.dumps(zonas, ensure_ascii=False, separators=sep), encoding="utf-8")
+
+
 def construir(pais="PER"):
     from atlas.optimizar import construir as c
     g = c(pais)
     SALIDA.mkdir(parents=True, exist_ok=True)
     ruta = SALIDA / f"zonas_{pais.lower()}.geojson"
     ruta.write_text(json.dumps(g, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    escribir_web(g, pais)
+    from atlas import fondo, terreno
+    terreno.generar(pais)
+    fondo.curvas(pais=pais)                    # curvas de nivel del mapa (DEM de Blur)
     print(f"{len(g['features'])} zonas → {ruta.relative_to(RAIZ)} (modelo v{g['metadata']['modelo_version']})")
     return ruta
 
@@ -70,6 +113,8 @@ def main(argv=None) -> int:
     e.add_argument("--rapido", action="store_true")
     c = sub.add_parser("construir")
     c.add_argument("--pais", default="PER")
+    t = sub.add_parser("territorio")
+    t.add_argument("--pais", default="PER")
     s = sub.add_parser("sync")
     s.add_argument("--aportes", type=Path)
     s.add_argument("--forzar", action="store_true")
@@ -85,6 +130,10 @@ def main(argv=None) -> int:
         print(json.dumps(entrenar(a.gens, a.rapido)["cv"], indent=2))
     elif a.cmd == "construir":
         construir(a.pais)
+    elif a.cmd == "territorio":
+        from atlas import relieve, urbano
+        relieve.calcular(a.pais)
+        urbano.calcular(a.pais)
     elif a.cmd == "sync":
         if a.aportes:
             nuevos = importar_aportes(a.aportes)
@@ -97,9 +146,19 @@ def main(argv=None) -> int:
         cambios = detectar_cambios(guardar=False)
         print("fuentes cambiadas:", cambios["cambiadas"] or "ninguna")
         if cambios["cambiadas"] or a.forzar:
-            from atlas.modelos import entrenar
-            r = entrenar(a.gens)
-            print(f"modelo v{r['version']}: aceptado={r['aceptado']} · R² conjunto={r['cv']['conjunto']['R2']}")
+            ids = cambios["cambiadas"]
+            terr = [i for i in ids if i.startswith("territorio_")]
+            if any(i.startswith("territorio_geo") for i in terr):          # Blur cambió costa o distritos
+                from atlas.zonas import generar_zonas, guardar_zonas
+                guardar_zonas(generar_zonas(a.pais), a.pais)
+            if terr:                                                        # relieve/población por zona
+                from atlas import relieve, urbano
+                relieve.calcular(a.pais)
+                urbano.calcular(a.pais)
+            if a.forzar or any(not i.startswith("territorio_") for i in ids):
+                from atlas.modelos import entrenar
+                r = entrenar(a.gens)
+                print(f"modelo v{r['version']}: aceptado={r['aceptado']} · R² conjunto={r['cv']['conjunto']['R2']}")
             construir(a.pais)
         detectar_cambios(guardar=True)
     return 0
