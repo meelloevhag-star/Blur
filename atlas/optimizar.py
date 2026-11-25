@@ -17,12 +17,12 @@ from atlas import niebla as nb
 from atlas import relieve as rel_mod
 from atlas import urbano as urb_mod
 from atlas.diseno_mezcla import dosificar
-from atlas.durabilidad import VIDA_MAX, vida_util, ajuste_drcm, efecto_agentes_cloruros
+from atlas.durabilidad import VIDA_MAX, parametros_fick, vida_util, ajuste_drcm, efecto_agentes_cloruros
 from atlas.ingesta import vector_cierre
 from atlas.modelos import ModeloCierre
 from atlas.normas import reglas
 from atlas.viabilidad import catalogo, costo_y_disponibilidad
-from atlas.zonas import cargar_zonas
+from atlas.zonas import DIST_FRENTE_KM, PROF_KM, TAM_HEX_KM, cargar_zonas
 from atlas.rutas import DATOS
 
 W0_DISENO = 0.3       # mm, fisura de diseño (límite usual de servicio)
@@ -32,11 +32,15 @@ TMN_GRID = (12.5, 19.0)
 VIDA_OBJ = 50
 
 
-def evaluar_zona(z, amb, modelo: ModeloCierre, rel: dict | None = None, urb: dict | None = None) -> dict:
+def evaluar_zona(z, amb, modelo: ModeloCierre, rel: dict | None = None, urb: dict | None = None,
+                 dist_km: float | None = None) -> dict:
+    """dist_km: distancia de la obra al mar (por defecto, el centro de la celda)."""
     cat = catalogo()
+    dist = z.dist_mar_km if dist_km is None else dist_km
     idx_n = nb.indice_niebla_orografica(amb, rel)
-    dep = nb.deposicion_cloruros(z.dist_mar_km, amb, idx_n, (rel or {}).get("barrera_m", 0.0))
-    reg = nb.regimen(z.franja, dep, idx_n, rel)
+    # en el frente marino no hay cresta entre la obra y el mar
+    dep = nb.deposicion_cloruros(dist, amb, idx_n, (rel or {}).get("barrera_m", 0.0) if dist_km is None else 0.0)
+    reg = nb.regimen(dist, dep, idx_n, rel)
     acceso_km = (urb or {}).get("dist_via_principal_km", 0.0)
     rg = reglas(reg)
     marino = 1 if reg != "seco" else 0
@@ -67,6 +71,8 @@ def evaluar_zona(z, amb, modelo: ModeloCierre, rel: dict | None = None, urb: dic
                          cem["n"], pred["cierre_pct"] / 100, agente_id)
         vida_sin = vida_util(receta["a_c"], tipo, reg, dep, amb["t_media_c"], rg["recubrimiento_mm"],
                              cem["n"], 0.0, "ninguno")
+        fick = parametros_fick(receta["a_c"], tipo, reg, dep, amb["t_media_c"], rg["recubrimiento_mm"],
+                               cem["n"], pred["cierre_pct"] / 100, agente_id)
         econ = costo_y_disponibilidad(receta, agente_id, z.lat, z.lon, acceso_km)
         en_dominio = pred["n_datos_combinacion"] > 0
         avisos = []
@@ -79,7 +85,7 @@ def evaluar_zona(z, amb, modelo: ModeloCierre, rel: dict | None = None, urb: dic
             "agente": agente_id, "agente_nombre": ag["nombre"], "cepa": ag["cepa"] or "—",
             "portador": ag["portador_blur"], "nutriente": ag["nutriente"] or "—", "dosis_agente": ag["dosis_texto"],
             "curado_humedo_previo": bool(curado), "dosificacion": receta,
-            "prediccion": pred, "vida_util_anios": vida, "vida_util_sin_reparacion_anios": vida_sin,
+            "prediccion": pred, "vida_util_anios": vida, "vida_util_sin_reparacion_anios": vida_sin, "fick": fick,
             "viabilidad": econ, "en_dominio": en_dominio, "avisos": avisos,
             "puntaje_desempeno": round(desempeno, 3),
             "origen": {"cierre": "modelo (XGBoost+NEAT, datos Blur)" if en_dominio else "modelo extrapolado",
@@ -99,7 +105,9 @@ def evaluar_zona(z, amb, modelo: ModeloCierre, rel: dict | None = None, urb: dic
     # mide qué tan agresivo es el ambiente para lo que hoy se construye → severidad para la prioridad
     vida_comun = vida_util(0.55, "I", reg, dep, amb["t_media_c"], 40,
                            cat["cementos"]["I"]["n"], 0.0, "ninguno", fisurado=False)
-    return {"regimen": reg, "vida_util_concreto_comun_anios": vida_comun, "reglas": rg, "indice_niebla": idx_n, "deposicion_cl_mg_m2_d": dep,
+    fick_comun = parametros_fick(0.55, "I", reg, dep, amb["t_media_c"], 40, cat["cementos"]["I"]["n"], 0.0, "ninguno",
+                                 fisurado=False)
+    return {"regimen": reg, "vida_util_concreto_comun_anios": vida_comun, "fick_comun": fick_comun, "reglas": rg, "indice_niebla": idx_n, "deposicion_cl_mg_m2_d": dep,
             "clase_iso9223": nb.clase_iso9223(dep), "ambiente_marino_modelo": marino,
             "recetas": {"ideal": ideal, "economica": economica, "disponible": disponible},
             "referencia_sin_agente": referencia,
@@ -128,6 +136,12 @@ def construir(pais="PER") -> dict:
         urb = urbano.get(z.id)
         amb = amb_mod.clima_zona(z, celdas, rel["elev_media_m"] if rel else None)
         r = evaluar_zona(z, amb, modelo, rel, urb)
+        frente = None
+        if z.frente_marino:   # la misma celda, para una obra a < 500 m del mar
+            rf = evaluar_zona(z, amb, modelo, rel, urb, dist_km=DIST_FRENTE_KM)
+            frente = {k: rf[k] for k in ("regimen", "vida_util_concreto_comun_anios", "fick_comun", "reglas", "indice_niebla",
+                                         "deposicion_cl_mg_m2_d", "clase_iso9223", "recetas", "referencia_sin_agente")}
+            frente["dist_mar_km"] = DIST_FRENTE_KM
         # escala logarítmica: 1 año → 1; 10 años → 0,54; 50 → 0,22; ≥ 150 → 0
         sev = max(0.0, min(1.0, 1 - math.log(max(r["vida_util_concreto_comun_anios"], 1)) / math.log(VIDA_MAX)))
         pob = (urb or {}).get("poblacion", 0)
@@ -135,9 +149,10 @@ def construir(pais="PER") -> dict:
         feats.append({"type": "Feature", "id": z.id,
                       "geometry": {"type": "Polygon", "coordinates": [z.poligono]},
                       "properties": {
-                          "id": z.id, "pais": z.pais, "departamento": z.departamento, "franja": z.franja,
-                          "provincia": z.provincia, "distrito": z.distrito, "ubigeo": z.ubigeo, "tramo": z.tramo,
-                          "dist_mar_km": z.dist_mar_km, "lat": z.lat, "lon": z.lon,
+                          "id": z.id, "pais": z.pais, "departamento": z.departamento,
+                          "provincia": z.provincia, "distrito": z.distrito, "ubigeo": z.ubigeo,
+                          "anillo": z.anillo, "q": z.q, "r": z.r, "frente_marino": z.frente_marino,
+                          "dist_mar_km": z.dist_mar_km, "dist_mar_min_km": z.dist_mar_min_km, "lat": z.lat, "lon": z.lon,
                           "ambiente": amb, "relieve": rel, "urbano": urb,
                           "elevacion_media_m": (rel or {}).get("elev_media_m"),
                           "frac_loma": (rel or {}).get("frac_loma", 0.0),
@@ -148,6 +163,7 @@ def construir(pais="PER") -> dict:
                           **{k: v for k, v in r.items() if k not in ("recetas", "referencia_sin_agente")},
                           "referencia_sin_agente": r["referencia_sin_agente"],
                           "recetas": r["recetas"],
+                          "frente": frente,
                           # atajos para colorear el mapa
                           "ideal_cierre_pct": ideal["prediccion"]["cierre_pct"],
                           "ideal_vida_anios": ideal["vida_util_anios"],
@@ -164,7 +180,7 @@ def construir(pais="PER") -> dict:
             "w0_diseno_mm": W0_DISENO, "edad_diseno_dias": EDAD_DISENO, "vida_objetivo": VIDA_OBJ,
             "zonas_con_clima_propio": sum(1 for f in feats if f["properties"]["ambiente"]["celda_propia"]),
             "zonas": len(zonas), "celdas_era5": len(celdas),
-            "malla": {"paso_km": 10, "franjas_km": [list(f) for f in __import__("atlas.zonas", fromlist=["x"]).FRANJAS_KM]},
+            "malla": {"tipo": "hexagonal", "tam_km": TAM_HEX_KM, "prof_km": PROF_KM, "frente_km": DIST_FRENTE_KM},
             "poblacion_total_zonas": sum(f["properties"]["poblacion"] for f in feats),
             "fuentes_territorio": {"relieve": relieve.get("_meta"), "urbano": urbano.get("_meta")}}
     return {"type": "FeatureCollection", "metadata": meta, "features": feats}

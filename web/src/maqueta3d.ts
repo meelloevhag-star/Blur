@@ -1,5 +1,5 @@
 /**
- * Maqueta 3D del tramo de costa (10 km × 38 km) desde el DEM Copernicus.
+ * Maqueta 3D de la celda hexagonal (ventana de 16 × 16 km con el mar al frente) desde el DEM Copernicus.
  *
  * - Plataforma giratoria (skill 3d-feature-objects): pose base de tres cuartos; con el cursor encima,
  *   el movimiento horizontal orienta ±0,7 rad y la maqueta sigue girando 0,58 rad/s; al salir vuelve a
@@ -14,11 +14,10 @@ import type { Terreno } from "./tipos";
 declare const THREE: any;
 
 const EXAG = 2.2;                          // exageración vertical
-const FRANJAS_KM = [[0, 0.5], [0.5, 2], [2, 5], [5, 10], [10, 20], [20, 35]];
 const NIEBLA = [300, 1000];
 
 export interface Maqueta {
-  mostrar(t: Terreno, franja: number): void;
+  mostrar(t: Terreno): void;
   girar(): void;
   soplar(): void;
   destruir(): void;
@@ -42,7 +41,7 @@ export function crearMaqueta(canvas: HTMLCanvasElement): Maqueta | null {
   escena.add(giro);
 
   const u = { brocha: { value: new THREE.Vector3(0, -99, 0) }, cantidad: { value: 0 }, reloj: { value: 0 },
-    densidad: { value: 1 }, vMin: { value: 0 }, vMax: { value: 0 }, oscuro: { value: 0 } };
+    densidad: { value: 1 }, oscuro: { value: 0 } };
   const campo = `uniform vec3 brocha; uniform float cantidad;
     float erosion(vec3 p){ float g=.25*sin(dot(p,vec3(1.9,.7,1.3)))+.15*cos(dot(p,vec3(-1.4,2.9,2.3)));
       return clamp(.08+distance(p,brocha)*.32+g,.04,9.); }`;
@@ -57,17 +56,27 @@ export function crearMaqueta(canvas: HTMLCanvasElement): Maqueta | null {
     terreno = granos = mar = null;
   }
 
-  function mostrar(t: Terreno, franja: number) {
+  /** ¿el punto (u, v) cae dentro del contorno de la celda? (par-impar) */
+  function dentro(c: [number, number][], x: number, y: number) {
+    let d = false;
+    for (let i = 0, j = c.length - 1; i < c.length; j = i++) {
+      const [xi, yi] = c[i], [xj, yj] = c[j];
+      if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) d = !d;
+    }
+    return d;
+  }
+
+  function mostrar(t: Terreno) {
     limpiar();
     const { nu, nv, h } = t;
     const [u0, u1] = t.u_km, [v0, v1] = t.v_km;
-    const vc = (v0 + v1) / 2 - 4;
+    const vc = (v0 + v1) / 2;
     const pos = new Float32Array(nu * nv * 3), alt = new Float32Array(nu * nv), vv = new Float32Array(nu * nv);
     for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) {
       const k = i * nv + j, hk = h[k];
       const x = u0 + (u1 - u0) * i / (nu - 1), v = v0 + (v1 - v0) * j / (nv - 1);
       pos.set([x, Math.max(hk, -40) / 1000 * EXAG, -(v - vc)], k * 3);
-      alt[k] = hk; vv[k] = v;
+      alt[k] = hk; vv[k] = t.celda?.length ? Number(dentro(t.celda, x, v)) : 1;
     }
     const idx: number[] = [];
     for (let i = 0; i < nu - 1; i++) for (let j = 0; j < nv - 1; j++) {
@@ -81,14 +90,12 @@ export function crearMaqueta(canvas: HTMLCanvasElement): Maqueta | null {
     geo.setAttribute("v", new THREE.BufferAttribute(vv, 1));
     geo.setIndex(idx);
     geo.computeVertexNormals();
-    const [fv0, fv1] = FRANJAS_KM[franja] ?? [0, 0];
-    u.vMin.value = fv0; u.vMax.value = fv1;
     const mat = new THREE.ShaderMaterial({
       uniforms: u, extensions: { derivatives: true },
       vertexShader: `attribute float altura; attribute float v; varying float H, V; varying vec3 N, P;
         void main(){ H=altura; V=v; N=normalize(normalMatrix*normal); vec4 p=modelViewMatrix*vec4(position,1.); P=-p.xyz;
           gl_Position=projectionMatrix*p; }`,
-      fragmentShader: `uniform float vMin, vMax, oscuro; varying float H, V; varying vec3 N, P;
+      fragmentShader: `uniform float oscuro; varying float H, V; varying vec3 N, P;
         vec3 rampa(float h){
           vec3 c=mix(vec3(.86,.80,.66), vec3(.74,.62,.43), smoothstep(0.,500.,h));
           c=mix(c, vec3(.55,.44,.32), smoothstep(500.,1500.,h));
@@ -105,19 +112,19 @@ export function crearMaqueta(canvas: HTMLCanvasElement): Maqueta | null {
           c=mix(c, c*.82, .55*iso);
           float lim=max(1.-smoothstep(0.,w*1.6,abs(H-${NIEBLA[0]}.)), 1.-smoothstep(0.,w*1.6,abs(H-${NIEBLA[1]}.)));
           c=mix(c, vec3(.08,.42,.32), .85*lim);
-          float enF=step(vMin,V)*step(V,vMax);
-          c=mix(c, c*1.18+vec3(.04,.06,.05), .7*enF);
-          float borde=enF*(1.-smoothstep(0.,.25,min(V-vMin, vMax-V)));
-          c=mix(c, vec3(.05,.12,.11), .9*borde);
+          float fuera=1.-smoothstep(.35,.65,V);
+          c=mix(c, c*.55+vec3(.02,.03,.03), .65*fuera);
+          float borde=1.-smoothstep(0.,max(fwidth(V)*1.4,1e-3),abs(V-.5));
+          c=mix(c, vec3(.37,.84,.7), .95*borde);
           gl_FragColor=vec4(c,1.); }`,
     });
     terreno = new THREE.Mesh(geo, mat);
     pose.add(terreno);
 
     // mar: plano translúcido a nivel 0 frente a la costa
-    const mg = new THREE.PlaneGeometry(u1 - u0, 9);
+    const mg = new THREE.PlaneGeometry(u1 - u0, v1 - v0);
     mg.rotateX(-Math.PI / 2);
-    mg.translate((u0 + u1) / 2, -0.012, -(v0 - vc) - 4.5 + 3);
+    mg.translate((u0 + u1) / 2, -0.012, 0);
     mar = new THREE.Mesh(mg, new THREE.MeshBasicMaterial({ color: 0x3f7f9b, transparent: true, opacity: .55 }));
     pose.add(mar);
 
@@ -166,7 +173,7 @@ export function crearMaqueta(canvas: HTMLCanvasElement): Maqueta | null {
     // punto de ejemplo para el botón: el de la franja de nubes más cercano al centro
     ejemplo.set(0, 0.8, 0);
     let mejor = Infinity;
-    for (let i = 0; i < n; i += 7) { const d = Math.abs(casas[i * 3]) + Math.abs(casas[i * 3 + 2] + 6); if (d < mejor) { mejor = d; ejemplo.fromArray(casas, i * 3); } }
+    for (let i = 0; i < n; i += 7) { const d = Math.abs(casas[i * 3]) + Math.abs(casas[i * 3 + 2]); if (d < mejor) { mejor = d; ejemplo.fromArray(casas, i * 3); } }
     encuadrar();
     pedir();
   }
@@ -178,9 +185,9 @@ export function crearMaqueta(canvas: HTMLCanvasElement): Maqueta | null {
     renderer.setPixelRatio(u.densidad.value);
     renderer.setSize(w, h, false);
     camara.aspect = w / h;
-    const dist = 46 / Math.min(1.25, camara.aspect);
-    camara.position.set(0, dist * 0.55, dist * 0.84);
-    camara.lookAt(0, 1.2, -2);
+    const dist = 30 / Math.min(1.25, camara.aspect);
+    camara.position.set(0, dist * 0.6, dist * 0.8);
+    camara.lookAt(0, 0.6, -0.5);
     camara.updateProjectionMatrix();
     pedir();
   }

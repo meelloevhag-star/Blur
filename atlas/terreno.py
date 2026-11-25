@@ -1,14 +1,17 @@
-"""Maquetas de terreno por tramo para la vista 3D del Atlas.
+"""Maquetas de terreno por celda hexagonal para la vista 3D del Atlas.
 
-Para cada tramo (10 km de costa) se muestrea el DEM Copernicus en una rejilla local:
-  u: a lo largo de la costa, de −5 a +5 km;  v: tierra adentro, de −3 km (mar) a +35 km.
-Se guarda por departamento en atlas/salida/web/terreno/<depto>.json como enteros (metros), junto
-con la orientación de la rejilla, para que el navegador construya la malla sin otro cálculo.
+Para cada celda se muestrea el DEM Copernicus en una ventana de VENTANA_KM × VENTANA_KM centrada en
+la celda y orientada con el mar al frente:
+  u: a lo largo de la costa;  v: tierra adentro (del punto de costa más cercano hacia la celda).
+Las alturas van como Int16 en base64 (metros; −1 = mar). Junto va el contorno del hexágono en km
+locales, para resaltarlo sobre el terreno. Se guarda por departamento en
+atlas/salida/web/terreno/<depto>.json.
 
     python -m atlas.terreno
 """
 from __future__ import annotations
 
+import base64
 import json
 import math
 
@@ -16,61 +19,46 @@ import numpy as np
 
 from atlas.cli import _slug
 from atlas.relieve import Mosaico
-from atlas.rutas import SALIDA
-from atlas.zonas import cargar_zonas
+from atlas.rutas import GEO, SALIDA
+from atlas.zonas import TAM_HEX_KM, cargar_zonas
 
-NU, NV = 33, 97              # resolución de la rejilla (u × v)
-U_KM = (-5.0, 5.0)
-V_KM = (-3.0, 35.0)
-
-
-def _ejes(tramo_zonas):
-    """Punto de costa y vectores unitarios (este, norte en km) hacia tierra y a lo largo de la costa."""
-    z0 = min(tramo_zonas, key=lambda z: z.franja)
-    zl = max(tramo_zonas, key=lambda z: z.franja)
-    kx = 111.32 * math.cos(math.radians(z0.lat))
-    vx, vy = (zl.lon - z0.lon) * kx, (zl.lat - z0.lat) * 111.32
-    n = math.hypot(vx, vy) or 1.0
-    vx, vy = vx / n, vy / n
-    ox = z0.lon - vx * z0.dist_mar_km / kx
-    oy = z0.lat - vy * z0.dist_mar_km / 111.32
-    return (ox, oy), (vx, vy), (vy, -vx), kx
+N = 48                      # resolución de la rejilla (N × N)
+VENTANA_KM = 16.0
 
 
 def generar(pais="PER"):
-    zonas = cargar_zonas(pais)
-    por_tramo: dict[int, list] = {}
-    for z in zonas:
-        por_tramo.setdefault(z.tramo, []).append(z)
+    from shapely.geometry import LineString, Point
+    from shapely.ops import nearest_points
+    linea = LineString(json.loads((GEO / f"costa_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"]["coordinates"])
     dem = Mosaico(max_mem=12)
-    us = np.linspace(*U_KM, NU)
-    vs = np.linspace(*V_KM, NV)
-    U, V = np.meshgrid(us, vs, indexing="ij")
+    s = np.linspace(-VENTANA_KM / 2, VENTANA_KM / 2, N)
+    U, V = np.meshgrid(s, s, indexing="ij")
     salida: dict[str, dict] = {}
-    for t, zs in sorted(por_tramo.items()):
-        (ox, oy), (vx, vy), (ax, ay), kx = _ejes(zs)
-        este = U * ax + V * vx
-        norte = U * ay + V * vy
-        lon = ox + este / kx
-        lat = oy + norte / 111.32
-        h = dem.muestrear(lon.ravel(), lat.ravel()).reshape(U.shape)
-        h = np.where(h > 0, h, -1)            # −1 = mar
-        # el tramo se guarda en cada departamento al que pertenecen sus franjas (la web lo busca por el
-        # departamento de la zona elegida)
-        datos = {
-            "nu": NU, "nv": NV, "u_km": list(U_KM), "v_km": list(V_KM),
-            "origen": [round(ox, 5), round(oy, 5)], "tierra_adentro": [round(vx, 4), round(vy, 4)],
-            "h": np.round(h).astype(int).ravel().tolist(),
-            "franjas": sorted([[z.franja, z.id, z.dist_mar_km] for z in zs]),
-        }
-        for depto in {_slug(z.departamento) for z in zs}:
-            salida.setdefault(depto, {})[str(t)] = datos
+    for z in cargar_zonas(pais):
+        kx = 111.32 * math.cos(math.radians(z.lat))
+        c = nearest_points(linea, Point(z.lon, z.lat))[0]
+        vx, vy = (z.lon - c.x) * kx, (z.lat - c.y) * 111.32
+        n = math.hypot(vx, vy)
+        vx, vy = (vx / n, vy / n) if n > 1e-6 else (1.0, 0.0)
+        ax, ay = vy, -vx                                  # a lo largo de la costa
+        este, norte = U * ax + V * vx, U * ay + V * vy
+        h = dem.muestrear((z.lon + este / kx).ravel(), (z.lat + norte / 111.32).ravel()).reshape(U.shape)
+        h = np.clip(np.where(h > 0, np.round(h), -1), -1, 32767).astype("<i2")
+        # contorno de la celda en (u, v) km
+        cont = []
+        for lon, lat in z.poligono[:-1]:
+            e, nn = (lon - z.lon) * kx, (lat - z.lat) * 111.32
+            cont.append([round(e * ax + nn * ay, 2), round(e * vx + nn * vy, 2)])
+        salida.setdefault(_slug(z.departamento), {})[z.id] = {
+            "nu": N, "nv": N, "u_km": [-VENTANA_KM / 2, VENTANA_KM / 2], "v_km": [-VENTANA_KM / 2, VENTANA_KM / 2],
+            "h64": base64.b64encode(h.tobytes()).decode(), "celda": cont,
+            "dist_mar_km": z.dist_mar_km, "tam_km": TAM_HEX_KM}
     d = SALIDA / "web" / "terreno"
     import shutil
     shutil.rmtree(d, ignore_errors=True)
     d.mkdir(parents=True, exist_ok=True)
-    for depto, tramos in salida.items():
-        (d / f"{depto}.json").write_text(json.dumps(tramos, separators=(",", ":")), encoding="utf-8")
+    for depto, celdas in salida.items():
+        (d / f"{depto}.json").write_text(json.dumps(celdas, separators=(",", ":")), encoding="utf-8")
     return d
 
 

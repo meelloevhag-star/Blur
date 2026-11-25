@@ -144,14 +144,19 @@ def estadisticas_zona(dem: Mosaico, z, costa_lonlat, d=0.0009) -> dict:
 
 def calcular(pais="PER") -> dict:
     zonas = cargar_zonas(pais)
+    from shapely.geometry import LineString, Point
+    from shapely.ops import nearest_points
+    from atlas.rutas import GEO
+    linea = LineString(json.loads((GEO / f"costa_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"]["coordinates"])
     costa = {}
-    for z in sorted(zonas, key=lambda z: z.franja):   # punto de costa de cada tramo ≈ centro de su franja 0
-        costa.setdefault(z.tramo, (z.lon, z.lat))
+    for z in zonas:                                    # punto de costa más cercano al centro de cada celda
+        p = nearest_points(linea, Point(z.lon, z.lat))[0]
+        costa[z.id] = (p.x, p.y)
     dem = Mosaico()
     ruta = DATOS / f"relieve_{pais.lower()}.json"
     out = {}
     for i, z in enumerate(zonas):
-        out[z.id] = estadisticas_zona(dem, z, costa[z.tramo])
+        out[z.id] = estadisticas_zona(dem, z, costa[z.id])
         if i % 200 == 0:
             print(f"{i}/{len(zonas)} zonas", flush=True)
     out["_meta"] = {"fuente": "Copernicus DEM GLO-90 (AWS copernicus-dem-90m)",

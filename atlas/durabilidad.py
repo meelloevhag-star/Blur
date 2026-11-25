@@ -77,6 +77,20 @@ def cs(regimen: str, a_c: float, dep: float) -> float:
     return A * a_c
 
 
+def parametros_fick(a_c, cemento, regimen, dep, t_media_c, recubrimiento_mm, n_env,
+                    cierre_frac=0.0, agente="ninguno", fisurado=True) -> dict:
+    """Parámetros del perfil de cloruros C(x, t) = Cs·(1 − erf(x / (2·√(D·(t0/t)^n·t)))) para el visor web."""
+    D = drcm0(a_c, cemento) * 1e-12 * math.exp(4800 * (1 / 293.0 - 1 / (273.15 + t_media_c)))
+    pen = 1.0
+    ef = efecto_agentes_cloruros()
+    if fisurado:
+        pen *= 1 + (ef["_factor_fisura_0p3"] - 1) * (1 - cierre_frac)
+    if agente in ef:
+        pen *= 1 - max(ef[agente]["reduccion_media"], 0.0)
+    return {"cs": round(cs(regimen, a_c, dep), 4), "d_m2_s": float(f"{D * pen ** 2:.4e}"), "n": n_env,
+            "t0_anios": round(T0_ANIOS, 5), "c_crit": C_CRIT, "recubrimiento_mm": recubrimiento_mm}
+
+
 def vida_util(a_c, cemento, regimen, dep, t_media_c, recubrimiento_mm, n_env,
               cierre_frac=0.0, agente="ninguno", fisurado=True) -> float:
     """Años hasta que el cloruro en el acero alcanza C_crit (iniciación de la corrosión)."""

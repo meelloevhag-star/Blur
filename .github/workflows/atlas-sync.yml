@@ -35,6 +35,11 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -r biocrete_neat/requirements.txt -r atlas/requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Dependencias web (la prueba de paridad Fick compila web/src/fick.ts)
+        run: cd web && npm ci
       - name: Pruebas
         run: python -m pytest -q atlas/tests biocrete_neat/tests
       - name: Territorio (relieve, población y clima; solo si se pide)
@@ -49,11 +54,8 @@ jobs:
           go-version: "1.22"
       - name: Paridad Go ↔ Python
         run: cd api && go test ./...
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
       - name: Compilar el mapa
-        run: cd web && npm ci && npm run build && npm run artefacto
+        run: cd web && npm run build && npm run artefacto
       - name: Guardar resultados
         run: |
           git config user.name "atlas-sync"

@@ -14,10 +14,10 @@ aportes validados ───┘   ingest → entrenar  └─ atlas/salida/zonas_
 
 | Pieza | Método | Datos de Blur que usa | Dónde |
 |---|---|---|---|
-| Zonas | **1.463 zonas**: 257 tramos de costa de 10 km × 6 franjas (0–0,5 / 0,5–2 / 2–5 / 5–10 / 10–20 / 20–35 km del mar), sin superposición, cada una con su distrito (UBIGEO) | Natural Earth 10m, distritos INEI | `zonas.py` |
+| Zonas | **Malla hexagonal de 10 km** (≈ 87 km² por celda, 1.097 celdas) sobre la franja de 0–35 km del mar, en proyección equivalente de Lambert: sin huecos ni solapes, recortada solo contra el mar. Las celdas con orilla (`frente_marino`) se evalúan además para una obra a 250 m del mar (salpicadura). Cada celda con su distrito (UBIGEO) | Natural Earth 10m, distritos INEI | `zonas.py` |
 | Relieve | Elevación, pendiente, % del área en el **cinturón de niebla (300–1.000 m)**, % de **ladera que mira al mar** y **cresta** entre el mar y la zona | Copernicus DEM GLO-90 | `relieve.py` |
 | Población | Habitantes 2022, densidad y clase urbana (urbano ≥ 1.500 hab/km², periurbano ≥ 300, rural ≥ 25); ciudad y vía principal más cercanas | WorldPop 2022 (Censo 2017 INEI), Natural Earth | `urbano.py` |
-| Clima | Un año horario de ERA5 por celda de 0,25° (189 celdas): temperatura, humedad, punto de rocío, nubes bajas y viento; **temperatura corregida por altitud** con el DEM | Open-Meteo Archive (CC BY 4.0) | `ambiente.py` |
+| Clima | Un año horario de ERA5 por celda de 0,25° (213 celdas): temperatura, humedad, punto de rocío, nubes bajas y viento; **temperatura corregida por altitud** con el DEM | Open-Meteo Archive (CC BY 4.0) | `ambiente.py` |
 | Niebla / garúa | Índice 0–1 regional (horas con HR ≥ 95 % y T−Td ≤ 1 °C, nubes bajas, HR ≥ 85 %) **amplificado en cerros y lomas** donde la ladera al mar corta la capa de nubes | ERA5 + DEM | `niebla.py` |
 | Cloruros en el aire | Perfil exponencial doble según distancia y viento; la niebla extiende la cola tierra adentro y **las crestas la frenan** | supuesto a calibrar | `niebla.py` |
 | Régimen y norma | salpicadura (XS3), niebla salina (XS2), **niebla orográfica: lomas y cerros (XS2)**, atmosférico marino (XS1), seco (XC): límites de a/c, cemento mínimo, f′c y recubrimiento | E.060 / ACI 318 / EN 206 | `normas.py` |

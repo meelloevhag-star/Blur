@@ -4,9 +4,9 @@
   <div class="portada-contenido">
     <p class="portada-sello">Atlas BioCrete · Perú</p>
     <h1 id="portada-titulo">El concreto que se repara<br><em>empieza por leer la costa</em></h1>
-    <p class="portada-texto">Sal del mar, garúa y cerros que atrapan la neblina: cada franja del litoral
-      castiga distinto al concreto. El atlas recorre los 2 500 km entre Tumbes y Tacna y dice qué mezcla
-      autorreparable conviene en cada una.</p>
+    <p class="portada-texto">Sal del mar, garúa y cerros que atrapan la neblina: cada rincón del litoral
+      castiga distinto al concreto. El atlas cubre los 2 500 km entre Tumbes y Tacna con celdas de 10 km
+      y dice qué mezcla autorreparable conviene en cada una.</p>
     <div class="portada-acciones">
       <button type="button" class="btn-portada" data-entrar>Explorar la costa</button>
       <span class="portada-pista">Haz clic sobre el relieve para ver cómo viaja una onda.</span>
@@ -33,7 +33,10 @@
       aria-autocomplete="list" aria-controls="resultados" aria-expanded="false">
     <ul id="resultados" role="listbox" hidden></ul>
   </div>
-  <div id="chips" class="chips" role="radiogroup" aria-label="Qué mostrar en el mapa"></div>
+  <div class="ver">
+    <button type="button" id="btn-capa" class="btn-capa" aria-haspopup="menu" aria-expanded="false" aria-controls="menu-capas">Ver: <span>Exposición</span></button>
+    <div id="menu-capas" class="menu-capas" role="menu" aria-label="Qué mostrar en el mapa" hidden></div>
+  </div>
 </div>
 
 <aside id="leyenda" class="leyenda">
@@ -50,11 +53,10 @@
   <div class="hoja-scroll">
     <div id="bienvenida" class="bienvenida">
       <h2>¿Qué concreto se repara solo en tu costa?</h2>
-      <p>Cada franja de la costa recibe distinta sal, neblina y sol. El atlas recomienda para cada una la mezcla
-        con agente autorreparador que más dura, la más barata y la más fácil de conseguir.</p>
-      <p class="pista">Busca tu distrito o toca la costa en el mapa. Para empezar:</p>
+      <p class="pista">Toca un hexágono del mapa o busca tu distrito.</p>
       <div id="atajos" class="atajos">
-        <button type="button" data-buscar="Paita">Paita, primera línea</button>
+        <button type="button" data-buscar="Colan">Colán</button>
+        <button type="button" data-buscar="Paita">Paita</button>
         <button type="button" data-buscar="Atiquipa">Lomas de Atiquipa</button>
         <button type="button" data-buscar="Callao">Callao</button>
         <button type="button" data-buscar="San Juan De Lurigancho">San Juan de Lurigancho</button>

@@ -24,7 +24,7 @@ COLUMNAS_BASE = ["autor_aporte", "institucion", "tipo_fuente", "doi_o_url", "nor
 
 
 # propiedades que bastan para pintar el mapa (el detalle de cada zona se pide aparte)
-LIGERAS = ["id", "pais", "departamento", "provincia", "distrito", "franja", "tramo", "lat", "lon", "dist_mar_km", "regimen",
+LIGERAS = ["id", "pais", "departamento", "provincia", "distrito", "anillo", "q", "r", "frente_marino", "lat", "lon", "dist_mar_km", "regimen",
            "indice_niebla", "deposicion_cl_mg_m2_d", "clase_iso9223", "elevacion_media_m", "frac_loma",
            "poblacion", "clase_urbana", "severidad", "prioridad", "ideal_cierre_pct", "ideal_vida_anios",
            "ideal_costo_m3", "ideal_disponibilidad", "economica_costo_m3", "ganancia_autorreparacion_anios",

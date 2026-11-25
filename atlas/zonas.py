@@ -1,4 +1,4 @@
-"""Zonas costeras: tramos de ~10 km a lo largo de la costa y 6 franjas tierra adentro.
+"""Zonas costeras: malla hexagonal de 10 km sobre la franja de 35 km tierra adentro.
 
 La línea de costa se obtiene una sola vez de Natural Earth 10m (dominio público) y se guarda
 recortada y simplificada en atlas/datos/geo/. Todo está parametrizado por país (ISO-3) para
@@ -15,11 +15,11 @@ from dataclasses import dataclass, asdict
 
 from atlas.rutas import GEO
 
-# Franjas de distancia al mar (km). La 1.ª concentra mareas/salpicadura; las siguientes cubren la
-# costa urbana, los cerros y las lomas (cinturón de niebla, ≈ 2–30 km tierra adentro).
-FRANJAS_KM = [(0.0, 0.5), (0.5, 2.0), (2.0, 5.0), (5.0, 10.0), (10.0, 20.0), (20.0, 35.0)]
-PASO_KM = 5.0
-DENSIDAD_KM = 1.0          # un vértice por km a lo largo de la costa: bordes que siguen su forma
+# Malla hexagonal: celdas de TAM_HEX_KM entre lados planos (10 km ≈ 87 km²) hasta PROF_KM tierra adentro.
+TAM_HEX_KM = 10.0
+PROF_KM = 35.0
+MIN_FRAC = 0.15            # una celda entra si al menos este % de su área cae en la franja costera
+DIST_FRENTE_KM = 0.25      # distancia de evaluación del frente marino (salpicadura, < 500 m)
 R_TIERRA = 6371.0
 
 
@@ -28,12 +28,15 @@ class Zona:
     id: str
     pais: str
     departamento: str
-    franja: int
-    dist_mar_km: float          # distancia representativa (centro de franja)
+    dist_mar_km: float          # distancia del centro de la celda al mar
     lat: float
     lon: float
     poligono: list               # [[lon, lat], ...] cerrado
-    tramo: int = 0
+    anillo: int = 0             # 0 = la celda toca el mar; 1, 2… celdas hacia el interior
+    q: int = 0                  # coordenadas axiales del hexágono
+    r: int = 0
+    dist_mar_min_km: float = 0.0
+    frente_marino: bool = False  # la celda tiene orilla: se evalúa también a < 500 m del mar
     provincia: str = ""
     distrito: str = ""
     ubigeo: str = ""
@@ -102,83 +105,108 @@ def construir_costa(dir_ne: str, pais: str = "PER"):
         {"type": "Feature", "properties": {"pais": pais}, "geometry": mapping(poli.simplify(0.01))}), encoding="utf-8")
 
 
-def _desplazar(p, normal, km):
-    ky, kx = _km(p[1])
-    return [p[0] + normal[0] * km / kx, p[1] + normal[1] * km / ky]
+def _proyeccion():
+    """Lambert acimutal equivalente centrada en Perú: km reales y áreas iguales en toda la costa."""
+    from pyproj import Transformer
+    crs = "+proj=laea +lat_0=-10 +lon_0=-76 +units=km +ellps=WGS84"
+    return (Transformer.from_crs("EPSG:4326", crs, always_xy=True).transform,
+            Transformer.from_crs(crs, "EPSG:4326", always_xy=True).transform)
 
 
-def generar_zonas(pais: str = "PER") -> list[Zona]:
-    from shapely.geometry import shape, Point
+def _hexagono(q, r, s):
+    """Hexágono de punta arriba; s = distancia centro-vértice (km)."""
+    cx, cy = s * math.sqrt(3) * (q + r / 2), s * 1.5 * r
+    return cx, cy, [(cx + s * math.cos(math.radians(60 * k - 30)), cy + s * math.sin(math.radians(60 * k - 30)))
+                    for k in range(6)]
 
-    costa = json.loads((GEO / f"costa_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"]["coordinates"]
-    poli = shape(json.loads((GEO / f"pais_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"])
+
+VECINOS = [(1, 0), (1, -1), (0, -1), (-1, 0), (-1, 1), (0, 1)]
+
+
+def generar_zonas(pais: str = "PER", tam_km: float = TAM_HEX_KM, prof_km: float = PROF_KM) -> list[Zona]:
+    """Hexágonos de `tam_km` (entre lados planos) que cubren tierra ∩ [0, prof_km] km del mar.
+
+    El lado del mar se recorta a la costa; el lado interior queda como hexágono entero. Los
+    pedazos con menos de MIN_FRAC de su área en la franja se suman al vecino con el que más borde
+    comparten, así la cobertura queda continua, sin huecos ni solapes."""
+    from shapely.geometry import shape, Point, Polygon, LineString
+    from shapely.ops import transform, unary_union
+    from collections import deque
+
+    a_proj, a_geo = _proyeccion()
+    costa_ll = json.loads((GEO / f"costa_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"]["coordinates"]
+    pais_ll = shape(json.loads((GEO / f"pais_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"])
     deptos = [(f["properties"]["nombre"], shape(f["geometry"])) for f in
               json.loads((GEO / f"departamentos_{pais.lower()}.geojson").read_text(encoding="utf-8"))["features"]]
     distritos = _distritos(pais)
+    costa = transform(a_proj, LineString(costa_ll))
+    tierra = transform(a_proj, pais_ll).buffer(0)
+    franja = tierra.intersection(costa.buffer(prof_km))
 
-    pts = _remuestrear(costa, DENSIDAD_KM)
-    m = int(round(PASO_KM / DENSIDAD_KM))     # vértices por tramo
-    # normales hacia tierra, suavizadas con ±3 km para que las franjas no se crucen en cada quiebre
-    normales = []
-    for i, p in enumerate(pts):
-        a, b = pts[max(i - 3, 0)], pts[min(i + 3, len(pts) - 1)]
-        ky, kx = _km(p[1])
-        tx, ty = (b[0] - a[0]) * kx, (b[1] - a[1]) * ky
-        n = math.hypot(tx, ty) or 1.0
-        cand = (-ty / n, tx / n)
-        prueba = _desplazar(p, cand, 3.0)
-        if not poli.contains(Point(prueba)):
-            cand = (ty / n, -tx / n)
-        normales.append(cand)
+    s = tam_km / math.sqrt(3)
+    area_hex = 1.5 * math.sqrt(3) * s * s
+    x0, y0, x1, y1 = franja.bounds
+    r0, r1 = int(y0 / (1.5 * s)) - 2, int(y1 / (1.5 * s)) + 2
+    celdas, sobras = {}, {}
+    from shapely.prepared import prep
+    pf = prep(franja)
+    for r in range(r0, r1 + 1):
+        q0 = int((x0 / (s * math.sqrt(3))) - r / 2) - 2
+        q1 = int((x1 / (s * math.sqrt(3))) - r / 2) + 2
+        for q in range(q0, q1 + 1):
+            cx, cy, vs = _hexagono(q, r, s)
+            h = Polygon(vs)
+            if not pf.intersects(h):
+                continue
+            dentro = h.intersection(franja)
+            if dentro.is_empty:
+                continue
+            if dentro.area >= MIN_FRAC * area_hex:
+                celdas[(q, r)] = h.intersection(tierra)        # recorte solo contra el mar / fronteras
+            else:
+                sobras[(q, r)] = dentro
+    # pedazos chicos → vecino aceptado con el que más borde comparten
+    for (q, r), g in sobras.items():
+        vec = [(q + dq, r + dr) for dq, dr in VECINOS if (q + dq, r + dr) in celdas]
+        if not vec:
+            continue
+        mejor = max(vec, key=lambda k: celdas[k].intersection(g.buffer(1e-3)).length + celdas[k].buffer(1e-3).intersection(g).area)
+        celdas[mejor] = unary_union([celdas[mejor], g])
+    # la parte principal de cada celda (descarta islotes sueltos)
+    for k, g in list(celdas.items()):
+        g = g.buffer(0)
+        celdas[k] = max(getattr(g, "geoms", [g]), key=lambda x: x.area)
+    # anillos: celdas con orilla = 0; el resto por saltos de vecino
+    anillo = {}
+    cola = deque()
+    for k, g in celdas.items():
+        if g.distance(costa) < 0.5:
+            anillo[k] = 0
+            cola.append(k)
+    while cola:
+        q, r = cola.popleft()
+        for dq, dr in VECINOS:
+            n = (q + dq, r + dr)
+            if n in celdas and n not in anillo:
+                anillo[n] = anillo[(q, r)] + 1
+                cola.append(n)
 
     zonas = []
-    for k, i0 in enumerate(range(0, len(pts) - m, m)):
-        seg = list(range(i0, i0 + m + 1))
-        cen = i0 + m // 2
-        for f, (d0, d1) in enumerate(FRANJAS_KM):
-            anillo = ([_desplazar(pts[j], normales[j], d0) for j in seg]
-                      + [_desplazar(pts[j], normales[j], d1) for j in reversed(seg)])
-            anillo.append(anillo[0])
-            dm = (d0 + d1) / 2
-            c = _desplazar(pts[cen], normales[cen], dm)
-            depto = next((n for n, g in deptos if g.contains(Point(c))), None)
-            if depto is None:  # punto de la 1.ª franja cae en el mar por la simplificación
-                depto = min(deptos, key=lambda d: d[1].distance(Point(c)))[0]
-            dist = _distrito_de(distritos, c)
-            zonas.append(Zona(id=f"{pais}-{k:03d}-{f}", pais=pais, departamento=dist[3] or depto, franja=f,
-                              dist_mar_km=round(dm, 2), lat=round(c[1], 4), lon=round(c[0], 4),
-                              poligono=[[round(x, 5), round(y, 5)] for x, y in anillo], tramo=k,
-                              provincia=dist[1], distrito=dist[0], ubigeo=dist[2]))
-    return _sin_solapes(zonas, poli)
-
-
-def _sin_solapes(zonas: list[Zona], pais_poli) -> list[Zona]:
-    """En curvas cerradas de la costa las franjas de tramos vecinos se cruzan. Se corrige así:
-    polígonos válidos, recortados a tierra, y cada zona pierde el área ya asignada a otra
-    (las franjas más cercanas al mar tienen prioridad). Las zonas que quedan vacías se descartan."""
-    from shapely.geometry import Polygon, Point
-    from shapely.ops import unary_union
-    tierra = pais_poli.buffer(0.004)
-    ocupado = None
-    salida = []
-    for z in sorted(zonas, key=lambda z: (z.franja, z.tramo)):
-        g = Polygon(z.poligono).buffer(0).intersection(tierra)
-        if ocupado is not None:
-            g = g.difference(ocupado)
-        if g.is_empty or g.area < 1e-6:
-            continue
-        parte = max(getattr(g, "geoms", [g]), key=lambda x: x.area)
-        if parte.geom_type != "Polygon":
-            continue
-        ocupado = parte if ocupado is None else unary_union([ocupado, parte])
-        c = parte.representative_point() if not parte.contains(Point(z.lon, z.lat)) else Point(z.lon, z.lat)
-        # redondear puede volver inválido el anillo: se repara y se guarda la parte mayor
-        r = Polygon([(round(x, 5), round(y, 5)) for x, y in parte.exterior.coords]).buffer(0)
-        r = max(getattr(r, "geoms", [r]), key=lambda x: x.area)
-        z.poligono = [[x, y] for x, y in r.exterior.coords]
-        z.lat, z.lon = round(c.y, 4), round(c.x, 4)
-        salida.append(z)
-    return sorted(salida, key=lambda z: (z.tramo, z.franja))
+    for (q, r), g in sorted(celdas.items(), key=lambda kv: (-kv[0][1], kv[0][0])):
+        c = g.centroid if g.contains(g.centroid) else g.representative_point()
+        lon, lat = a_geo(c.x, c.y)
+        ll = transform(a_geo, g).simplify(0.0003)
+        ll = max(getattr(ll.buffer(0), "geoms", [ll.buffer(0)]), key=lambda x: x.area)
+        anillo_ll = [[round(x, 5), round(y, 5)] for x, y in ll.exterior.coords]
+        depto = next((n for n, gd in deptos if gd.contains(Point(lon, lat))), None) or \
+            min(deptos, key=lambda d: d[1].distance(Point(lon, lat)))[0]
+        dist = _distrito_de(distritos, (lon, lat))
+        zonas.append(Zona(id=f"{pais}-H{q}_{r}", pais=pais, departamento=dist[3] or depto,
+                          dist_mar_km=round(c.distance(costa), 2), lat=round(lat, 4), lon=round(lon, 4),
+                          poligono=anillo_ll, anillo=anillo.get((q, r), max(1, round(g.distance(costa) / tam_km))), q=q, r=r,
+                          dist_mar_min_km=round(g.distance(costa), 2), frente_marino=anillo.get((q, r)) == 0,
+                          provincia=dist[1], distrito=dist[0], ubigeo=dist[2]))
+    return zonas
 
 
 def _distritos(pais: str):

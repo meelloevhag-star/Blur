@@ -56,9 +56,12 @@ def clase_iso9223(dep: float) -> str:
     return "S0" if dep <= 3 else "S1" if dep <= 60 else "S2" if dep <= 300 else "S3"
 
 
-def regimen(franja: int, dep: float, niebla: float, rel: dict | None = None) -> str:
-    """Régimen de exposición ampliado."""
-    if franja == 0:
+SALPICADURA_KM = 0.5
+
+
+def regimen(dist_mar_km: float, dep: float, niebla: float, rel: dict | None = None) -> str:
+    """Régimen de exposición ampliado (dist_mar_km: distancia de la obra al mar)."""
+    if dist_mar_km <= SALPICADURA_KM:
         return "salpicadura"            # mareas / salpicadura directa
     if rel and rel.get("frac_loma", 0) >= UMBRAL_LOMA and niebla >= 0.45:
         return "niebla_orografica"      # cerros/lomas dentro del cinturón de niebla, a barlovento

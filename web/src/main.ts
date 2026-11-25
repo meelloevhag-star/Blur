@@ -1,6 +1,7 @@
 import { crearFuente } from "./api";
 import { CAPAS, AGENTES, clase, type Capa } from "./capas";
-import { htmlFicha, htmlPerfil, htmlReceta, recetaEnPalabras, TIPOS } from "./ficha";
+import { htmlZona, HORIZONTE, recetaEnPalabras, TIPOS, VIDA_DISENO, veredicto, vista, type EstadoFicha, type Modo, type Tipo } from "./nodos";
+import { crearVisor, type Visor } from "./visor";
 import { crearMapa } from "./mapa";
 import { crearMaqueta, type Maqueta } from "./maqueta3d";
 import { iniciarLuz } from "./luz";
@@ -46,28 +47,38 @@ async function iniciar() {
     m.repintarTema();
   });
 
-  // ---------------- capas (chips) + leyenda ----------------
-  let capa: Capa = CAPAS.find((c) => c.id === leer("atlas-capa")) ?? CAPAS[0];
+  // ---------------- capas: menú "Ver" agrupado + leyenda con histograma ----------------
+  const ORDEN = ["regimen", ...CAPAS.map((c) => c.id).filter((i) => i !== "regimen")];
+  let capa: Capa = CAPAS.find((c) => c.id === leer("atlas-capa")) ?? CAPAS.find((c) => c.id === "regimen")!;
   let filtro: number | null = null;
-  const chips = $("#chips");
-  chips.innerHTML = CAPAS.map((c) => `<button type="button" role="radio" class="chip" data-capa="${c.id}" aria-checked="${c.id === capa.id}">${c.nombre}</button>`).join("");
-  chips.addEventListener("click", (e) => {
+  const btnCapa = $<HTMLButtonElement>("#btn-capa"), menu = $("#menu-capas");
+  const grupos = ["Ambiente", "Concreto", "Personas"];
+  menu.innerHTML = grupos.map((g) => `<div class="menu-grupo" role="group" aria-label="${g}"><p>${g}</p>${ORDEN.map((id) => CAPAS.find((c) => c.id === id)!)
+    .filter((c) => c.grupo === g).map((c) => `<button type="button" role="menuitemradio" data-capa="${c.id}" aria-checked="${c.id === capa.id}">${c.nombre}</button>`).join("")}</div>`).join("");
+  function abrirMenu(si: boolean) { menu.hidden = !si; btnCapa.setAttribute("aria-expanded", String(si)); if (si) menu.querySelector<HTMLElement>("[aria-checked='true']")?.focus(); }
+  btnCapa.addEventListener("click", () => abrirMenu(menu.hidden));
+  document.addEventListener("click", (e) => { if (!menu.hidden && !(e.target as HTMLElement).closest("#menu-capas, #btn-capa")) abrirMenu(false); });
+  menu.addEventListener("keydown", (e) => { if (e.key === "Escape") { abrirMenu(false); btnCapa.focus(); } });
+  menu.addEventListener("click", (e) => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-capa]");
     if (!b) return;
     capa = CAPAS.find((c) => c.id === b.dataset.capa)!;
     guardar("atlas-capa", capa.id);
-    chips.querySelectorAll("[data-capa]").forEach((x) => x.setAttribute("aria-checked", String(x === b)));
-    b.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    menu.querySelectorAll("[data-capa]").forEach((x) => x.setAttribute("aria-checked", String(x === b)));
+    abrirMenu(false);
     filtro = null;
     m.ponerCapa(capa);
     leyenda();
   });
   function leyenda() {
+    btnCapa.querySelector("span")!.textContent = capa.nombre;
     const cuenta = capa.colores.map(() => 0);
     props.forEach((p) => cuenta[clase(capa, capa.valor(p))]++);
+    const max = Math.max(...cuenta);
     $("#leyenda-titulo").textContent = capa.pregunta;
     $("#leyenda-lista").innerHTML = capa.colores.map((c, i) => cuenta[i] ? `<li><button type="button" data-clase="${i}" aria-pressed="${filtro === i}">
-      <span class="muestra" style="background:${c}"></span><span class="ley-txt">${capa.etiquetas[i]}</span><span class="ley-n">${cuenta[i]}</span></button></li>` : "").join("");
+      <span class="muestra" style="background:${c}"></span><span class="ley-txt">${capa.etiquetas[i]}</span>
+      <span class="ley-hist"><span style="--p:${(cuenta[i] / max * 100).toFixed(0)}%;background:${c}"></span></span><span class="ley-n">${cuenta[i]}</span></button></li>` : "").join("");
   }
   $("#leyenda-lista").addEventListener("click", (e) => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-clase]");
@@ -90,7 +101,7 @@ async function iniciar() {
   props.forEach((p) => {
     const k = `${p.distrito}|${p.provincia}`;
     const prev = indice.get(k);
-    if (!prev || p.franja < prev.franja) indice.set(k, p);
+    if (!prev || p.anillo < prev.anillo) indice.set(k, p);
   });
   const entradas = [...indice.values()].map((p) => ({ p, k: sinTildes(`${p.distrito} ${p.provincia} ${p.departamento}`) }));
   const input = $<HTMLInputElement>("#buscar"), lista = $("#resultados");
@@ -143,9 +154,11 @@ async function iniciar() {
     if (e.key === "ArrowDown") ponerHoja(estadoHoja === "completa" ? "media" : "asomada");
   });
 
-  // ---------------- ficha de zona ----------------
+  // ---------------- ficha de zona en nodos ----------------
   let maqueta: Maqueta | null = null;
-  let actual: PropsZona | null = null, tipo = "ideal";
+  let visor: Visor | null = null;
+  let actual: PropsZona | null = null;
+  const est: EstadoFicha = { modo: "interior", tipo: "ideal", abierto: null };
   const fijadas: string[] = [];
 
   async function abrir(id: string, volar = true) {
@@ -158,50 +171,75 @@ async function iniciar() {
     cont.setAttribute("aria-busy", "true");
     const z: Zona = await fuente.zona(id, ligera.detalle!);
     actual = { ...ligera, ...z.properties };
+    est.abierto = null;
+    est.modo = actual.frente_marino && actual.frente && actual.clase_urbana !== "deshabitado" ? "frente" : "interior";
     pintarFicha();
     cont.removeAttribute("aria-busy");
-    const t = await fuente.terreno(ligera.tramo, ligera.detalle!);
+    $(".hoja-scroll").scrollTop = 0;
+    const t = await fuente.terreno(id, ligera.detalle!);
     if (actual?.id !== id) return;
     const canvas = $<HTMLCanvasElement>("#maqueta", cont);
     maqueta?.destruir();
     maqueta = t ? crearMaqueta(canvas) : null;
-    if (maqueta && t) maqueta.mostrar(t, actual.franja);
+    if (maqueta && t) maqueta.mostrar(t);
     else { $(".maqueta-sin", cont).hidden = false; canvas.hidden = true; }
   }
 
-  function pintarFicha() {
+  /** Repinta solo la vía de nodos (la maqueta 3D se conserva). */
+  function pintarFicha(soloVia = false) {
     if (!actual) return;
-    cont.innerHTML = htmlFicha(actual, tipo);
-    const delTramo = props.filter((p) => p.tramo === actual!.tramo);
-    $("#perfil", cont).innerHTML = htmlPerfil(delTramo, actual.id);
+    const html = htmlZona(actual, est);
+    if (soloVia && cont.querySelector(".via")) {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = html;
+      cont.querySelector(".via")!.replaceWith(tmp.querySelector(".via")!);
+      cont.querySelector(".etiqueta-reg")!.replaceWith(tmp.querySelector(".etiqueta-reg")!);
+      const modo = tmp.querySelector(".modo");
+      if (modo) cont.querySelector(".modo")?.replaceWith(modo);
+    } else cont.innerHTML = html;
     $("[data-comparar]", cont).setAttribute("aria-pressed", String(fijadas.includes(actual.id)));
-    $(".hoja-scroll").scrollTop = 0;
+    montarVisor();
+  }
+  function montarVisor() {
+    visor?.destruir(); visor = null;
+    const el = cont.querySelector<HTMLElement>("#visor");
+    if (!el || !actual || est.abierto !== "tiempo") return;
+    const v = vista(actual, est.modo), r = v.recetas[est.tipo];
+    if (!v.fick_comun || !r.fick) { el.innerHTML = `<p class="nota">Este cálculo necesita datos regenerados del atlas.</p>`; return; }
+    visor = crearVisor(el, v.fick_comun, r.fick, TIPOS.find(([k]) => k === est.tipo)![1], HORIZONTE, VIDA_DISENO);
   }
 
   cont.addEventListener("click", async (e) => {
     const t = e.target as HTMLElement;
-    const seg = t.closest<HTMLButtonElement>("[data-tipo]");
-    if (seg && actual) {
-      tipo = seg.dataset.tipo!;
-      cont.querySelectorAll("[data-tipo]").forEach((b) => b.setAttribute("aria-selected", String(b === seg)));
-      $(".receta", cont).innerHTML = htmlReceta((actual.recetas as any)[tipo], actual);
+    const cab = t.closest<HTMLElement>(".nodo-cab");
+    if (cab) {
+      const id = cab.closest<HTMLElement>("[data-nodo]")!.dataset.nodo!;
+      est.abierto = est.abierto === id ? null : id;
+      cont.querySelectorAll<HTMLElement>("[data-nodo]").forEach((n) => {
+        const on = n.dataset.nodo === est.abierto;
+        n.classList.toggle("abierto", on);
+        n.querySelector(".nodo-cab")!.setAttribute("aria-expanded", String(on));
+        (n.querySelector(".nodo-cuerpo") as HTMLElement).hidden = !on;
+      });
+      montarVisor();
+      if (est.abierto) requestAnimationFrame(() => cab.scrollIntoView({ block: "nearest", behavior: "smooth" }));
       return;
     }
-    const fr = t.closest<HTMLElement>("[data-zona]");
-    if (fr) return abrir(fr.dataset.zona!, true);
-    if (t.closest("[data-cerrar]")) { hoja.classList.remove("con-zona"); ponerHoja("asomada"); m.seleccionar(null); actual = null; maqueta?.destruir(); maqueta = null; return; }
+    const tar = t.closest<HTMLElement>("[data-tipo]");
+    if (tar && actual) { est.tipo = tar.dataset.tipo as Tipo; pintarFicha(true); return; }
+    const modo = t.closest<HTMLElement>("[data-modo]");
+    if (modo && actual) { est.modo = modo.dataset.modo as Modo; pintarFicha(true); return; }
+    const info = t.closest<HTMLElement>("[data-info]");
+    if (info) { const p = info.parentElement!.nextElementSibling as HTMLElement; p.hidden = !p.hidden; info.setAttribute("aria-expanded", String(!p.hidden)); return; }
+    if (t.closest("[data-cerrar]")) { hoja.classList.remove("con-zona"); ponerHoja("asomada"); m.seleccionar(null); actual = null; maqueta?.destruir(); maqueta = null; visor?.destruir(); return; }
     if (t.closest("[data-girar]")) return maqueta?.girar();
     if (t.closest("[data-soplar]")) { const b = t.closest("[data-soplar]")!; b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true")); return maqueta?.soplar(); }
     if (t.closest("[data-comparar]") && actual) return alternarComparacion(actual.id);
     if (t.closest("[data-copiar]") && actual) {
-      const r = (actual.recetas as any)[tipo], d = r.dosificacion;
+      const r = vista(actual, est.modo).recetas[est.tipo], d = r.dosificacion;
       const txt = `${actual.distrito} (${actual.id}) · ${recetaEnPalabras(r)}\nCemento ${d.cemento_tipo}\t${d.cemento_kg} kg\nAgua\t${d.agua_kg} kg\nArena\t${d.arena_kg} kg\nPiedra\t${d.piedra_kg} kg\nSuperplastificante\t${d.superplastificante_kg} kg\nCristalizante\t${d.cristalino_kg} kg\nAgente\t${d.agente_kg} kg`;
       try { await navigator.clipboard.writeText(txt); aviso("Dosificación copiada"); } catch { aviso("No se pudo copiar: selecciona la tabla y cópiala"); }
     }
-  });
-  cont.addEventListener("keydown", (e) => {
-    const fr = (e.target as HTMLElement).closest<HTMLElement>("[data-zona]");
-    if (fr && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); abrir(fr.dataset.zona!); }
   });
   m.alSeleccionar((p) => abrir(p.id));
 
@@ -236,9 +274,9 @@ async function iniciar() {
       ${fila("Neblina", (p) => p.indice_niebla.toFixed(2).replace(".", ","))}
       ${fila("Sal en el aire", (p) => `${n0(p.deposicion_cl_mg_m2_d)} mg/m²·d`)}
       ${fila("Altura media", (p) => `${n0(p.elevacion_media_m ?? 0)} m`)}
-      ${fila("Concreto común", (p) => p.vida_util_concreto_comun_anios >= 150 ? "150+ años" : `${n0(p.vida_util_concreto_comun_anios)} años`)}
+      ${fila("Concreto común", (p) => veredicto(p.vida_util_concreto_comun_anios).txt)}
       ${fila("Receta ideal", (p) => recetaEnPalabras(p.recetas!.ideal))}
-      ${fila("Vida útil con la receta", (p) => p.recetas!.ideal.vida_util_anios >= 150 ? "150+ años" : `${n0(p.recetas!.ideal.vida_util_anios)} años`)}
+      ${fila("Vida útil con la receta", (p) => veredicto(p.recetas!.ideal.vida_util_anios).txt)}
       ${fila("Costo ideal", (p) => `S/ ${n0(p.recetas!.ideal.viabilidad.costo_m3_pen)} por m³`)}
       ${fila("Opción económica", (p) => `S/ ${n0(p.recetas!.economica.viabilidad.costo_m3_pen)}: ${AGENTES[p.recetas!.economica.agente]?.corto}`)}
       ${fila("Población", (p) => `${n0(p.poblacion)} hab.`)}</tbody>`;
@@ -254,11 +292,11 @@ async function iniciar() {
     const p = entradas.find((x) => x.k.startsWith(q))?.p;
     if (p) abrir(p.id);
   });
-  $("#modelo").textContent = `${props.length.toLocaleString("es-PE")} zonas de 10 km entre Tumbes y Tacna. Modelo v${col.metadata.modelo_version}, entrenado con ${col.metadata.cv_modelo ? "los ensayos de Blur" : "Blur"}: acierta el cierre de fisura con un error medio de ±${String(col.metadata.cv_modelo?.conjunto?.MAE_pct ?? "").replace(".", ",")} puntos.`;
+  $("#modelo").textContent = `${props.length.toLocaleString("es-PE")} celdas hexagonales de 10 km entre Tumbes y Tacna. Modelo v${col.metadata.modelo_version}, entrenado con ${col.metadata.cv_modelo ? "los ensayos de Blur" : "Blur"}: acierta el cierre de fisura con un error medio de ±${String(col.metadata.cv_modelo?.conjunto?.MAE_pct ?? "").replace(".", ",")} puntos.`;
 
   const inicial = location.hash.slice(1);
   if (inicial && porId.has(inicial)) abrir(inicial, true);
-  else if (!movil.matches) abrir(props.find((p) => p.distrito === "Atiquipa" && p.franja === 3)?.id ?? props[0].id, false);
+  else if (!movil.matches) abrir(props.filter((p) => p.distrito === "Atiquipa").sort((a, b) => b.frac_loma - a.frac_loma)[0]?.id ?? props[0].id, false);
 
   iniciarAportes();
 }

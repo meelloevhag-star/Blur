@@ -10,7 +10,7 @@ from atlas.diseno_mezcla import dosificar, fc_estimado
 from atlas.durabilidad import vida_util, ajuste_drcm
 from atlas.ingesta import NOMBRES_CIERRE, dataset_cierre, vector_cierre
 from atlas.normas import reglas
-from atlas.rutas import MODELOS, SALIDA
+from atlas.rutas import MODELOS, RAIZ, SALIDA
 from atlas.viabilidad import catalogo
 
 FIXTURE = Path(__file__).parent / "fixture_paridad.json"
@@ -97,7 +97,7 @@ class _DEMSintetico:
 def _zona(lon0, lon1, lat0=-12.05, lat1=-11.95):
     from atlas.zonas import Zona
     pol = [[lon0, lat0], [lon1, lat0], [lon1, lat1], [lon0, lat1], [lon0, lat0]]
-    return Zona(id="T", pais="PER", departamento="X", franja=3, dist_mar_km=7.5,
+    return Zona(id="T", pais="PER", departamento="X", dist_mar_km=7.5,
                 lat=(lat0 + lat1) / 2, lon=(lon0 + lon1) / 2, poligono=pol)
 
 
@@ -132,15 +132,56 @@ def test_comodines_de_fuentes(tmp_path, monkeypatch):
 
 
 @pytest.mark.skipif(not (SALIDA / "zonas_per.geojson").exists(), reason="sin salida construida")
-def test_malla_v2_sin_solapes_y_territorio():
+def test_malla_hexagonal_sin_huecos_ni_solapes():
     from shapely.geometry import Polygon
     from shapely.ops import unary_union
+    from atlas.zonas import TAM_HEX_KM
     g = json.loads((SALIDA / "zonas_per.geojson").read_text(encoding="utf-8"))
+    assert g["metadata"]["malla"]["tipo"] == "hexagonal"
     P = [Polygon(f["geometry"]["coordinates"][0]) for f in g["features"]]
     assert all(p.is_valid for p in P)
-    assert unary_union(P).area == pytest.approx(sum(p.area for p in P), rel=1e-4)
+    u = unary_union(P)
+    assert u.area == pytest.approx(sum(p.area for p in P), rel=1e-4)                     # sin solapes
+    assert sum(len(x.interiors) for x in getattr(u, "geoms", [u])) == 0                    # sin huecos
+    # tamaño parejo: ninguna celda supera 1,6 veces el hexágono nominal (≈ 87 km² a 10 km)
+    km2 = 111.32 ** 2
+    import math
+    nominal = math.sqrt(3) / 2 * TAM_HEX_KM ** 2
+    areas = [p.area * km2 * math.cos(math.radians(p.centroid.y)) for p in P]
+    assert max(areas) < 1.6 * nominal
     props = {f["properties"]["distrito"]: f["properties"] for f in g["features"]}
     assert g["metadata"]["poblacion_total_zonas"] == sum(f["properties"]["poblacion"] for f in g["features"])
     lima = [f["properties"] for f in g["features"] if f["properties"]["distrito"] in ("Lima", "Callao")]
     assert any(p["clase_urbana"] == "urbano" for p in lima)
-    assert "Atiquipa" in props
+    assert {"Atiquipa", "Colan"} <= set(props)
+
+
+def test_frente_marino_es_salpicadura():
+    g = json.loads((SALIDA / "zonas_per.geojson").read_text(encoding="utf-8"))
+    orilla = [f["properties"] for f in g["features"] if f["properties"]["frente_marino"]]
+    assert orilla and all(p["frente"]["regimen"] == "salpicadura" for p in orilla)
+    assert all(p["frente"] is None for p in (f["properties"] for f in g["features"]) if not p["frente_marino"])
+
+
+def test_paridad_fick_python_typescript(tmp_path):
+    """El visor web (web/src/fick.ts) reproduce la vida útil de durabilidad.py con los parámetros exportados."""
+    import shutil
+    import subprocess
+    from atlas.durabilidad import parametros_fick, vida_util
+    esbuild = RAIZ / "web" / "node_modules" / ".bin" / "esbuild"
+    if not shutil.which("node") or not esbuild.exists():
+        pytest.skip("sin Node o sin web/node_modules (npm ci)")
+    casos = [(0.45, "IP", "atmosferico_marino", 80, 19, 50, 0.45, 0.6, "basilisk"),
+             (0.55, "I", "salpicadura", 2000, 22, 40, 0.3, 0.0, "ninguno"),
+             (0.40, "HS", "niebla_salina", 300, 17, 65, 0.6, 0.4, "cristalino")]
+    params = [parametros_fick(*c[:7], cierre_frac=c[7], agente=c[8]) for c in casos]
+    esperado = [vida_util(*c[:7], cierre_frac=c[7], agente=c[8]) for c in casos]
+    web = RAIZ / "web"
+    script = tmp_path / "p.mjs"
+    out = tmp_path / "fick.mjs"
+    subprocess.run([str(esbuild), str(web / "src" / "fick.ts"), "--format=esm", f"--outfile={out}", "--log-level=error"],
+                   cwd=web, check=True)
+    script.write_text(f"import {{ anioInicio }} from {json.dumps(str(out))};\n"
+                      f"console.log(JSON.stringify({json.dumps(params)}.map((f) => anioInicio(f, 150) ?? 150)));")
+    r = subprocess.run(["node", str(script)], capture_output=True, text=True, check=True)
+    assert json.loads(r.stdout) == pytest.approx(esperado, abs=1)

@@ -1,11 +1,10 @@
 import type { PropsZona } from "./tipos";
 
-export type Agregado = "max" | "min" | "suma" | "moda" | "costa";
+export type Grupo = "Ambiente" | "Concreto" | "Personas";
 export interface Capa {
-  id: string; nombre: string; pregunta: string; unidad?: string;
+  id: string; nombre: string; pregunta: string; unidad?: string; grupo: Grupo;
   valor(p: PropsZona): number;
   cortes: number[]; colores: string[]; etiquetas: string[];
-  agregado: Agregado;            // cómo resumir las 6 franjas de un tramo en la cinta costera
   formato(v: number): string;
 }
 
@@ -43,36 +42,36 @@ const TIERRA = ["#efe7d4", "#d9c39a", "#b99868", "#8c6b44", "#5a4329"];     // r
 const CALOR = ["#f3e6d6", "#e9bf93", "#d48b5b", "#ae5634", "#6e2c1c"];      // urgencia / costo
 
 export const CAPAS: Capa[] = [
-  { id: "receta", nombre: "Qué concreto usar", pregunta: "Agente autorreparador de la receta ideal",
+  { id: "receta", grupo: "Concreto", nombre: "Qué concreto usar", pregunta: "Agente autorreparador de la receta ideal",
     valor: (p) => ORDEN_AG.indexOf(p.ideal_agente), cortes: [1, 2, 3, 4],
     colores: ORDEN_AG.map((a) => AGENTES[a].color), etiquetas: ORDEN_AG.map((a) => AGENTES[a].corto),
-    agregado: "costa", formato: (v) => AGENTES[ORDEN_AG[v]]?.corto ?? "—" },
-  { id: "regimen", nombre: "Exposición", pregunta: "Cómo le llega la sal al concreto",
+    formato: (v) => AGENTES[ORDEN_AG[v]]?.corto ?? "—" },
+  { id: "regimen", grupo: "Ambiente", nombre: "Exposición", pregunta: "Cómo le llega la sal al concreto",
     valor: (p) => ORDEN_REG.indexOf(p.regimen), cortes: [1, 2, 3, 4],
     colores: ORDEN_REG.map((r) => REGIMENES[r].color), etiquetas: ORDEN_REG.map((r) => REGIMENES[r].nombre),
-    agregado: "moda", formato: (v) => REGIMENES[ORDEN_REG[v]]?.nombre ?? "—" },
-  { id: "niebla", nombre: "Neblina", pregunta: "Cuánta neblina y garúa recibe (0 a 1)",
+    formato: (v) => REGIMENES[ORDEN_REG[v]]?.nombre ?? "—" },
+  { id: "niebla", grupo: "Ambiente", nombre: "Neblina", pregunta: "Cuánta neblina y garúa recibe (0 a 1)",
     valor: (p) => p.indice_niebla, cortes: [0.25, 0.45, 0.65, 0.85], colores: SEC,
-    etiquetas: ["Casi nunca", "Poca", "Frecuente", "Muy frecuente", "Casi permanente"], agregado: "max",
+    etiquetas: ["Casi nunca", "Poca", "Frecuente", "Muy frecuente", "Casi permanente"],
     formato: (v) => v.toFixed(2).replace(".", ",") },
-  { id: "cloruros", nombre: "Sal en el aire", pregunta: "Cloruros que se depositan por día",
+  { id: "cloruros", grupo: "Ambiente", nombre: "Sal en el aire", pregunta: "Cloruros que se depositan por día",
     valor: (p) => p.deposicion_cl_mg_m2_d, cortes: [3, 15, 60, 300], colores: AZUL,
-    etiquetas: rangos([3, 15, 60, 300], "mg/m²·d"), agregado: "costa", formato: (v) => `${n0(v)} mg/m²·d` },
-  { id: "relieve", nombre: "Relieve", pregunta: "Altura media del terreno",
+    etiquetas: rangos([3, 15, 60, 300], "mg/m²·d"), formato: (v) => `${n0(v)} mg/m²·d` },
+  { id: "relieve", grupo: "Ambiente", nombre: "Relieve", pregunta: "Altura media del terreno",
     valor: (p) => p.elevacion_media_m ?? 0, cortes: [100, 300, 600, 1000], colores: TIERRA,
-    etiquetas: rangos([100, 300, 600, 1000], "m"), agregado: "max", formato: (v) => `${n0(v)} m` },
-  { id: "poblacion", nombre: "Ciudades", pregunta: "Grado de urbanización (WorldPop 2022, Censo 2017)",
+    etiquetas: rangos([100, 300, 600, 1000], "m"), formato: (v) => `${n0(v)} m` },
+  { id: "poblacion", grupo: "Personas", nombre: "Ciudades", pregunta: "Grado de urbanización (WorldPop 2022, Censo 2017)",
     valor: (p) => URB.indexOf(p.clase_urbana), cortes: [1, 2, 3], colores: ["#efe9de", "#d5c2a3", "#b07f58", "#6e3b24"],
-    etiquetas: ["Deshabitado", "Rural", "Periurbano", "Urbano"], agregado: "max", formato: (v) => ["Deshabitado", "Rural", "Periurbano", "Urbano"][v] ?? "—" },
-  { id: "prioridad", nombre: "Dónde rinde más", pregunta: "Personas que viven donde el concreto común se deteriora antes",
+    etiquetas: ["Deshabitado", "Rural", "Periurbano", "Urbano"], formato: (v) => ["Deshabitado", "Rural", "Periurbano", "Urbano"][v] ?? "—" },
+  { id: "prioridad", grupo: "Personas", nombre: "Dónde rinde más", pregunta: "Personas que viven donde el concreto común se deteriora antes",
     valor: (p) => p.prioridad, cortes: [1000, 10000, 50000, 200000], colores: CALOR,
-    etiquetas: rangos([1000, 10000, 50000, 200000], "personas"), agregado: "suma", formato: (v) => `${n0(v)} personas` },
-  { id: "vida", nombre: "Concreto común", pregunta: "Años hasta la corrosión con el concreto de hoy (Tipo I, a/c 0,55)",
+    etiquetas: rangos([1000, 10000, 50000, 200000], "personas"), formato: (v) => `${n0(v)} personas` },
+  { id: "vida", grupo: "Concreto", nombre: "Concreto común", pregunta: "Años hasta la corrosión con el concreto de hoy (Tipo I, a/c 0,55)",
     valor: (p) => p.vida_util_concreto_comun_anios, cortes: [10, 25, 50, 100], colores: [...CALOR].reverse(),
-    etiquetas: rangos([10, 25, 50, 100], "años"), agregado: "min", formato: (v) => v >= 150 ? "150 años o más" : `${n0(v)} años` },
-  { id: "costo", nombre: "Costo", pregunta: "Costo por m³ de la receta más económica",
+    etiquetas: rangos([10, 25, 50, 100], "años"), formato: (v) => v >= 150 ? "150 años o más" : `${n0(v)} años` },
+  { id: "costo", grupo: "Concreto", nombre: "Costo", pregunta: "Costo por m³ de la receta más económica",
     valor: (p) => p.economica_costo_m3, cortes: [500, 520, 540, 560], colores: ["#145c46", "#3f8a6e", "#d9c39a", "#d48b5b", "#ae5634"],
-    etiquetas: rangos([500, 520, 540, 560], "S/ por m³"), agregado: "min", formato: (v) => `S/ ${n0(v)} por m³` },
+    etiquetas: rangos([500, 520, 540, 560], "S/ por m³"), formato: (v) => `S/ ${n0(v)} por m³` },
 ];
 
 export function clase(capa: Capa, v: number): number {
@@ -81,18 +80,3 @@ export function clase(capa: Capa, v: number): number {
   return i;
 }
 export const color = (capa: Capa, v: number) => capa.colores[clase(capa, v)] ?? "#999";
-
-export function resumirTramo(capa: Capa, zonas: PropsZona[]): number {
-  const v = zonas.map((z) => capa.valor(z));
-  switch (capa.agregado) {
-    case "max": return Math.max(...v);
-    case "min": return Math.min(...v);
-    case "suma": return v.reduce((a, b) => a + b, 0);
-    case "costa": return capa.valor(zonas.reduce((a, b) => (b.franja < a.franja ? b : a)));
-    case "moda": {
-      const c = new Map<number, number>();
-      v.forEach((x) => c.set(x, (c.get(x) ?? 0) + 1));
-      return [...c.entries()].sort((a, b) => b[1] - a[1])[0][0];
-    }
-  }
-}
