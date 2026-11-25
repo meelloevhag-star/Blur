@@ -1,0 +1,43 @@
+{
+  "ingemmet:https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer": {
+    "estado": "error",
+    "detalle": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1011)>"
+  },
+  "minam:https://geoservidorperu.minam.gob.pe/arcgis/rest/services/ServicioPMIZMC/MapServer": {
+    "estado": "error",
+    "detalle": "HTTP Error 403: Forbidden"
+  },
+  "inei:https://arcgis.inei.gob.pe:6443/arcgis/rest/services/FORTALECIMIENTOV1/CARTOGRAFIA_UTM_17S_ULE/MapServer": {
+    "estado": "error",
+    "detalle": "<urlopen error [Errno -2] Name or service not known>"
+  },
+  "osm:plantas_concreto": {
+    "estado": "ok",
+    "elementos": 13,
+    "servidor": "https://overpass-api.de/api/interpreter",
+    "archivo": "datos/gis/osm/plantas_concreto.geojson",
+    "licencia": "ODbL"
+  },
+  "osm:canteras": {
+    "estado": "ok",
+    "elementos": 1308,
+    "servidor": "https://overpass-api.de/api/interpreter",
+    "archivo": "datos/gis/osm/canteras.geojson",
+    "licencia": "ODbL"
+  },
+  "osm:puertos": {
+    "estado": "ok",
+    "elementos": 42,
+    "servidor": "https://overpass-api.de/api/interpreter",
+    "archivo": "datos/gis/osm/puertos.geojson",
+    "licencia": "ODbL"
+  },
+  "osm:puentes": {
+    "estado": "ok",
+    "elementos": 5246,
+    "servidor": "https://overpass-api.de/api/interpreter",
+    "archivo": "datos/gis/osm/puentes.geojson",
+    "licencia": "ODbL"
+  },
+  "_fecha": "2026-11-25T03:43:19+00:00"
+}
