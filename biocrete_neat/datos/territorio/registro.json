@@ -26,368 +26,369 @@
     "_fecha": "2026-11-25T22:56:59+00:00"
   },
   "gis:ingemmet": {
-    "Roca Mineral Industrial": {
+    "ingemmet:Roca Mineral Industrial": {
       "estado": "ok",
       "elementos": 5938,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/0_roca_mineral_industrial.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Litio": {
+    "ingemmet:Litio": {
       "estado": "ok",
       "elementos": 312,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/28_litio.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Concesión Minera No Metálica": {
+    "ingemmet:Concesión Minera No Metálica": {
       "estado": "ok",
-      "elementos": 8093,
+      "elementos": 8087,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/2_concesi_n_minera_no_met_lica.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Andalucita": {
+    "ingemmet:Andalucita": {
       "estado": "ok",
       "elementos": 1,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/4_andalucita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Andesita": {
+    "ingemmet:Andesita": {
       "estado": "ok",
       "elementos": 7,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/5_andesita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Arcilla Caolinítica": {
+    "ingemmet:Arcilla Caolinítica": {
       "estado": "ok",
       "elementos": 27,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/6_arcilla_caolin_tica.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Arcilla Común": {
+    "ingemmet:Arcilla Común": {
       "estado": "ok",
       "elementos": 449,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/7_arcilla_com_n.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Arcilla Refractaria": {
+    "ingemmet:Arcilla Refractaria": {
       "estado": "ok",
       "elementos": 3,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/8_arcilla_refractaria.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Arena Silícea": {
+    "ingemmet:Arena Silícea": {
       "estado": "ok",
       "elementos": 103,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/9_arena_sil_cea.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Árido": {
+    "ingemmet:Árido": {
       "estado": "ok",
       "elementos": 734,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/10_rido.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Azufre": {
+    "ingemmet:Azufre": {
       "estado": "ok",
       "elementos": 1,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/11_azufre.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Baritina": {
+    "ingemmet:Baritina": {
       "estado": "ok",
       "elementos": 16,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/12_baritina.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Bauxita": {
+    "ingemmet:Bauxita": {
       "estado": "ok",
       "elementos": 1,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/13_bauxita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Bentonita": {
+    "ingemmet:Bentonita": {
       "estado": "ok",
       "elementos": 9,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/14_bentonita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Borato": {
+    "ingemmet:Borato": {
       "estado": "ok",
       "elementos": 0,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/15_borato.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Calcita": {
+    "ingemmet:Calcita": {
       "estado": "ok",
       "elementos": 11,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/16_calcita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Caliza": {
+    "ingemmet:Caliza": {
       "estado": "ok",
       "elementos": 896,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/17_caliza.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Caolín": {
+    "ingemmet:Caolín": {
       "estado": "ok",
       "elementos": 21,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/18_caol_n.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Carbón": {
+    "ingemmet:Carbón": {
       "estado": "ok",
       "elementos": 64,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/19_carb_n.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Coquina": {
+    "ingemmet:Coquina": {
       "estado": "ok",
       "elementos": 10,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/20_coquina.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Diatomita": {
+    "ingemmet:Diatomita": {
       "estado": "ok",
       "elementos": 18,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/21_diatomita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Dolomia": {
+    "ingemmet:Dolomia": {
       "estado": "ok",
       "elementos": 97,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/22_dolomia.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Feldespato": {
+    "ingemmet:Feldespato": {
       "estado": "ok",
       "elementos": 44,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/23_feldespato.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Fluorita": {
+    "ingemmet:Fluorita": {
       "estado": "ok",
       "elementos": 1,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/24_fluorita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Fosfato": {
+    "ingemmet:Fosfato": {
       "estado": "ok",
       "elementos": 32,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/25_fosfato.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Grafito": {
+    "ingemmet:Grafito": {
       "estado": "ok",
       "elementos": 103,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/26_grafito.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Granito": {
+    "ingemmet:Granito": {
       "estado": "ok",
       "elementos": 267,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/27_granito.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Magnesio": {
+    "ingemmet:Magnesio": {
       "estado": "ok",
       "elementos": 0,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/29_magnesio.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Manganeso": {
+    "ingemmet:Manganeso": {
       "estado": "ok",
       "elementos": 101,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/30_manganeso.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Mica": {
+    "ingemmet:Mica": {
       "estado": "ok",
       "elementos": 5,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/31_mica.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Marmol": {
+    "ingemmet:Marmol": {
       "estado": "ok",
       "elementos": 149,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/32_marmol.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Ocre": {
+    "ingemmet:Ocre": {
       "estado": "ok",
       "elementos": 11,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/33_ocre.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Ónix": {
+    "ingemmet:Ónix": {
       "estado": "ok",
       "elementos": 4,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/34_nix.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Piedra Laja": {
+    "ingemmet:Piedra Laja": {
       "estado": "ok",
       "elementos": 55,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/35_piedra_laja.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Piedra Poméz": {
+    "ingemmet:Piedra Poméz": {
       "estado": "ok",
       "elementos": 5,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/36_piedra_pom_z.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Pirofilita": {
+    "ingemmet:Pirofilita": {
       "estado": "ok",
       "elementos": 9,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/37_pirofilita.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Pizarra": {
+    "ingemmet:Pizarra": {
       "estado": "ok",
       "elementos": 5,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/38_pizarra.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Puzolana": {
+    "ingemmet:Puzolana": {
       "estado": "ok",
       "elementos": 20,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/39_puzolana.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Sal": {
+    "ingemmet:Sal": {
       "estado": "ok",
       "elementos": 18,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/40_sal.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Serpentina": {
+    "ingemmet:Serpentina": {
       "estado": "ok",
       "elementos": 17,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/41_serpentina.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Sillar": {
+    "ingemmet:Sillar": {
       "estado": "ok",
       "elementos": 30,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/42_sillar.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Silice": {
+    "ingemmet:Silice": {
       "estado": "ok",
       "elementos": 106,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/43_silice.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Talco": {
+    "ingemmet:Talco": {
       "estado": "ok",
       "elementos": 5,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/44_talco.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Travertino": {
+    "ingemmet:Travertino": {
       "estado": "ok",
       "elementos": 22,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/45_travertino.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Yeso": {
+    "ingemmet:Yeso": {
       "estado": "ok",
       "elementos": 96,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/46_yeso.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "Zeolitas": {
+    "ingemmet:Zeolitas": {
       "estado": "ok",
       "elementos": 1,
       "archivo": "biocrete_neat/datos/territorio/gis/ingemmet/47_zeolitas.geojson",
       "url": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer",
       "licencia": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)"
     },
-    "_fecha": "2026-11-25T03:50:41+00:00"
+    "_fecha": "2026-11-25T23:20:15+00:00"
   },
   "gis:minam": {
-    "https://geoservidorperu.minam.gob.pe/arcgis/rest/services/ServicioPMIZMC/MapServer": {
+    "minam:https://geoservidorperu.minam.gob.pe/arcgis/rest/services/ServicioPMIZMC/MapServer": {
       "estado": "error",
       "detalle": "HTTP Error 403: Forbidden",
+      "url": "https://geoservidorperu.minam.gob.pe/arcgis/rest/services/ServicioPMIZMC/MapServer",
       "licencia": "datos abiertos del Estado peruano (MINAM)"
     },
-    "_fecha": "2026-11-25T03:50:41+00:00"
+    "_fecha": "2026-11-25T23:20:31+00:00"
   },
   "gis:osm": {
-    "plantas_concreto": {
+    "osm:plantas_concreto": {
       "estado": "ok",
       "elementos": 13,
+      "url": "https://overpass-api.de/api/interpreter",
       "archivo": "biocrete_neat/datos/territorio/gis/osm/plantas_concreto.geojson",
-      "licencia": "ODbL (© colaboradores de OpenStreetMap)",
-      "url": "https://overpass-api.de/api/interpreter"
+      "licencia": "ODbL (© colaboradores de OpenStreetMap)"
     },
-    "canteras": {
+    "osm:canteras": {
       "estado": "ok",
       "elementos": 1308,
+      "url": "https://overpass-api.de/api/interpreter",
       "archivo": "biocrete_neat/datos/territorio/gis/osm/canteras.geojson",
-      "licencia": "ODbL (© colaboradores de OpenStreetMap)",
-      "url": "https://overpass-api.de/api/interpreter"
+      "licencia": "ODbL (© colaboradores de OpenStreetMap)"
     },
-    "puertos": {
+    "osm:puertos": {
       "estado": "ok",
       "elementos": 42,
+      "url": "https://overpass-api.de/api/interpreter",
       "archivo": "biocrete_neat/datos/territorio/gis/osm/puertos.geojson",
-      "licencia": "ODbL (© colaboradores de OpenStreetMap)",
-      "url": "https://overpass-api.de/api/interpreter"
+      "licencia": "ODbL (© colaboradores de OpenStreetMap)"
     },
-    "puentes": {
+    "osm:puentes": {
       "estado": "ok",
       "elementos": 5246,
+      "url": "https://overpass-api.de/api/interpreter",
       "archivo": "biocrete_neat/datos/territorio/gis/osm/puentes.geojson",
-      "licencia": "ODbL (© colaboradores de OpenStreetMap)",
-      "url": "https://overpass-api.de/api/interpreter"
+      "licencia": "ODbL (© colaboradores de OpenStreetMap)"
     },
-    "_fecha": "2026-11-25T03:50:41+00:00"
+    "_fecha": "2026-11-25T23:25:54+00:00"
   },
   "poblacion": {
     "estado": "ok",
