@@ -76,5 +76,12 @@ jobs:
           git config user.email "atlas-sync@users.noreply.github.com"
           git checkout -- biocrete_neat/datos/territorio/registro.json 2>/dev/null || true
           git add atlas/modelos atlas/salida atlas/datos atlas/tests/fixture_paridad.json
-          git diff --cached --quiet || git commit -m "chore(atlas): re-entrenamiento automático con datos nuevos de Blur"
-          git push
+          git diff --cached --quiet && exit 0
+          git commit -m "chore(atlas): re-entrenamiento automático con datos nuevos de Blur"
+          RAMA="${{ github.event.workflow_run.head_branch || github.ref_name }}"
+          for i in 1 2 3 4; do
+            # otra corrida (atlas-sync / blur-territorio) pudo subir antes: cada una escribe su carpeta, no chocan
+            git pull --rebase --autostash origin "$RAMA" && git push origin "HEAD:$RAMA" && exit 0
+            sleep $((i * 10))
+          done
+          exit 1
