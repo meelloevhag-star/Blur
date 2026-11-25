@@ -39,5 +39,281 @@
     "archivo": "datos/gis/osm/puentes.geojson",
     "licencia": "ODbL"
   },
-  "_fecha": "2026-11-25T03:43:19+00:00"
+  "_fecha": "2026-11-25T03:50:41+00:00",
+  "ingemmet:Roca Mineral Industrial": {
+    "estado": "ok",
+    "elementos": 5938,
+    "archivo": "datos/gis/ingemmet/0_roca_mineral_industrial.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Litio": {
+    "estado": "ok",
+    "elementos": 312,
+    "archivo": "datos/gis/ingemmet/28_litio.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Concesión Minera No Metálica": {
+    "estado": "ok",
+    "elementos": 8093,
+    "archivo": "datos/gis/ingemmet/2_concesi_n_minera_no_met_lica.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Andalucita": {
+    "estado": "ok",
+    "elementos": 1,
+    "archivo": "datos/gis/ingemmet/4_andalucita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Andesita": {
+    "estado": "ok",
+    "elementos": 7,
+    "archivo": "datos/gis/ingemmet/5_andesita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Arcilla Caolinítica": {
+    "estado": "ok",
+    "elementos": 27,
+    "archivo": "datos/gis/ingemmet/6_arcilla_caolin_tica.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Arcilla Común": {
+    "estado": "ok",
+    "elementos": 449,
+    "archivo": "datos/gis/ingemmet/7_arcilla_com_n.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Arcilla Refractaria": {
+    "estado": "ok",
+    "elementos": 3,
+    "archivo": "datos/gis/ingemmet/8_arcilla_refractaria.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Arena Silícea": {
+    "estado": "ok",
+    "elementos": 103,
+    "archivo": "datos/gis/ingemmet/9_arena_sil_cea.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Árido": {
+    "estado": "ok",
+    "elementos": 734,
+    "archivo": "datos/gis/ingemmet/10_rido.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Azufre": {
+    "estado": "ok",
+    "elementos": 1,
+    "archivo": "datos/gis/ingemmet/11_azufre.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Baritina": {
+    "estado": "ok",
+    "elementos": 16,
+    "archivo": "datos/gis/ingemmet/12_baritina.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Bauxita": {
+    "estado": "ok",
+    "elementos": 1,
+    "archivo": "datos/gis/ingemmet/13_bauxita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Bentonita": {
+    "estado": "ok",
+    "elementos": 9,
+    "archivo": "datos/gis/ingemmet/14_bentonita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Borato": {
+    "estado": "ok",
+    "elementos": 0,
+    "archivo": "datos/gis/ingemmet/15_borato.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Calcita": {
+    "estado": "ok",
+    "elementos": 11,
+    "archivo": "datos/gis/ingemmet/16_calcita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Caliza": {
+    "estado": "ok",
+    "elementos": 896,
+    "archivo": "datos/gis/ingemmet/17_caliza.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Caolín": {
+    "estado": "ok",
+    "elementos": 21,
+    "archivo": "datos/gis/ingemmet/18_caol_n.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Carbón": {
+    "estado": "ok",
+    "elementos": 64,
+    "archivo": "datos/gis/ingemmet/19_carb_n.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Coquina": {
+    "estado": "ok",
+    "elementos": 10,
+    "archivo": "datos/gis/ingemmet/20_coquina.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Diatomita": {
+    "estado": "ok",
+    "elementos": 18,
+    "archivo": "datos/gis/ingemmet/21_diatomita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Dolomia": {
+    "estado": "ok",
+    "elementos": 97,
+    "archivo": "datos/gis/ingemmet/22_dolomia.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Feldespato": {
+    "estado": "ok",
+    "elementos": 44,
+    "archivo": "datos/gis/ingemmet/23_feldespato.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Fluorita": {
+    "estado": "ok",
+    "elementos": 1,
+    "archivo": "datos/gis/ingemmet/24_fluorita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Fosfato": {
+    "estado": "ok",
+    "elementos": 32,
+    "archivo": "datos/gis/ingemmet/25_fosfato.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Grafito": {
+    "estado": "ok",
+    "elementos": 103,
+    "archivo": "datos/gis/ingemmet/26_grafito.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Granito": {
+    "estado": "ok",
+    "elementos": 267,
+    "archivo": "datos/gis/ingemmet/27_granito.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Magnesio": {
+    "estado": "ok",
+    "elementos": 0,
+    "archivo": "datos/gis/ingemmet/29_magnesio.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Manganeso": {
+    "estado": "ok",
+    "elementos": 101,
+    "archivo": "datos/gis/ingemmet/30_manganeso.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Mica": {
+    "estado": "ok",
+    "elementos": 5,
+    "archivo": "datos/gis/ingemmet/31_mica.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Marmol": {
+    "estado": "ok",
+    "elementos": 149,
+    "archivo": "datos/gis/ingemmet/32_marmol.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Ocre": {
+    "estado": "ok",
+    "elementos": 11,
+    "archivo": "datos/gis/ingemmet/33_ocre.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Ónix": {
+    "estado": "ok",
+    "elementos": 4,
+    "archivo": "datos/gis/ingemmet/34_nix.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Piedra Laja": {
+    "estado": "ok",
+    "elementos": 55,
+    "archivo": "datos/gis/ingemmet/35_piedra_laja.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Piedra Poméz": {
+    "estado": "ok",
+    "elementos": 5,
+    "archivo": "datos/gis/ingemmet/36_piedra_pom_z.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Pirofilita": {
+    "estado": "ok",
+    "elementos": 9,
+    "archivo": "datos/gis/ingemmet/37_pirofilita.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Pizarra": {
+    "estado": "ok",
+    "elementos": 5,
+    "archivo": "datos/gis/ingemmet/38_pizarra.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Puzolana": {
+    "estado": "ok",
+    "elementos": 20,
+    "archivo": "datos/gis/ingemmet/39_puzolana.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Sal": {
+    "estado": "ok",
+    "elementos": 18,
+    "archivo": "datos/gis/ingemmet/40_sal.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Serpentina": {
+    "estado": "ok",
+    "elementos": 17,
+    "archivo": "datos/gis/ingemmet/41_serpentina.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Sillar": {
+    "estado": "ok",
+    "elementos": 30,
+    "archivo": "datos/gis/ingemmet/42_sillar.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Silice": {
+    "estado": "ok",
+    "elementos": 106,
+    "archivo": "datos/gis/ingemmet/43_silice.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Talco": {
+    "estado": "ok",
+    "elementos": 5,
+    "archivo": "datos/gis/ingemmet/44_talco.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Travertino": {
+    "estado": "ok",
+    "elementos": 22,
+    "archivo": "datos/gis/ingemmet/45_travertino.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Yeso": {
+    "estado": "ok",
+    "elementos": 96,
+    "archivo": "datos/gis/ingemmet/46_yeso.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  },
+  "ingemmet:Zeolitas": {
+    "estado": "ok",
+    "elementos": 1,
+    "archivo": "datos/gis/ingemmet/47_zeolitas.geojson",
+    "servicio": "https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer"
+  }
 }
