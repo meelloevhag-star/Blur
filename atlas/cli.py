@@ -68,8 +68,9 @@ def construir(pais="PER"):
     ruta = SALIDA / f"zonas_{pais.lower()}.geojson"
     ruta.write_text(json.dumps(g, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     escribir_web(g, pais)
-    from atlas import terreno
+    from atlas import fondo, terreno
     terreno.generar(pais)
+    fondo.curvas(pais=pais)                    # curvas de nivel del mapa (DEM de Blur)
     print(f"{len(g['features'])} zonas → {ruta.relative_to(RAIZ)} (modelo v{g['metadata']['modelo_version']})")
     return ruta
 

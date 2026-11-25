@@ -38,7 +38,7 @@ const URB = ["deshabitado", "rural", "periurbano", "urbano"];
 
 const SEC = ["#e6efe9", "#b9d6c6", "#7fb39b", "#3f8a6e", "#145c46"];        // verde loma
 const AZUL = ["#e5eef2", "#b5cfdb", "#7eaac0", "#467f9e", "#1f4e6b"];       // sal
-const TIERRA = ["#efe7d4", "#d9c39a", "#b99868", "#8c6b44", "#5a4329"];     // relieve
+const TIERRA = ["#f1e4cf", "#dcb98f", "#b98a7a", "#7d5a86", "#463a6b"];     // relieve: rampa arena → púrpura (Purple Desert)
 const CALOR = ["#f3e6d6", "#e9bf93", "#d48b5b", "#ae5634", "#6e2c1c"];      // urgencia / costo
 
 export const CAPAS: Capa[] = [

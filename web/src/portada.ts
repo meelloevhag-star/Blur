@@ -12,7 +12,7 @@ interface Rejilla { nx: number; ny: number; h: number[]; lugar: string }
 const NIEBLA = [300, 1000];
 const quieto = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export async function iniciarPortada(el: HTMLElement, alEntrar: () => void) {
+export async function iniciarPortada(el: HTMLElement, alEntrar: () => void, antesDeSalir: () => Promise<void> = async () => {}) {
   const fondo = el.querySelector<HTMLCanvasElement>("#portada-relieve")!;
   const capa = el.querySelector<HTMLCanvasElement>("#portada-luz")!;
   let datos: Rejilla;
@@ -162,14 +162,19 @@ export async function iniciarPortada(el: HTMLElement, alEntrar: () => void) {
   el.addEventListener("pointermove", (e) => { cursor.x = e.clientX; cursor.y = e.clientY; cursor.activo = e.pointerType !== "touch"; pedir(); });
   el.addEventListener("pointerleave", () => { cursor.activo = false; pedir(); });
   el.addEventListener("pointerdown", (e) => {
-    if ((e.target as HTMLElement).closest("button, a")) return;
+    if ((e.target as HTMLElement).closest("button, a, .globo")) return;
     const max = Math.max(...[[0, 0], [W, 0], [0, H], [W, H]].map(([x, y]) => Math.hypot(x - e.clientX, y - e.clientY)));
     onda = { x: e.clientX, y: e.clientY, t0: performance.now(), max };
     pedir();
   });
 
   el.querySelector<HTMLElement>("#portada-lugar")!.textContent = datos.lugar;
-  const entrar = () => {
+  let saliendo = false;
+  const entrar = async () => {
+    if (saliendo || el.hidden) return;
+    saliendo = true;
+    await antesDeSalir();
+    saliendo = false;
     el.classList.add("saliendo");
     setTimeout(() => { el.hidden = true; alEntrar(); }, quieto() ? 0 : 650);
   };

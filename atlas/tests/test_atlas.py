@@ -211,3 +211,12 @@ def test_territorio_de_blur_en_fuentes():
     assert any(i.startswith("territorio_clima:") for i in ids)
     assert any(i.startswith("territorio_gis:") for i in ids)
     assert all(not f.get("entrena") for f in fuentes_expandidas() if f["tipo"] == "territorio")
+
+
+def test_curvas_de_nivel_para_el_mapa():
+    ruta = RAIZ / "web" / "public" / "fondo" / "curvas.json"
+    assert ruta.exists() and ruta.stat().st_size < 2.5e6
+    d = json.loads(ruta.read_text(encoding="utf-8"))
+    cotas = {c for c, _ in d["lineas"]}
+    assert {300, 1000} <= cotas                     # franja de nubes de las lomas
+    assert all(len(p) >= 4 and len(p) % 2 == 0 for _, p in d["lineas"])

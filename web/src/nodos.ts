@@ -4,6 +4,7 @@
  * cada nodo cerrado muestra solo su título y un dato.
  */
 import { AGENTES, REGIMENES } from "./capas";
+import { htmlPlano } from "./plano";
 import type { Durabilidad, Fick, PropsZona, Receta } from "./tipos";
 
 export const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
@@ -72,10 +73,12 @@ const ICONO: Record<string, string> = {
 };
 const icono = (k: string) => `<svg viewBox="0 0 24 24" aria-hidden="true" class="ico">${ICONO[k]}</svg>`;
 
+const NUM: Record<string, string> = { condiciones: "01", recetas: "02", tiempo: "03", costo: "04" };
+
 function nodo(id: string, titulo: string, dato: string, cuerpo: string, abierto: boolean) {
   return `<li class="nodo${abierto ? " abierto" : ""}" data-nodo="${id}">
     <button type="button" class="nodo-cab" aria-expanded="${abierto}" aria-controls="n-${id}">
-      <span class="nodo-punto">${icono(id)}</span><span class="nodo-titulo">${titulo}</span><span class="nodo-dato">${dato}</span>
+      <span class="nodo-punto">${icono(id)}</span><span class="nodo-titulo"><small class="mono">${NUM[id] ?? ""}</small>${titulo}</span><span class="nodo-dato">${dato}</span>
       <span class="nodo-flecha" aria-hidden="true"></span>
     </button>
     <div class="nodo-cuerpo" id="n-${id}" ${abierto ? "" : "hidden"}>${cuerpo}</div></li>`;
@@ -115,10 +118,11 @@ function htmlTarjetas(v: Vista, tipo: Tipo) {
   }).join("")}</div>`;
 }
 
-export function htmlDosificacion(r: Receta) {
+export function htmlDosificacion(r: Receta, cara = "cara expuesta") {
   const d = r.dosificacion;
   const ve = veredicto(r.durabilidad);
   return `<p class="receta-frase">${esc(recetaEnPalabras(r))}</p>
+    ${htmlPlano(r, cara)}
     <p class="veredicto ${ve.ok ? "ok" : "no"}">${ve.txt} <span>${ve.detalle}</span></p>
     <p class="nota">Sella ${n0(r.prediccion.cierre_pct)} % de una fisura de 0,3 mm a los 90 días (protege la fisura; no se suma a la vida útil).</p>
     <table class="dos"><tbody>
@@ -171,6 +175,7 @@ export function htmlZona(p: PropsZona, e: EstadoFicha): string {
       <div class="ficha-titulos">
         <h2 id="ficha-titulo">${esc(p.distrito)}</h2>
         <p class="ficha-sub">${esc(p.provincia)}, ${esc(p.departamento)}</p>
+        <p class="ficha-meta mono">${esc(p.id)} · ${Math.abs(p.lat).toFixed(3)}°S ${Math.abs(p.lon).toFixed(3)}°O · ${esc(v.reglas?.clase ?? "")} · ${n1(p.dist_mar_km)} km del mar</p>
       </div>
       <div class="ficha-acciones">
         <button type="button" class="btn-icono" data-comparar aria-pressed="false" aria-label="Fijar para comparar" title="Comparar">⇆</button>
@@ -184,7 +189,7 @@ export function htmlZona(p: PropsZona, e: EstadoFicha): string {
       <button type="button" role="radio" data-modo="interior" aria-checked="${e.modo === "interior"}">tierra adentro</button></div>` : ""}
 
     <section class="raiz" aria-labelledby="t-terreno">
-      <h3 id="t-terreno" class="oculto">Topografía de la celda</h3>
+      <h3 id="t-terreno" class="raiz-tit mono">00 / Topografía de la celda</h3>
       <div class="maqueta">
         <canvas id="maqueta" role="img" aria-label="Maqueta 3D de la celda: mar al frente, cerros al fondo; contorno verde: la celda"></canvas>
         <div class="maqueta-botones">
@@ -200,7 +205,7 @@ export function htmlZona(p: PropsZona, e: EstadoFicha): string {
     <ol class="via">
       ${nodo("condiciones", "Condiciones de la zona", esc(v.reglas?.clase ?? ""), htmlCondiciones(p, v), e.abierto === "condiciones")}
       ${nodo("recetas", "Concretos y recetas", esc(AGENTES[v.recetas.ideal.agente]?.corto ?? ""),
-        htmlTarjetas(v, e.tipo) + `<div class="receta-detalle">${htmlDosificacion(r)}</div>`, e.abierto === "recetas")}
+        htmlTarjetas(v, e.tipo) + `<div class="receta-detalle">${htmlDosificacion(r, `${reg?.nombre ?? v.regimen} · ${v.reglas?.clase ?? ""}`)}</div>`, e.abierto === "recetas")}
       ${nodo("tiempo", "En el tiempo", `común: ${comun.corto}`,
         `<div id="visor" class="visor"></div>`, e.abierto === "tiempo")}
       ${nodo("costo", "Costo aproximado", `S/ ${n0(r.viabilidad.costo_m3_pen)}/m³`, htmlCosto(r, nombreTipo), e.abierto === "costo")}

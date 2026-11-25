@@ -120,3 +120,54 @@ def portada(lon0=-77.62, lon1=-77.02, lat0=-11.62, lat1=-11.12, nx=180, ny=110, 
              "fuente": "Copernicus DEM GLO-90", "lugar": "Lomas de Lachay, Huaura (Lima)"}
     (SALIDA / f"portada_{nombre}.json").write_text(json.dumps(datos, separators=(",", ":")), encoding="utf-8")
     return datos
+
+
+def curvas(paso_m=100, max_m=2500, paso_px=3, buffer_km=40.0, tolerancia=0.0018, pais="PER"):
+    """Curvas de nivel del DEM de Blur en la franja costera → web/public/fondo/curvas.json.
+
+    Formato compacto: {"paso": 100, "maestra": 500, "lineas": [[cota, [lon, lat, lon, lat, ...]], ...]}.
+    Cada tesela se submuestrea (~270 m), se enmascara fuera de `buffer_km` del mar y se contornea con
+    matplotlib; las líneas se simplifican (Douglas-Peucker) y se redondean a 3 decimales.
+    """
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import rasterio
+    from shapely import contains_xy
+    from shapely.geometry import LineString, shape
+    from atlas.rutas import GEO
+    costa = LineString(json.loads((GEO / f"costa_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"]["coordinates"])
+    tierra = shape(json.loads((GEO / f"pais_{pais.lower()}.geojson").read_text(encoding="utf-8"))["geometry"])
+    franja = tierra.intersection(costa.buffer(buffer_km / 111.0)).buffer(0.01)
+    niveles = list(range(paso_m, max_m + 1, paso_m))
+    lineas = []
+    for t in sorted(DEM_CACHE.glob("*.tif")):
+        with rasterio.open(t) as r:
+            a = r.read(1).astype(np.float32)[::paso_px, ::paso_px]
+            tr = r.transform
+        lon = tr.c + tr.a * paso_px * (np.arange(a.shape[1]) + 0.5)
+        lat = tr.f + tr.e * paso_px * (np.arange(a.shape[0]) + 0.5)
+        X, Y = np.meshgrid(lon, lat)
+        dentro = contains_xy(franja, X, Y)
+        if not dentro.any():
+            continue
+        a[~np.isfinite(a)] = 0
+        a = np.where(dentro, a, np.nan)
+        fig = plt.figure()
+        cs = plt.contour(X, Y, a, levels=[n for n in niveles if n <= np.nanmax(a)] or [niveles[0]])
+        for cota, segs in zip(cs.levels, cs.allsegs):
+            for s in segs:
+                if len(s) < 4:
+                    continue
+                g = LineString(s).simplify(tolerancia)
+                if g.length < 0.01:
+                    continue
+                plano = [round(v, 3) for xy in g.coords for v in xy]
+                lineas.append([int(cota), plano])
+        plt.close(fig)
+    SALIDA.mkdir(parents=True, exist_ok=True)
+    ruta = SALIDA / "curvas.json"
+    ruta.write_text(json.dumps({"paso": paso_m, "maestra": 500, "franja_nubes": [300, 1000],
+                                "fuente": "Copernicus DEM GLO-90 (vía Blur), curvas del Atlas", "lineas": lineas},
+                               separators=(",", ":")), encoding="utf-8")
+    return ruta

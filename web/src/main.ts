@@ -2,6 +2,9 @@ import { crearFuente } from "./api";
 import { CAPAS, AGENTES, clase, type Capa } from "./capas";
 import { htmlZona, HORIZONTE, recetaEnPalabras, TIPOS, VIDA_DISENO, veredicto, vista, type EstadoFicha, type Modo, type Tipo } from "./nodos";
 import { crearVisor, type Visor } from "./visor";
+import { crearGlobo } from "./globo";
+import { crearHud } from "./hud";
+import { crearRecorrido } from "./recorrido";
 import { crearMapa } from "./mapa";
 import { crearMaqueta, type Maqueta } from "./maqueta3d";
 import { iniciarLuz } from "./luz";
@@ -36,11 +39,24 @@ async function iniciar() {
   const conEnlace = location.hash.length > 1;
   if (conEnlace) portada.hidden = true;
   else { portada.focus({ preventScroll: true }); }
-  iniciarPortada(portada, () => $<HTMLInputElement>("#buscar").focus({ preventScroll: true }));
+  // globo de entrada (Meridian Earth): la costa encendida con los centroides de las celdas
+  const globo = conEnlace ? null : crearGlobo($<HTMLCanvasElement>("#portada-globo"),
+    props.filter((_, i) => i % 3 === 0).map((p) => [p.lat, p.lon] as [number, number]));
+  let alEntrarMapa = () => {};
+  iniciarPortada(portada, () => { alEntrarMapa(); $<HTMLInputElement>("#buscar").focus({ preventScroll: true }); },
+    async () => { await globo?.centrarPeru(); });
   $("#volver-portada").addEventListener("click", () => { portada.classList.remove("saliendo"); portada.hidden = false; portada.focus(); });
 
   const m = await crearMapa($("#mapa"), col);
   document.body.classList.add("listo");
+  const hud = crearHud(m.mapa, props);
+  m.alPasar((p) => hud.celda(p));
+  // al salir de la portada el mapa entra desde el globo: de zoom 5 a la costa
+  alEntrarMapa = () => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    m.mapa.setView([-10, -76], 5, { animate: false });
+    m.encuadrar([[-18.4, -81.4], [-3.4, -70.2]]);
+  };
   iniciarLuz();
   $("#btn-tema").addEventListener("click", () => {
     ponerTema(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
@@ -59,16 +75,19 @@ async function iniciar() {
   btnCapa.addEventListener("click", () => abrirMenu(menu.hidden));
   document.addEventListener("click", (e) => { if (!menu.hidden && !(e.target as HTMLElement).closest("#menu-capas, #btn-capa")) abrirMenu(false); });
   menu.addEventListener("keydown", (e) => { if (e.key === "Escape") { abrirMenu(false); btnCapa.focus(); } });
-  menu.addEventListener("click", (e) => {
-    const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-capa]");
-    if (!b) return;
-    capa = CAPAS.find((c) => c.id === b.dataset.capa)!;
-    guardar("atlas-capa", capa.id);
-    menu.querySelectorAll("[data-capa]").forEach((x) => x.setAttribute("aria-checked", String(x === b)));
-    abrirMenu(false);
+  function elegirCapa(id: string, recordar = true) {
+    capa = CAPAS.find((c) => c.id === id) ?? capa;
+    if (recordar) guardar("atlas-capa", capa.id);
+    menu.querySelectorAll<HTMLElement>("[data-capa]").forEach((x) => x.setAttribute("aria-checked", String(x.dataset.capa === capa.id)));
     filtro = null;
     m.ponerCapa(capa);
     leyenda();
+  }
+  menu.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-capa]");
+    if (!b) return;
+    abrirMenu(false);
+    elegirCapa(b.dataset.capa!);
   });
   function leyenda() {
     btnCapa.querySelector("span")!.textContent = capa.nombre;
@@ -297,6 +316,21 @@ async function iniciar() {
   const inicial = location.hash.slice(1);
   if (inicial && porId.has(inicial)) abrir(inicial, true);
   else if (!movil.matches) abrir(props.filter((p) => p.distrito === "Atiquipa").sort((a, b) => b.frac_loma - a.frac_loma)[0]?.id ?? props[0].id, false);
+
+  // ---------------- recorrido Tumbes → Tacna (ECLIPSE) ----------------
+  const capaAntes = () => capa.id;
+  let volverA = capaAntes();
+  const rec = crearRecorrido($("#recorrido"), props, {
+    encuadrar: (b) => m.encuadrar(b),
+    ponerCapa: (id) => elegirCapa(id, false),
+    abrir: (id) => abrir(id),
+    alCerrar: () => { elegirCapa(volverA, false); $("#btn-recorrido").focus(); },
+  });
+  $("#btn-recorrido").addEventListener("click", () => {
+    volverA = capaAntes();
+    hoja.classList.remove("con-zona"); ponerHoja("asomada");
+    rec.abrir();
+  });
 
   iniciarAportes();
 }

@@ -13,5 +13,8 @@
     "esbuild": "0.23.1",
     "leaflet": "1.9.4",
     "typescript": "5.5.4"
+  },
+  "dependencies": {
+    "cobe": "0.6.3"
   }
 }
