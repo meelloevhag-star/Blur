@@ -1,0 +1,154 @@
+# Inventario de fuentes GIS para el Atlas (comprobado desde este entorno el 2026-11-25).
+# estado:  ok            = respondió y se descargaron datos de prueba
+#          ok_catalogo   = el catálogo/listado responde; falta probar la descarga de la capa concreta
+#          bloqueado_red = el servicio existe pero la red de este entorno no llega (no es falla del servicio)
+#          bloqueado_sitio = el propio sitio rechazó la petición (403/WAF)
+#          sin_servicio  = solo hay visor web o PDF, sin servicio de datos
+# protocolo: arcgis_rest | wms | wfs | wcs | stac | descarga | api
+fuentes:
+  # ---------------- exposición / ambiente ----------------
+  - id: soilgrids
+    nombre: SoilGrids 250 m (ISRIC) — pH, CEC, textura, carbono
+    protocolo: wcs
+    url: https://maps.isric.org/mapserv?map=/map/{variable}.map
+    estado: ok
+    uso: química del suelo bajo cimentaciones; no trae salinidad directa
+    licencia: CC BY 4.0
+  - id: isric_salinidad
+    nombre: Mapas globales de salinidad del suelo 1986–2016 (ISRIC / Wageningen)
+    protocolo: descarga
+    url: https://data.isric.org/geonetwork/srv/api/records/c59d0162-a258-4210-af80-777d7929c512
+    estado: ok_catalogo
+    uso: conductividad eléctrica del suelo → sulfatos/cloruros en el terreno (exactitud 67–70 %)
+  - id: fao_gsasmap
+    nombre: Mapa global de suelos afectados por sales (FAO GSASmap)
+    protocolo: descarga
+    url: https://www.fao.org/soils-portal/data-hub/soil-maps-and-databases/global-map-of-salt-affected-soils/en
+    estado: ok_catalogo
+    uso: suelos salinos/sódicos 0–30 y 30–100 cm
+  - id: stac_planetary
+    nombre: Microsoft Planetary Computer — MODIS 09A1 (bandera de nubes), Landsat C2 L2 (temperatura de superficie), Sentinel-2, GOES-16 CMI, ESA WorldCover, Copernicus DEM 30 m
+    protocolo: stac
+    url: https://planetarycomputer.microsoft.com/api/stac/v1
+    estado: ok
+    uso: frecuencia de neblina y nubes bajas (MODIS diario 500 m, GOES cada 10 min), temperatura superficial, cobertura del suelo
+  - id: stac_earth_search
+    nombre: Element84 Earth Search (Sentinel-2, Landsat, Copernicus DEM en AWS)
+    protocolo: stac
+    url: https://earth-search.aws.element84.com/v1
+    estado: ok
+  - id: oleaje_open_meteo
+    nombre: Open-Meteo Marine (oleaje: altura, periodo, dirección; reanálisis y pronóstico)
+    protocolo: api
+    url: https://marine-api.open-meteo.com/v1/marine
+    estado: ok
+    uso: severidad de la franja de salpicadura por tramo
+  - id: dhn_cartas
+    nombre: DHN — cartas náuticas raster y pronóstico de oleaje en bahías
+    protocolo: descarga
+    url: https://www.dhn.mil.pe/portal/cartas-raster
+    estado: sin_servicio
+    uso: validar oleaje y batimetría costera; sin WMS/WFS público encontrado
+  - id: minam_geoservidor
+    nombre: MINAM Geoservidor — ZEE, humedales, cobertura vegetal, batimetría litoral (HIDRONAV)
+    protocolo: arcgis_rest
+    url: https://geoservidorperu.minam.gob.pe/arcgis/rest/services
+    estado: bloqueado_sitio
+    nota: el sitio respondió 403 (filtro anti-robots); probar desde un navegador o pedir acceso
+
+  # ---------------- viabilidad: insumos y transporte ----------------
+  - id: ingemmet_rocas_industriales
+    nombre: INGEMMET GEOCATMIN — Rocas y minerales industriales (339 canteras; 22 % áridos) y concesiones no metálicas
+    protocolo: arcgis_rest
+    url: https://geocatmin.ingemmet.gob.pe/arcgis/rest/services/SERV_ROCAS_MINERALES_INDUSTRIALES/MapServer
+    estado: bloqueado_red
+    nota: el proxy de este entorno no valida el certificado TLS del servidor; abre desde QGIS/ArcGIS o un navegador
+    uso: canteras de agregados y caliza → costo real de arena y piedra por zona
+  - id: ingemmet_catastro
+    nombre: INGEMMET — Catastro minero (actualización diaria)
+    protocolo: arcgis_rest
+    url: https://geocatminapp.ingemmet.gob.pe/arcgis/rest/services/SERV_CATASTRO_MINERO/MapServer
+    estado: bloqueado_red
+  - id: sigrid_red_vial
+    nombre: SIGRID/CENEPRED — Red vial (con estado, superficie y ruta), red ferroviaria, transporte
+    protocolo: arcgis_rest
+    url: https://sigrid.cenepred.gob.pe/arcgis/rest/services/sigrid/Elementos_Expuestos/MapServer/2060300
+    estado: ok
+    formatos: [geojson, json]
+    limite_registros: 1000
+  - id: hdx_vias
+    nombre: HDX — Roads of Peru; Peru road surface (Planet)
+    protocolo: descarga
+    url: https://data.humdata.org/dataset?q=peru%20roads
+    estado: ok
+  - id: osm_geofabrik
+    nombre: OpenStreetMap (Geofabrik / Overpass) — plantas de premezclado, uso de suelo, puertos
+    protocolo: descarga
+    url: https://download.geofabrik.de/south-america/peru.html
+    estado: bloqueado_red
+    nota: la red de este entorno corta la conexión; funciona fuera (GitHub Actions)
+
+  # ---------------- demanda: edificaciones e infraestructura ----------------
+  - id: google_open_buildings
+    nombre: Google Open Buildings v3 (huellas de edificios; cubre Lima, Paita, Tacna, Ilo)
+    protocolo: descarga
+    url: https://openbuildings-public-dot-gweb-research.uw.r.appspot.com/public/tiles.geojson
+    estado: ok
+    uso: m³ de concreto expuesto por zona
+    licencia: CC BY-4.0 / ODbL
+  - id: microsoft_buildings
+    nombre: Microsoft Global ML Building Footprints (277 archivos para Perú, 2026-02-23)
+    protocolo: descarga
+    url: https://minedbuildings.z5.web.core.windows.net/global-buildings/dataset-links.csv
+    estado: ok
+    licencia: CDLA Permissive 2.0
+  - id: vida_buildings
+    nombre: VIDA Google+Microsoft Open Buildings — GeoParquet por país (PER)
+    protocolo: descarga
+    url: https://data.source.coop/vida/google-microsoft-open-buildings/geoparquet/by_country/country_iso=PER/PER.parquet
+    estado: ok
+    nota: archivo grande (cientos de MB); conviene leerlo por filtro espacial
+  - id: ghsl_built
+    nombre: GHSL GHS-BUILT-S R2023A — superficie construida 1975–2030, 100 m
+    protocolo: descarga
+    url: https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_BUILT_S_GLOBE_R2023A/
+    estado: ok
+    uso: crecimiento urbano y proyección a 2030
+  - id: sigrid_expuestos
+    nombre: SIGRID/CENEPRED — Elementos expuestos (colegios, salud, mercados, manzanas 2025, predios, líneas eléctricas, agua, hidrocarburos)
+    protocolo: arcgis_rest
+    url: https://sigrid.cenepred.gob.pe/arcgis/rest/services/sigrid/Elementos_Expuestos/MapServer
+    estado: ok
+    formatos: [geojson, json]
+    limite_registros: 1000
+    nota: 3 053 manzanas referenciales 2025 solo en el distrito de Paita
+  - id: sigrid_fen
+    nombre: SIGRID — Fenómeno El Niño 2027 (manzanas por riesgo de inundación, puntos críticos, infraestructura crítica)
+    protocolo: arcgis_rest
+    url: https://sigrid.cenepred.gob.pe/arcgis/rest/services/sectores/COEN_FEN_2027/MapServer
+    estado: ok
+  - id: inei_cartografia
+    nombre: INEI — Cartografía base (zonas censales, manzanas, ejes viales)
+    protocolo: arcgis_rest
+    url: https://arcgis.inei.gob.pe:6443/arcgis/rest/services
+    estado: bloqueado_red
+    nota: usa el puerto 6443, que el proxy de este entorno no admite
+  - id: mef_geoinvierte
+    nombre: MEF GeoInvierte — proyectos de inversión pública georreferenciados
+    protocolo: arcgis_rest
+    url: https://ofi5.mef.gob.pe/geoinvierteportal/
+    estado: bloqueado_red
+    nota: no respondió en 10 s; no se encontró un servicio REST público documentado
+
+  # ---------------- peligros que fisuran el concreto ----------------
+  - id: sigrid_peligros
+    nombre: SIGRID — Cartografía de peligros (sismos históricos 1500–2014, inundación, geodinámica)
+    protocolo: arcgis_rest
+    url: https://sigrid.cenepred.gob.pe/arcgis/rest/services
+    estado: ok_catalogo
+    nota: los servicios "Cartografia_Peligros" citados en la web ya no existen con ese nombre; hay que ubicarlos en las carpetas actuales
+  - id: idep_catalogo
+    nombre: GeoIDEP — Catálogo nacional de servicios WMS/WFS del Estado peruano
+    protocolo: descarga
+    url: https://www.geoidep.gob.pe/
+    estado: ok_catalogo
