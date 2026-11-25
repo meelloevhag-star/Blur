@@ -1,34 +1,27 @@
-"""Descarga de capas GIS que no son accesibles desde la nube (ver INVENTARIO_GIS.md).
+"""Blur · capas GIS (ArcGIS REST del Estado y OpenStreetMap). Inventario en INVENTARIO_GIS.md.
 
-Solo usa la biblioteca estándar de Python 3.9+ para poder correrlo en cualquier computadora:
+Solo usa la biblioteca estándar, para poder correrlo en cualquier computadora o en GitHub Actions:
 
-    python atlas/descargar_gis.py                # todas las fuentes
-    python atlas/descargar_gis.py --solo ingemmet osm
+    python -m biocrete_neat.territorio gis                 # todas las fuentes
+    python -m biocrete_neat.territorio gis --solo ingemmet osm
 
-Guarda GeoJSON recortado a la costa en atlas/datos/gis/<fuente>/<capa>.geojson y un
-registro de lo descargado en atlas/datos/gis/registro.json.
+Guarda GeoJSON en biocrete_neat/datos/territorio/gis/<fuente>/<capa>.geojson y anota cada capa en el
+registro común de Blur (registro.json). Cada corrida reemplaza lo que había de esa fuente.
 """
 from __future__ import annotations
 
 import argparse
-import datetime as dt
 import json
 import re
-import shutil
-import ssl
-import subprocess
 import sys
-import time
-import urllib.error
 import urllib.parse
-import urllib.request
-from pathlib import Path
 
-RAIZ = Path(__file__).resolve().parent
-SALIDA = RAIZ / "datos" / "gis"
+from biocrete_neat.territorio.red import abrir
+from biocrete_neat.territorio.registro import DIR, RAIZ, Registro
+
+SALIDA = DIR / "gis"
 # Franja costera del Atlas (Tumbes–Tacna), con margen. Se recorta finamente después.
 BBOX = (-81.6, -18.6, -69.8, -3.2)
-UA = "BioCrete-Atlas/1.0 (investigacion academica)"
 
 ARCGIS = {
     "ingemmet": [
@@ -49,59 +42,6 @@ CONSULTAS_OSM = {
     "puertos": 'nwr["industrial"="port"]({b});nwr["landuse"="port"]({b});nwr["harbour"]({b});',
     "puentes": 'way["bridge"="yes"]["highway"~"motorway|trunk|primary|secondary"]({b});',
 }
-
-
-_CONTEXTOS: dict[str, ssl.SSLContext] = {}
-
-
-def _contexto_con_intermedio(host: str) -> ssl.SSLContext | None:
-    """Servidores que no envían su certificado intermedio (frecuente en sitios del Estado).
-
-    Se hace lo mismo que un navegador ("AIA fetching"): se lee la URL del emisor que trae el propio
-    certificado del servidor, se descarga ese intermedio y se agrega a las CA de confianza. La
-    verificación sigue activa: el intermedio solo se acepta si encadena con una raíz de confianza.
-    """
-    if host in _CONTEXTOS:
-        return _CONTEXTOS[host]
-    if not shutil.which("openssl"):
-        return None
-    pem = ssl.get_server_certificate((host, 443))
-    texto = subprocess.run(["openssl", "x509", "-noout", "-text"], input=pem, capture_output=True, text=True).stdout
-    m = re.search(r"CA Issuers - URI:(\S+)", texto)
-    if not m:
-        return None
-    crudo = urllib.request.urlopen(urllib.request.Request(m.group(1), headers={"User-Agent": UA}), timeout=60).read()
-    inter = crudo.decode() if crudo.lstrip().startswith(b"-----BEGIN") else ssl.DER_cert_to_PEM_cert(crudo)
-    ctx = ssl.create_default_context()
-    ctx.load_verify_locations(cadata=inter)
-    _CONTEXTOS[host] = ctx
-    print(f"  · {host}: cadena completada con el intermedio de {m.group(1)}")
-    return ctx
-
-
-def abrir(url: str, datos: bytes | None = None, intentos=3, tiempo=90):
-    host = urllib.parse.urlparse(url).hostname or ""
-    ctx = _CONTEXTOS.get(host) or ssl.create_default_context()
-    for i in range(intentos):
-        try:
-            req = urllib.request.Request(url, data=datos, headers={"User-Agent": UA})
-            with urllib.request.urlopen(req, timeout=tiempo, context=ctx) as r:
-                return r.read()
-        except (ssl.SSLCertVerificationError, urllib.error.URLError) as e:
-            causa = getattr(e, "reason", e)
-            if not isinstance(causa, ssl.SSLCertVerificationError):
-                if i == intentos - 1:
-                    raise
-                time.sleep(5 * (i + 1))
-                continue
-            nuevo = _contexto_con_intermedio(host)
-            if nuevo is None or nuevo is ctx:
-                raise RuntimeError(f"certificado TLS inválido en {url}: {causa}") from e
-            ctx = nuevo
-        except Exception as e:  # noqa: BLE001
-            if i == intentos - 1:
-                raise
-            time.sleep(5 * (i + 1))
 
 
 def capas_arcgis(servicio: str) -> list[dict]:
@@ -134,7 +74,7 @@ def fuente_arcgis(clave: str, registro: dict):
         try:
             capas = capas_arcgis(servicio)
         except Exception as e:  # noqa: BLE001
-            registro[f"{clave}:{servicio}"] = {"estado": "error", "detalle": str(e)}
+            registro[f"{clave}:{servicio}"] = {"estado": "error", "detalle": str(e), "url": servicio}
             print(f"  ✗ {servicio}: {e}")
             continue
         for c in capas:
@@ -146,7 +86,7 @@ def fuente_arcgis(clave: str, registro: dict):
                 destino.parent.mkdir(parents=True, exist_ok=True)
                 destino.write_text(json.dumps(fc, ensure_ascii=False), encoding="utf-8")
                 registro[f"{clave}:{c['name']}"] = {"estado": "ok", "elementos": len(fc["features"]),
-                                                     "archivo": str(destino.relative_to(RAIZ)), "servicio": servicio}
+                                                     "archivo": str(destino.relative_to(RAIZ)), "url": servicio}
                 print(f"  ✓ {c['name']}: {len(fc['features'])} elementos")
             except Exception as e:  # noqa: BLE001
                 registro[f"{clave}:{c['name']}"] = {"estado": "error", "detalle": str(e)}
@@ -172,7 +112,7 @@ def fuente_osm(registro: dict):
                 destino.parent.mkdir(parents=True, exist_ok=True)
                 destino.write_text(json.dumps({"type": "FeatureCollection", "features": feats}, ensure_ascii=False),
                                    encoding="utf-8")
-                registro[f"osm:{nombre}"] = {"estado": "ok", "elementos": len(feats), "servidor": ep,
+                registro[f"osm:{nombre}"] = {"estado": "ok", "elementos": len(feats), "url": ep,
                                              "archivo": str(destino.relative_to(RAIZ)), "licencia": "ODbL"}
                 print(f"  ✓ {nombre}: {len(feats)} elementos")
                 break
@@ -181,21 +121,27 @@ def fuente_osm(registro: dict):
                 print(f"  ✗ {nombre} en {ep}: {e}")
 
 
+LICENCIAS = {"ingemmet": "datos abiertos del Estado peruano (INGEMMET, GEOCATMIN)",
+             "minam": "datos abiertos del Estado peruano (MINAM)", "osm": "ODbL (© colaboradores de OpenStreetMap)"}
+
+
+def recolectar(solo: list[str] | None = None) -> dict:
+    reg = Registro()
+    for f in solo or [*ARCGIS, "osm"]:
+        print(f"== {f}")
+        capas: dict = {}
+        fuente_osm(capas) if f == "osm" else fuente_arcgis(f, capas)
+        # en OSM se prueban varios servidores: un error previo se borra si otro servidor respondió
+        reg.reemplazar(f"gis:{f}", {k: v | {"licencia": LICENCIAS[f]} for k, v in capas.items()})
+    reg.guardar()
+    return reg.datos
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--solo", nargs="*", choices=[*ARCGIS, "osm"], help="fuentes a descargar")
     a = ap.parse_args(argv)
-    fuentes = a.solo or [*ARCGIS, "osm"]
-    SALIDA.mkdir(parents=True, exist_ok=True)
-    ruta_reg = SALIDA / "registro.json"
-    registro = json.loads(ruta_reg.read_text(encoding="utf-8")) if ruta_reg.exists() else {}
-    for f in fuentes:
-        print(f"== {f}")
-        fuente_osm(registro) if f == "osm" else fuente_arcgis(f, registro)
-    registro["_fecha"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
-    ruta_reg.write_text(json.dumps(registro, ensure_ascii=False, indent=2), encoding="utf-8")
-    ok = sum(1 for k, v in registro.items() if isinstance(v, dict) and v.get("estado") == "ok")
-    print(f"listo: {ok} capas descargadas → {SALIDA}")
+    recolectar(a.solo)
     return 0
 
 

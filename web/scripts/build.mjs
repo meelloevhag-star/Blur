@@ -20,7 +20,7 @@ const css = readFileSync(join(raiz, "node_modules/leaflet/dist/leaflet.css"), "u
 const cuerpo = readFileSync(join(raiz, "src/cuerpo.html"), "utf8");
 const datos = [["atlas/salida/web/zonas_ligero_per.geojson", "zonas_ligero_per.geojson"],
   ["atlas/salida/web/detalle", "detalle"], ["atlas/salida/web/terreno", "terreno"], ["web/public/fondo", "fondo"],
-  ["atlas/datos/geo/departamentos_per.geojson", "departamentos_per.geojson"]];
+  ["biocrete_neat/datos/territorio/geo/departamentos_per.geojson", "departamentos_per.geojson"]];
 
 const salida = join(raiz, artefacto ? "dist-artefacto" : "dist");
 mkdirSync(salida, { recursive: true });

@@ -9,3 +9,6 @@ web/dist-artefacto/
 atlas/aportes/pendientes/
 biocrete_neat/aportes/recibidos/
 atlas/.cache/
+biocrete_neat/datos/territorio/dem/
+biocrete_neat/datos/territorio/worldpop/
+biocrete_neat/datos/territorio/crudo/

@@ -3,6 +3,8 @@
 # de Paita) basta con añadir una entrada aquí: `atlas ingest` la detecta por su huella.
 #
 # tipo: replicas_cierre  → filas con w0, edad y cierre % (entrenan el modelo de cierre)
+#       territorio       → clima, relieve, población, geografía y capas GIS que recoge Blur
+#                          (python -m biocrete_neat.territorio); no entrenan: recalculan las zonas
 #       cloruros_rcm     → D_RCM vs a/c (calibran el modelo de difusión)
 #       cloruros_agno3   → penetración de cloruros con/sin agente (efecto del agente)
 #       referencia       → se registran para trazabilidad pero no entrenan
@@ -84,4 +86,21 @@ fuentes:
   - id: zenodo
     ruta: datasets_reales_zenodo
     tipo: referencia
+    entrena: false
+  # ---- territorio: lo recoge Blur (biocrete_neat/territorio), el Atlas solo lo lee ----
+  - id: territorio_geo
+    ruta: biocrete_neat/datos/territorio/geo/*
+    tipo: territorio
+    entrena: false
+  - id: territorio_clima
+    ruta: biocrete_neat/datos/territorio/clima_era5_*.json
+    tipo: territorio
+    entrena: false
+  - id: territorio_registro          # relieve (DEM) y población (WorldPop): sus huellas están en el registro
+    ruta: biocrete_neat/datos/territorio/registro.json
+    tipo: territorio
+    entrena: false
+  - id: territorio_gis
+    ruta: biocrete_neat/datos/territorio/gis/**/*.geojson
+    tipo: territorio
     entrena: false

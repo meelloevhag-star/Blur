@@ -12,6 +12,9 @@ Por zona se guarda (atlas/datos/relieve_<pais>.json, sin los rásters):
   - frac_loma: fracción que cumple ambas a la vez (ladera al mar dentro del cinturón);
   - barrera_m: elevación máxima del terreno entre la costa y la zona (por encima de la zona).
 
+Las teselas las descarga Blur (python -m biocrete_neat.territorio relieve) a
+biocrete_neat/datos/territorio/dem/; aquí solo se leen.
+
     python -m atlas.relieve [--pais PER]
 """
 from __future__ import annotations
@@ -19,18 +22,15 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import urllib.error
-import urllib.request
 from collections import OrderedDict
 from pathlib import Path
 
 import numpy as np
 
-from atlas.rutas import ATLAS, DATOS
+from atlas.rutas import AVISO_BLUR, DATOS, DEM
 from atlas.zonas import cargar_zonas
 
-CACHE = ATLAS / ".cache" / "dem"
-URL = "https://copernicus-dem-90m.s3.amazonaws.com/{n}/{n}.tif"
+CACHE = DEM
 # Cinturón de niebla de las lomas costeras peruanas: base de la capa de estratos ~300 m y techo en la
 # inversión ~1000 m (rango habitual en la literatura de lomas; parámetro a calibrar por latitud).
 COTA_NIEBLA_MIN = 300.0
@@ -44,12 +44,13 @@ def _nombre(lat_floor: int, lon_floor: int) -> str:
 
 
 class Mosaico:
-    """Teselas de 1° cargadas bajo demanda (con caché en disco y LRU en memoria). Mar/ausente = 0 m."""
+    """Teselas de 1° de Blur leídas bajo demanda (LRU en memoria). Mar = 0 m."""
 
     def __init__(self, max_mem=8):
         self.mem: OrderedDict = OrderedDict()
         self.max_mem = max_mem
-        CACHE.mkdir(parents=True, exist_ok=True)
+        if not CACHE.exists():
+            raise FileNotFoundError(f"{CACHE}: {AVISO_BLUR.format(que='relieve')}")
 
     def _cargar(self, lat_f: int, lon_f: int):
         clave = (lat_f, lon_f)
@@ -59,13 +60,7 @@ class Mosaico:
         n = _nombre(lat_f, lon_f)
         ruta = CACHE / f"{n}.tif"
         if not ruta.exists() and not (CACHE / f"{n}.mar").exists():
-            try:
-                urllib.request.urlretrieve(URL.format(n=n), ruta)
-            except urllib.error.HTTPError as e:
-                if e.code in (403, 404):            # tesela de océano: no existe
-                    (CACHE / f"{n}.mar").touch()
-                else:
-                    raise
+            raise FileNotFoundError(f"tesela {n}: {AVISO_BLUR.format(que='relieve')}")
         if ruta.exists():
             import rasterio
             with rasterio.open(ruta) as r:

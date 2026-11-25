@@ -195,3 +195,19 @@ def test_paridad_fick_python_typescript(tmp_path):
                       f"console.log(JSON.stringify({json.dumps(params)}.map((f) => anioInicio(f, 150) ?? 150)));")
     r = subprocess.run(["node", str(script)], capture_output=True, text=True, check=True)
     assert json.loads(r.stdout) == pytest.approx(esperado, abs=1)
+
+
+def test_atlas_no_descarga_nada():
+    """Conseguir datos es tarea de Blur (biocrete_neat/territorio): el Atlas no sale a la red."""
+    import re
+    prohibido = re.compile(r"\b(urllib|requests|urlopen|urlretrieve|http\.client)\b")
+    infractores = [p.name for p in (RAIZ / "atlas").glob("*.py") if prohibido.search(p.read_text(encoding="utf-8"))]
+    assert infractores == []
+
+
+def test_territorio_de_blur_en_fuentes():
+    from atlas.ingesta import fuentes_expandidas
+    ids = [f["id"] for f in fuentes_expandidas()]
+    assert any(i.startswith("territorio_clima:") for i in ids)
+    assert any(i.startswith("territorio_gis:") for i in ids)
+    assert all(not f.get("entrena") for f in fuentes_expandidas() if f["tipo"] == "territorio")

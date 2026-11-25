@@ -1,6 +1,12 @@
 # BioCrete Atlas
 
-Mapa interactivo y API que recomiendan **concreto autorreparable por zona** del litoral peruano. Cada zona recibe una receta completa (dosificación por m³, cemento, agregados, aditivos y agente autorreparador), su vida útil estimada frente a cloruros y su viabilidad (costo por m³ y facilidad de conseguir los insumos). El Atlas **se alimenta de los datos que reúne Blur**: cada réplica, dataset o aporte validado que entra al repositorio re-entrena los modelos y regenera el mapa.
+Mapa interactivo y API que recomiendan **concreto autorreparable por zona** del litoral peruano.
+
+> **Reparto de tareas.** Conseguir datos es tarea de **Blur**: los ensayos (réplicas, aportes, Zenodo) y
+> también el territorio — geografía, clima ERA5, relieve, población y capas GIS — que recoge
+> `biocrete_neat/territorio` (`python -m biocrete_neat.territorio`). **El Atlas no descarga nada**: lee lo que
+> Blur deja en `biocrete_neat/datos/`, lo resume por zona, entrena, diseña recetas y pinta el mapa. Una
+> prueba (`test_atlas_no_descarga_nada`) impide que vuelva a salir a la red. Cada zona recibe una receta completa (dosificación por m³, cemento, agregados, aditivos y agente autorreparador), su vida útil estimada frente a cloruros y su viabilidad (costo por m³ y facilidad de conseguir los insumos). El Atlas **se alimenta de los datos que reúne Blur**: cada réplica, dataset o aporte validado que entra al repositorio re-entrena los modelos y regenera el mapa.
 
 ```
 biocrete_neat/datos ─┐                      ┌─ atlas/modelos/modelo_cierre.json ─► api/ (Go)  ─► /api/*
@@ -17,7 +23,7 @@ aportes validados ───┘   ingest → entrenar  └─ atlas/salida/zonas_
 | Zonas | **Malla hexagonal de 10 km** (≈ 87 km² por celda, 1.097 celdas) sobre la franja de 0–35 km del mar, en proyección equivalente de Lambert: sin huecos ni solapes, recortada solo contra el mar. Las celdas con orilla (`frente_marino`) se evalúan además para una obra a 250 m del mar (salpicadura). Cada celda con su distrito (UBIGEO) | Natural Earth 10m, distritos INEI | `zonas.py` |
 | Relieve | Elevación, pendiente, % del área en el **cinturón de niebla (300–1.000 m)**, % de **ladera que mira al mar** y **cresta** entre el mar y la zona | Copernicus DEM GLO-90 | `relieve.py` |
 | Población | Habitantes 2022, densidad y clase urbana (urbano ≥ 1.500 hab/km², periurbano ≥ 300, rural ≥ 25); ciudad y vía principal más cercanas | WorldPop 2022 (Censo 2017 INEI), Natural Earth | `urbano.py` |
-| Clima | Un año horario de ERA5 por celda de 0,25° (213 celdas): temperatura, humedad, punto de rocío, nubes bajas y viento; **temperatura corregida por altitud** con el DEM | Open-Meteo Archive (CC BY 4.0) | `ambiente.py` |
+| Clima | Un año horario de ERA5 por celda de 0,25° (237 celdas costeras, recogidas por Blur): temperatura, humedad, punto de rocío, nubes bajas y viento; **temperatura corregida por altitud** con el DEM | Blur: `biocrete_neat/territorio/clima.py` (Open-Meteo, CC BY 4.0) | `ambiente.py` |
 | Niebla / garúa | Índice 0–1 regional (horas con HR ≥ 95 % y T−Td ≤ 1 °C, nubes bajas, HR ≥ 85 %) **amplificado en cerros y lomas** donde la ladera al mar corta la capa de nubes | ERA5 + DEM | `niebla.py` |
 | Cloruros en el aire | Perfil exponencial doble según distancia y viento; la niebla extiende la cola tierra adentro y **las crestas la frenan** | supuesto a calibrar | `niebla.py` |
 | Régimen y norma | salpicadura (XS3 / C2), niebla salina (XS1 / C2), **niebla orográfica: lomas y cerros** (C2 si la sal ≥ 60 mg/m²·d), atmosférico marino (XS1 / C1–C2), seco (XC4 / C1): a/c máx., cemento mín. y máx. (450 kg), f′c especificado (E.060 tabla 5.3), recubrimiento y agentes permitidos | E.060 (2019) / ACI 318-19 / EN 206 / EN 1992-1-1 | `normas.py` |
@@ -34,7 +40,8 @@ El modelo de cierre distingue el **portador** (ninguno, cristalino, Basilisk, LW
 
 ```bash
 pip install -r biocrete_neat/requirements.txt -r atlas/requirements.txt
-python -m atlas territorio        # relieve (DEM), población (WorldPop) y clima por celda; solo descarga lo que falta
+python -m biocrete_neat.territorio todo   # Blur recoge geografía, clima, relieve, población y GIS (solo lo que falta)
+python -m atlas territorio        # el Atlas resume relieve y población por zona (sin red)
 python -m atlas sync --forzar     # ingesta → entrenar → recetas (atlas/salida/zonas_per.geojson)
 ```
 

@@ -3,7 +3,8 @@
     python -m atlas ingest              # ¿qué fuentes de Blur cambiaron?
     python -m atlas entrenar            # re-entrena el conjunto (campeón/candidato)
     python -m atlas construir           # recetas por zona → atlas/salida/zonas_<pais>.geojson (+ web/)
-    python -m atlas territorio          # relieve (DEM) + población/urbano + clima por celda
+    python -m atlas territorio          # relieve y población por zona, con los datos que recoge Blur
+                                        # (antes: python -m biocrete_neat.territorio)
     python -m atlas sync [--aportes DIR] [--forzar]
         1) importa aportes exportados por la API (CSV en DIR) → validar_aportes de Blur
         2) si alguna fuente cambió (o --forzar): entrenar → construir
@@ -129,10 +130,9 @@ def main(argv=None) -> int:
     elif a.cmd == "construir":
         construir(a.pais)
     elif a.cmd == "territorio":
-        from atlas import ambiente, relieve, urbano
+        from atlas import relieve, urbano
         relieve.calcular(a.pais)
         urbano.calcular(a.pais)
-        ambiente.descargar(a.pais)
     elif a.cmd == "sync":
         if a.aportes:
             nuevos = importar_aportes(a.aportes)
@@ -145,9 +145,19 @@ def main(argv=None) -> int:
         cambios = detectar_cambios(guardar=False)
         print("fuentes cambiadas:", cambios["cambiadas"] or "ninguna")
         if cambios["cambiadas"] or a.forzar:
-            from atlas.modelos import entrenar
-            r = entrenar(a.gens)
-            print(f"modelo v{r['version']}: aceptado={r['aceptado']} · R² conjunto={r['cv']['conjunto']['R2']}")
+            ids = cambios["cambiadas"]
+            terr = [i for i in ids if i.startswith("territorio_")]
+            if any(i.startswith("territorio_geo") for i in terr):          # Blur cambió costa o distritos
+                from atlas.zonas import generar_zonas, guardar_zonas
+                guardar_zonas(generar_zonas(a.pais), a.pais)
+            if terr:                                                        # relieve/población por zona
+                from atlas import relieve, urbano
+                relieve.calcular(a.pais)
+                urbano.calcular(a.pais)
+            if a.forzar or any(not i.startswith("territorio_") for i in ids):
+                from atlas.modelos import entrenar
+                r = entrenar(a.gens)
+                print(f"modelo v{r['version']}: aceptado={r['aceptado']} · R² conjunto={r['cv']['conjunto']['R2']}")
             construir(a.pais)
         detectar_cambios(guardar=True)
     return 0

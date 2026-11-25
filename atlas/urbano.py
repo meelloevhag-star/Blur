@@ -1,12 +1,12 @@
 """Población y uso urbano por zona.
 
   - Población: WorldPop 2022, 1 km, ajustada a la ONU (CC BY 4.0). WorldPop distribuye los totales del
-    Censo Nacional 2017 (INEI) y sus proyecciones con covariables satelitales; se baja a
-    atlas/.cache/ y se resume por zona (no se versiona el ráster).
+    Censo Nacional 2017 (INEI) y sus proyecciones con covariables satelitales. El ráster lo recoge
+    Blur (biocrete_neat/territorio/poblacion.py) y aquí se resume por zona.
   - Clase urbana: umbrales de densidad del Grado de Urbanización (ONU-Eurostat, 2020):
     urbano ≥ 1 500 hab/km², periurbano ≥ 300, rural ≥ 25, deshabitado < 25.
   - Ciudad más cercana y distancia a una carretera principal: Natural Earth 10m
-    (atlas/datos/geo/ciudades_per.json, vias_per.geojson).
+    recogidas por Blur (biocrete_neat/datos/territorio/geo/ciudades_per.json, vias_per.geojson).
 
     python -m atlas.urbano [--pais PER]
 """
@@ -15,17 +15,14 @@ from __future__ import annotations
 import argparse
 import json
 import math
-import urllib.request
 
 import numpy as np
 
 from atlas.relieve import _rejilla_en_poligono
-from atlas.rutas import ATLAS, DATOS, GEO
+from atlas.rutas import AVISO_BLUR, DATOS, GEO, WORLDPOP_DIR
 from atlas.zonas import cargar_zonas
 
-CACHE = ATLAS / ".cache"
-WORLDPOP = {"PER": "https://data.worldpop.org/GIS/Population/Global_2021_2022_1km_UNadj/unconstrained/2022/PER/"
-                   "per_ppp_2022_1km_UNadj.tif"}
+RASTER = {"PER": "per_ppp_2022_1km_UNadj.tif"}
 UMBRALES = [(1500, "urbano"), (300, "periurbano"), (25, "rural"), (0, "deshabitado")]
 
 
@@ -44,10 +41,9 @@ def _area_km2(pol) -> float:
 class Poblacion:
     def __init__(self, pais="PER"):
         import rasterio
-        ruta = CACHE / WORLDPOP[pais].rsplit("/", 1)[1]
+        ruta = WORLDPOP_DIR / RASTER[pais]
         if not ruta.exists():
-            CACHE.mkdir(parents=True, exist_ok=True)
-            urllib.request.urlretrieve(WORLDPOP[pais], ruta)
+            raise FileNotFoundError(f"{ruta}: {AVISO_BLUR.format(que='poblacion')}")
         with rasterio.open(ruta) as r:
             self.a = r.read(1).astype(np.float64)
             self.tr = r.transform
