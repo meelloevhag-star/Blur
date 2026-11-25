@@ -1,13 +1,17 @@
-import { anioInicio, cloruro } from "./fick";
-import type { Fick } from "./tipos";
+import { cloruro } from "./fick";
+import type { Durabilidad, Fick } from "./tipos";
+
+/** Perfil medio (para dibujar) + verificación probabilista (para decidir cuándo empieza la corrosión). */
+export interface Caso { f: Fick; d: Durabilidad }
 
 /**
  * Visor "en el tiempo": corte del concreto, de la cara expuesta (izquierda) hacia adentro, con la
- * barra de acero a la profundidad del recubrimiento. El degradé es el cloruro que entra año a año;
- * cuando en la barra llega al umbral crítico, el acero pasa a óxido. Dos cortes: el concreto común
- * de la zona y la receta elegida, con la misma escala.
+ * barra de acero a la profundidad del recubrimiento. El degradé es el cloruro medio que entra año a
+ * año. El acero pasa a óxido en el año en que la probabilidad de despasivación llega a 10 % (t10,
+ * criterio fib B34, β = 1,3), no cuando lo cruza el perfil medio. Dos cortes con la misma escala:
+ * el concreto común de la zona y la receta elegida.
  */
-export interface Visor { ponerReceta(f: Fick, nombre: string): void; destruir(): void }
+export interface Visor { destruir(): void }
 
 const PROF_MM = 90;               // profundidad dibujada
 const W = 340, FILA = 66, X0 = 92, X1 = W - 10;
@@ -21,8 +25,10 @@ function colorCl(r: number): string {
   return `rgb(${p.map((v, i) => Math.round(v + (q[i] - v) * m)).join(",")})`;
 }
 
-export function crearVisor(el: HTMLElement, comun: Fick, receta: Fick, nombreReceta: string, horizonte = 100, diseno = 50): Visor {
-  let rec = receta, nomRec = nombreReceta, anio = diseno, raf = 0, jugando = false;
+export function crearVisor(el: HTMLElement, comunC: Caso, recetaC: Caso, nombreReceta: string, horizonte = 100, diseno = 50): Visor {
+  const comun = comunC.f, rec = recetaC.f, nomRec = nombreReceta;
+  let anio = diseno, raf = 0, jugando = false;
+  const t10 = (c: Caso) => (c.d.t10_anios > horizonte ? null : c.d.t10_anios);
   el.innerHTML = `
     <svg class="visor-svg" viewBox="0 0 ${W} ${FILA * 2 + 112}" role="img" aria-label="Avance de los cloruros en el concreto según los años"></svg>
     <div class="visor-ctrl">
@@ -35,14 +41,13 @@ export function crearVisor(el: HTMLElement, comun: Fick, receta: Fick, nombreRec
     salida = el.querySelector("output")!, estado = el.querySelector(".visor-estado")!, play = el.querySelector<HTMLButtonElement>(".visor-play")!;
   const X = (mm: number) => X0 + (mm / PROF_MM) * (X1 - X0);
 
-  function fila(f: Fick, y: number, et: string, id: string) {
-    const ini = anioInicio(f, 150);
+  function fila(c: Caso, y: number, et: string, id: string) {
+    const f = c.f, ini = t10(c);
     const paradas = Array.from({ length: 19 }, (_, i) => {
       const mm = (i / 18) * PROF_MM;
       return `<stop offset="${(i / 18).toFixed(3)}" stop-color="${colorCl(cloruro(f, mm, anio) / f.c_crit)}"/>`;
     }).join("");
-    const enAcero = cloruro(f, f.recubrimiento_mm, anio);
-    const oxida = anio > 0 && enAcero >= f.c_crit;
+    const oxida = ini !== null && anio >= ini;
     const frente = (() => {   // profundidad donde C = C_crit
       if (anio <= 0) return 0;
       let lo = 0, hi = PROF_MM;
@@ -59,7 +64,7 @@ export function crearVisor(el: HTMLElement, comun: Fick, receta: Fick, nombreRec
       <rect x="${X0}" y="${y + 4}" width="${X1 - X0}" height="${FILA - 18}" rx="4" fill="url(#g-${id})"/>
       <line x1="${X0}" x2="${X0}" y1="${y}" y2="${y + FILA - 10}" class="v-cara"/>
       ${frente > 0 ? `<line x1="${X(frente)}" x2="${X(frente)}" y1="${y + 4}" y2="${y + FILA - 14}" class="v-frente"/>` : ""}
-      <circle cx="${X(f.recubrimiento_mm + 6)}" cy="${y + 4 + (FILA - 18) / 2}" r="7" class="${oxida ? "v-acero oxido" : "v-acero"}"/>`,
+      <circle cx="${X(Math.min(f.recubrimiento_mm + 6, PROF_MM - 6))}" cy="${y + 4 + (FILA - 18) / 2}" r="7" class="${oxida ? "v-acero oxido" : "v-acero"}"/>`,
     };
   }
 
@@ -70,20 +75,24 @@ export function crearVisor(el: HTMLElement, comun: Fick, receta: Fick, nombreRec
     const T = (t: number) => X0 + (t / horizonte) * (X1 - X0);
     const linea = (f: Fick) => Array.from({ length: horizonte + 1 }, (_, t) => `${T(t).toFixed(1)},${Y(cloruro(f, f.recubrimiento_mm, t) / f.c_crit).toFixed(1)}`).join(" ");
     return `<text x="0" y="${y0 + 10}" class="v-sub">cloruro en</text><text x="0" y="${y0 + 23}" class="v-sub">el acero</text>
-      <line x1="${X0}" x2="${X1}" y1="${Y(1)}" y2="${Y(1)}" class="v-umbral"/><text x="${X1}" y="${Y(1) - 4}" class="v-sub" text-anchor="end">umbral de corrosión</text>
+      <line x1="${X0}" x2="${X1}" y1="${Y(1)}" y2="${Y(1)}" class="v-umbral"/><text x="${X1}" y="${Y(1) - 4}" class="v-sub" text-anchor="end">umbral medio de corrosión</text>
+      <rect x="${X0}" y="${Y(1)}" width="${X1 - X0}" height="${Y(0.7) - Y(1)}" class="v-banda"/>
       <line x1="${T(diseno)}" x2="${T(diseno)}" y1="${y0}" y2="${y0 + h}" class="v-diseno"/><text x="${T(diseno) + 3}" y="${y0 + h + 12}" class="v-sub">${diseno} años de diseño</text>
       <polyline points="${linea(comun)}" class="v-l-comun"/><polyline points="${linea(rec)}" class="v-l-receta"/>
+      ${[[comunC, "v-p-comun"], [recetaC, "v-p-receta"]].map(([c, k]) => { const t = t10(c as Caso); return t === null ? "" :
+        `<circle cx="${T(t)}" cy="${y0 + h}" r="4" class="${k}"><title>10 % de probabilidad de corrosión: año ${Math.round(t)}</title></circle>`; }).join("")}
       <line x1="${T(anio)}" x2="${T(anio)}" y1="${y0 - 4}" y2="${y0 + h}" class="v-cursor"/>
       <text x="${X0}" y="${y0 + h + 12}" class="v-sub">0</text><text x="${X1}" y="${y0 + h + 12}" class="v-sub" text-anchor="end">${horizonte}</text>`;
   }
 
   function pintar() {
-    const a = fila(comun, 0, "Concreto común", "c"), b = fila(rec, FILA, "Receta", "r");
+    const a = fila(comunC, 0, "Concreto común", "c"), b = fila(recetaC, FILA, "Receta", "r");
     svg.innerHTML = a.svg + b.svg + curva();
     salida.textContent = `${anio} años`;
     const txt = (n: string, ini: number | null) =>
-      ini === null ? `${n}: el acero no llega al umbral en ${horizonte} años` :
-      anio >= ini ? `${n}: el acero empieza a corroerse en el año ${ini}` : `${n}: acero protegido (el umbral llegaría en el año ${ini})`;
+      ini === null ? `${n}: menos de 10 % de probabilidad de corrosión en ${horizonte} años` :
+      anio >= ini ? `${n}: ${ini < 1 ? "desde el primer año" : `desde el año ${Math.round(ini)}`} hay 10 % o más de probabilidad de que el acero se esté corroyendo` :
+      `${n}: acero protegido (el riesgo llega a 10 % en el año ${Math.round(ini)})`;
     estado.textContent = `${txt("Común", a.ini)}. ${txt(nomRec, b.ini)}.`;
   }
 
@@ -107,7 +116,6 @@ export function crearVisor(el: HTMLElement, comun: Fick, receta: Fick, nombreRec
   });
   pintar();
   return {
-    ponerReceta(f, n) { rec = f; nomRec = n; pintar(); },
     destruir() { jugando = false; cancelAnimationFrame(raf); },
   };
 }

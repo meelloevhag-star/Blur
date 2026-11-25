@@ -4,7 +4,7 @@
  * cada nodo cerrado muestra solo su título y un dato.
  */
 import { AGENTES, REGIMENES } from "./capas";
-import type { Fick, PropsZona, Receta } from "./tipos";
+import type { Durabilidad, Fick, PropsZona, Receta } from "./tipos";
 
 export const esc = (s: unknown) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
 const n0 = (x: number) => Math.round(x).toLocaleString("es-PE");
@@ -26,16 +26,18 @@ export const HORIZONTE = 100;
 /** Lo que cambia según dónde esté la obra dentro de la celda. */
 export interface Vista {
   regimen: string; indice_niebla: number; deposicion_cl_mg_m2_d: number; clase_iso9223: string;
-  vida_comun: number; fick_comun?: Fick; reglas: PropsZona["reglas"];
+  vida_comun: number; comun?: Durabilidad; fick_comun?: Fick; reglas: PropsZona["reglas"]; aviso?: string | null;
   recetas: { ideal: Receta; economica: Receta; disponible: Receta };
 }
 export function vista(p: PropsZona, modo: Modo): Vista {
   const f = modo === "frente" && p.frente ? p.frente : null;
   return f
     ? { regimen: f.regimen, indice_niebla: f.indice_niebla, deposicion_cl_mg_m2_d: f.deposicion_cl_mg_m2_d, clase_iso9223: f.clase_iso9223,
-        vida_comun: f.vida_util_concreto_comun_anios, fick_comun: f.fick_comun, reglas: f.reglas, recetas: f.recetas }
+        vida_comun: f.vida_util_concreto_comun_anios, comun: f.durabilidad_comun, fick_comun: f.fick_comun, reglas: f.reglas,
+        recetas: f.recetas, aviso: f.aviso }
     : { regimen: p.regimen, indice_niebla: p.indice_niebla, deposicion_cl_mg_m2_d: p.deposicion_cl_mg_m2_d, clase_iso9223: p.clase_iso9223,
-        vida_comun: p.vida_util_concreto_comun_anios, fick_comun: p.fick_comun, reglas: p.reglas, recetas: p.recetas! };
+        vida_comun: p.vida_util_concreto_comun_anios, comun: p.durabilidad_comun, fick_comun: p.fick_comun, reglas: p.reglas,
+        recetas: p.recetas!, aviso: p.aviso };
 }
 
 export function recetaCorta(r: Receta): string {
@@ -47,11 +49,18 @@ export function recetaEnPalabras(r: Receta): string {
   return `Cemento tipo ${d.cemento_tipo}, a/c ${n2(d.a_c)}, con ${(AGENTES[r.agente]?.nombre ?? r.agente_nombre).toLowerCase()}`;
 }
 
-/** "Cumple 50 años" / "No llega: 32 años", sin prometer más allá del horizonte de cálculo. */
-export function veredicto(anios: number): { ok: boolean; txt: string; corto: string } {
-  if (anios >= HORIZONTE) return { ok: true, txt: `Cumple ${VIDA_DISENO} años con margen`, corto: `+${HORIZONTE} años` };
-  if (anios >= VIDA_DISENO) return { ok: true, txt: `Cumple ${VIDA_DISENO} años (${n0(anios)} estimados)`, corto: `${n0(anios)} años` };
-  return { ok: false, txt: `No llega a ${VIDA_DISENO} años: ${n0(anios)} estimados`, corto: `${n0(anios)} años` };
+/**
+ * Veredicto con el criterio de fib B34: cumple una vida de diseño si la probabilidad de que el acero
+ * empiece a corroerse antes de esa edad es ≤ 10 % (β ≥ 1,3). Sin años inventados más allá de 100.
+ */
+export function veredicto(d: Durabilidad | undefined): { ok: boolean; txt: string; corto: string; detalle: string } {
+  if (!d) return { ok: false, txt: "Sin cálculo", corto: "—", detalle: "" };
+  const pf50 = Math.round(d.pf["50"] * 100);
+  const detalle = `${pf50 < 1 ? "menos de 1" : pf50} % de probabilidad de corrosión antes de 50 años`;
+  if (d.cumple_anios >= 100) return { ok: true, txt: "Cumple 100 años", corto: "100 años", detalle };
+  if (d.cumple_anios >= VIDA_DISENO) return { ok: true, txt: `Cumple ${d.cumple_anios} años, no 100`, corto: `${d.cumple_anios} años`, detalle };
+  if (d.cumple_anios > 0) return { ok: false, txt: `Solo cumple ${d.cumple_anios} años`, corto: `${d.cumple_anios} años`, detalle };
+  return { ok: false, txt: "No llega a 25 años", corto: "< 25 años", detalle };
 }
 
 const ICONO: Record<string, string> = {
@@ -93,21 +102,25 @@ function htmlCondiciones(p: PropsZona, v: Vista) {
   </div>`;
 }
 
+const firma = (r: Receta) => `${r.agente}|${r.dosificacion.cemento_tipo}|${r.dosificacion.a_c}|${r.dosificacion.tmn_mm}|${r.recubrimiento_mm}|${r.curado_humedo_previo}`;
+
 function htmlTarjetas(v: Vista, tipo: Tipo) {
   return `<div class="tarjetas" role="radiogroup" aria-label="Receta">${TIPOS.map(([k, nombre]) => {
-    const r = v.recetas[k], ve = veredicto(r.vida_util_anios);
+    const r = v.recetas[k], ve = veredicto(r.durabilidad);
+    const igual = k !== "ideal" && firma(r) === firma(v.recetas.ideal);
     return `<button type="button" role="radio" class="tarjeta${k === tipo ? " sel" : ""}" data-tipo="${k}" aria-checked="${k === tipo}">
       <span class="tarjeta-tit">${nombre}</span>
-      <span class="tarjeta-receta">${esc(recetaCorta(r))}</span>
+      <span class="tarjeta-receta">${igual ? "La misma que la de mejor desempeño" : esc(recetaCorta(r))}</span>
       <span class="tarjeta-vida ${ve.ok ? "ok" : "no"}">${ve.ok ? "✓" : "!"} ${ve.corto}</span></button>`;
   }).join("")}</div>`;
 }
 
 export function htmlDosificacion(r: Receta) {
   const d = r.dosificacion;
-  const ve = veredicto(r.vida_util_anios);
+  const ve = veredicto(r.durabilidad);
   return `<p class="receta-frase">${esc(recetaEnPalabras(r))}</p>
-    <p class="veredicto ${ve.ok ? "ok" : "no"}">${ve.txt} · sella ${n0(r.prediccion.cierre_pct)} % de una fisura de 0,3 mm</p>
+    <p class="veredicto ${ve.ok ? "ok" : "no"}">${ve.txt} <span>${ve.detalle}</span></p>
+    <p class="nota">Sella ${n0(r.prediccion.cierre_pct)} % de una fisura de 0,3 mm a los 90 días (protege la fisura; no se suma a la vida útil).</p>
     <table class="dos"><tbody>
       <tr><th scope="row">Cemento ${esc(d.cemento_tipo)}</th><td>${n0(d.cemento_kg)} kg</td><td>${n1(d.cemento_kg / 42.5)} bolsas</td></tr>
       <tr><th scope="row">Agua</th><td>${n0(d.agua_kg)} kg</td><td>a/c ${n2(d.a_c)}</td></tr>
@@ -116,13 +129,14 @@ export function htmlDosificacion(r: Receta) {
       ${d.superplastificante_kg ? `<tr><th scope="row">Superplastificante</th><td>${n1(d.superplastificante_kg)} kg</td><td></td></tr>` : ""}
       ${d.cristalino_kg ? `<tr><th scope="row">Cristalizante</th><td>${n1(d.cristalino_kg)} kg</td><td></td></tr>` : ""}
       ${d.agente_kg ? `<tr><th scope="row">Agente</th><td>${n1(d.agente_kg)} kg</td><td>${esc(r.dosis_agente)}</td></tr>` : ""}
-      <tr><th scope="row">f′c esperado</th><td>${n0(d.fc_estimado_mpa)} MPa</td><td>28 días</td></tr>
+      <tr><th scope="row">f′c especificado</th><td>${n0((d as any).fc_especificado_mpa ?? d.fc_estimado_mpa)} MPa</td><td>media ${n0(d.fc_estimado_mpa)} MPa</td></tr>
+      <tr><th scope="row">Recubrimiento</th><td>${r.recubrimiento_mm} mm</td><td>al acero</td></tr>
     </tbody></table>
     <div class="fila-acciones"><button type="button" class="btn-sec" data-copiar>Copiar dosificación</button>
       <button type="button" class="btn-txt" data-info aria-expanded="false">ⓘ De dónde sale</button></div>
     <p class="nota info" hidden>Cierre: ${esc(r.origen.cierre)} (${r.prediccion.n_datos_combinacion} ensayos de Blur con esta combinación,
       IC 95 % ${n0(r.prediccion.cierre_ic95_pct[0])}–${n0(r.prediccion.cierre_ic95_pct[1])} %). Dosificación: ${esc(r.origen.dosificacion)}.
-      Vida útil: ${esc(r.origen.vida_util)}. ${r.avisos.length ? esc(r.avisos.join(". ")) + "." : ""}</p>`;
+      Vida útil: ${esc(r.origen.vida_util)}; con 10 % de probabilidad el acero se despasiva a los ${n0(r.durabilidad.t10_anios)}${r.durabilidad.t10_anios > 100 ? "+" : ""} años. ${r.avisos.length ? esc(r.avisos.join(". ")) + "." : ""}</p>`;
 }
 
 const PARTIDAS: [string, string[]][] = [
@@ -151,7 +165,7 @@ export function htmlZona(p: PropsZona, e: EstadoFicha): string {
   const r = v.recetas[e.tipo];
   const nombreTipo = TIPOS.find(([k]) => k === e.tipo)![1];
   const rel = p.relieve ?? {};
-  const comun = veredicto(v.vida_comun);
+  const comun = veredicto(v.comun);
   return `
     <header class="ficha-cab">
       <div class="ficha-titulos">
@@ -182,11 +196,12 @@ export function htmlZona(p: PropsZona, e: EstadoFicha): string {
       <p class="raiz-pie">${n0(Number(rel.elev_media_m ?? 0))} m de altura media${Number(rel.frac_loma ?? 0) > 0.05 ? ` · ${n0(Number(rel.frac_loma) * 100)} % laderas con neblina` : ""} · celda de 10 km</p>
     </section>
 
+    ${v.aviso ? `<p class="aviso">${esc(v.aviso)}</p>` : ""}
     <ol class="via">
       ${nodo("condiciones", "Condiciones de la zona", esc(v.reglas?.clase ?? ""), htmlCondiciones(p, v), e.abierto === "condiciones")}
       ${nodo("recetas", "Concretos y recetas", esc(AGENTES[v.recetas.ideal.agente]?.corto ?? ""),
         htmlTarjetas(v, e.tipo) + `<div class="receta-detalle">${htmlDosificacion(r)}</div>`, e.abierto === "recetas")}
-      ${nodo("tiempo", "En el tiempo", comun.ok ? "común: cumple" : `común: ${comun.corto}`,
+      ${nodo("tiempo", "En el tiempo", `común: ${comun.corto}`,
         `<div id="visor" class="visor"></div>`, e.abierto === "tiempo")}
       ${nodo("costo", "Costo aproximado", `S/ ${n0(r.viabilidad.costo_m3_pen)}/m³`, htmlCosto(r, nombreTipo), e.abierto === "costo")}
     </ol>

@@ -33,7 +33,7 @@ var ligeras = []string{"id", "pais", "departamento", "provincia", "distrito", "a
 	"lat", "lon", "dist_mar_km", "regimen", "indice_niebla", "deposicion_cl_mg_m2_d", "clase_iso9223",
 	"elevacion_media_m", "frac_loma", "poblacion", "clase_urbana", "severidad", "prioridad", "ideal_cierre_pct",
 	"ideal_vida_anios", "ideal_costo_m3", "ideal_disponibilidad", "economica_costo_m3",
-	"ganancia_autorreparacion_anios", "vida_util_concreto_comun_anios"}
+	"ideal_cumple_anios", "comun_cumple_anios", "vida_util_concreto_comun_anios"}
 
 // atajos de la receta ideal que la web usa para colorear (igual que atlas/cli.py escribir_web)
 func atajosIdeal(props map[string]any, p map[string]any) {

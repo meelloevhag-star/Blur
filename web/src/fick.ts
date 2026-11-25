@@ -14,10 +14,11 @@ export function erf(x: number): number {
 export function cloruro(f: Fick, x_mm: number, t: number): number {
   if (t <= 0) return 0;
   const D = f.d_m2_s * Math.pow(f.t0_anios / t, f.n);
-  return f.cs * (1 - erf((x_mm / 1000) / (2 * Math.sqrt(D * t * SEG_ANIO))));
+  const x = Math.max(x_mm - (f.dx_mm ?? 0), 0);
+  return f.cs * (1 - erf((x / 1000) / (2 * Math.sqrt(D * t * SEG_ANIO))));
 }
 
-/** Primer año entero en que el cloruro en el acero alcanza C_crit (igual que durabilidad.vida_util); null si no llega antes de `hasta`. */
+/** Primer año entero en que el perfil medio alcanza C_crit en el acero (igual que durabilidad.inicio_medio); null si no llega. */
 export function anioInicio(f: Fick, hasta = 150): number | null {
   if (f.cs <= f.c_crit) return null;
   for (let t = 1; t <= hasta; t++) if (cloruro(f, f.recubrimiento_mm, t) >= f.c_crit) return t;

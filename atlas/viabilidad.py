@@ -74,9 +74,11 @@ def costo_y_disponibilidad(receta: dict, agente_id: str, lat: float, lon: float,
     base = sum(partidas.values())
     ag = c["agentes"][agente_id]
     if agente_id == "basilisk":
-        partidas["agente_autorreparador"] = 0.5 * base           # ENR: +50 % del m³
+        # ENR: +50 % del m³ con la dosis alta (15 kg/m³); se escala con la dosis real (ESTIMADO, cotizar)
+        partidas["agente_autorreparador"] = 0.5 * base * receta["agente_kg"] / 15
     elif agente_id in ("lwa_bacterias", "hidrogel_bacterias", "consorcio_agricola"):
-        lactato_kg = 0.015 * receta["cemento_kg"]                # ~1,5 % del cemento (supuesto de literatura)
+        # Wiktor y Jonkers 2011: ~15 kg de lactato por m³ en el LWA; hidrogel/consorcio ~1,5 % del cemento
+        lactato_kg = 15.0 if agente_id == "lwa_bacterias" else 0.015 * receta["cemento_kg"]
         partidas["agente_autorreparador"] = lactato_kg * 5.2 * t["tipo_cambio"] + (
             60.0 if agente_id == "lwa_bacterias" else 120.0 if agente_id == "hidrogel_bacterias" else 25.0)
     total = sum(partidas.values())

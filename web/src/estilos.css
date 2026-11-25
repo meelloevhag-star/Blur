@@ -369,6 +369,9 @@ table.comparar tbody th { color: var(--suave); font-weight: 400; min-width: 8em;
 .v-acero { fill: #6f7a7d; stroke: #2c3436; stroke-width: 1.5; transition: fill .3s; } .v-acero.oxido { fill: #a5462a; stroke: #5a2412; }
 .v-umbral { stroke: var(--alerta); stroke-dasharray: 4 3; } .v-diseno { stroke: var(--suave); stroke-dasharray: 2 3; }
 .v-cursor { stroke: var(--tinta); stroke-width: 1.2; }
+.v-banda { fill: color-mix(in srgb, var(--alerta) 12%, transparent); }
+.v-p-comun { fill: var(--alerta); } .v-p-receta { fill: var(--acento); }
+.veredicto span { display: block; font-weight: 400; color: var(--suave); font-size: .78rem; }
 .v-l-comun { fill: none; stroke: var(--alerta); stroke-width: 2; } .v-l-receta { fill: none; stroke: var(--acento); stroke-width: 2.4; }
 .pie-ficha { margin-top: 4px; }
 @media (max-width: 400px) {

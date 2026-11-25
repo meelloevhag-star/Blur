@@ -206,7 +206,7 @@ async function iniciar() {
     if (!el || !actual || est.abierto !== "tiempo") return;
     const v = vista(actual, est.modo), r = v.recetas[est.tipo];
     if (!v.fick_comun || !r.fick) { el.innerHTML = `<p class="nota">Este cálculo necesita datos regenerados del atlas.</p>`; return; }
-    visor = crearVisor(el, v.fick_comun, r.fick, TIPOS.find(([k]) => k === est.tipo)![1], HORIZONTE, VIDA_DISENO);
+    visor = crearVisor(el, { f: v.fick_comun, d: v.comun! }, { f: r.fick, d: r.durabilidad }, TIPOS.find(([k]) => k === est.tipo)![1], HORIZONTE, VIDA_DISENO);
   }
 
   cont.addEventListener("click", async (e) => {
@@ -274,9 +274,9 @@ async function iniciar() {
       ${fila("Neblina", (p) => p.indice_niebla.toFixed(2).replace(".", ","))}
       ${fila("Sal en el aire", (p) => `${n0(p.deposicion_cl_mg_m2_d)} mg/m²·d`)}
       ${fila("Altura media", (p) => `${n0(p.elevacion_media_m ?? 0)} m`)}
-      ${fila("Concreto común", (p) => veredicto(p.vida_util_concreto_comun_anios).txt)}
+      ${fila("Concreto común", (p) => veredicto(p.durabilidad_comun).txt)}
       ${fila("Receta ideal", (p) => recetaEnPalabras(p.recetas!.ideal))}
-      ${fila("Vida útil con la receta", (p) => veredicto(p.recetas!.ideal.vida_util_anios).txt)}
+      ${fila("Vida útil con la receta", (p) => veredicto(p.recetas!.ideal.durabilidad).txt)}
       ${fila("Costo ideal", (p) => `S/ ${n0(p.recetas!.ideal.viabilidad.costo_m3_pen)} por m³`)}
       ${fila("Opción económica", (p) => `S/ ${n0(p.recetas!.economica.viabilidad.costo_m3_pen)}: ${AGENTES[p.recetas!.economica.agente]?.corto}`)}
       ${fila("Población", (p) => `${n0(p.poblacion)} hab.`)}</tbody>`;

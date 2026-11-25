@@ -1,7 +1,10 @@
 """Dosificación por m³ con el método de volumen absoluto de ACI 211.1.
 
 Asentamiento de 75-100 mm, concreto sin aire incorporado, módulo de finura de la arena 2,8.
-Si la relación a/c ≤ 0,45 se añade superplastificante (reducción de agua del 15 %).
+Con a/c ≤ 0,50 se añade superplastificante PCE (0,8 % del cemento, reducción de agua del 20 %),
+de forma continua para que el cemento no salte entre a/c vecinos.
+El f′c que se compara con la norma es el especificado: f′c = f′cr − 8,5 MPa si f′cr ≤ 43,5 MPa y
+(f′cr − 5)/1,1 si es mayor (E.060 tabla 5.3, sin historial de desviación estándar).
 """
 from __future__ import annotations
 
@@ -20,13 +23,18 @@ def fc_estimado(a_c: float) -> float:
     return float(np.interp(a_c, x, y, left=y[0] + (x[0] - a_c) * 100, right=y[-1]))
 
 
+def fc_especificado(fcr: float) -> float:
+    """E.060 tabla 5.3 (sin datos de desviación): f′cr = f′c + 8,5 (21–35 MPa) o 1,1·f′c + 5 (> 35)."""
+    return fcr - 8.5 if fcr <= 43.5 else (fcr - 5) / 1.1
+
+
 def dosificar(a_c: float, tmn: float, cemento: dict, cem_min: float, agregados: dict,
               agente_kg: float = 0.0, cristalino_kg: float = 0.0) -> dict:
     agua, aire = AGUA_TMN[tmn]
     sp_pct = 0.0
-    if a_c <= 0.45:
-        agua *= 0.85
-        sp_pct = 1.0
+    if a_c <= 0.50:
+        agua *= 0.80
+        sp_pct = 0.8
     cem = max(agua / a_c, cem_min)
     a_c_real = agua / cem
     grava = VOL_GRAVA[tmn] * agregados["piedra"]["peso_unitario_kg_m3"]
@@ -39,5 +47,6 @@ def dosificar(a_c: float, tmn: float, cemento: dict, cem_min: float, agregados: 
         "tmn_mm": tmn, "aire_pct": aire, "superplastificante_kg": round(cem * sp_pct / 100, 2),
         "cristalino_kg": round(cristalino_kg, 2), "agente_kg": round(agente_kg, 2),
         "fc_estimado_mpa": round(fc_estimado(a_c_real), 1),
+        "fc_especificado_mpa": round(fc_especificado(fc_estimado(a_c_real)), 1),
         "metodo": "ACI 211.1 volumen absoluto (asentamiento 75-100 mm, MF arena 2,8)",
     }

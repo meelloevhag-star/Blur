@@ -7,7 +7,7 @@ import pytest
 
 from atlas import niebla as nb
 from atlas.diseno_mezcla import dosificar, fc_estimado
-from atlas.durabilidad import vida_util, ajuste_drcm
+from atlas.durabilidad import ajuste_drcm
 from atlas.ingesta import NOMBRES_CIERRE, dataset_cierre, vector_cierre
 from atlas.normas import reglas
 from atlas.rutas import MODELOS, RAIZ, SALIDA
@@ -37,14 +37,19 @@ def test_dosificacion_suma_un_m3():
     assert fc_estimado(0.40) > fc_estimado(0.50)
 
 
-def test_vida_util_monotona():
-    a = vida_util(0.40, "HS", "salpicadura", 500, 20, 65, 0.45)
-    b = vida_util(0.50, "HS", "salpicadura", 500, 20, 65, 0.45)
-    assert a >= b
-    assert vida_util(0.45, "I", "salpicadura", 500, 20, 65, 0.3, cierre_frac=0.9) >= \
-        vida_util(0.45, "I", "salpicadura", 500, 20, 65, 0.3, cierre_frac=0.0)
-    assert ajuste_drcm()["b"] > 0      # más a/c → más difusión
-
+def test_vida_util_probabilista_coherente():
+    from atlas.durabilidad import confiabilidad
+    a = confiabilidad(0.40, "IP", "salpicadura", 2000, 20, 75)
+    b = confiabilidad(0.50, "IP", "salpicadura", 2000, 20, 75)
+    c = confiabilidad(0.40, "IP", "salpicadura", 2000, 20, 85)
+    assert a["pf"]["50"] < b["pf"]["50"] and c["pf"]["50"] < a["pf"]["50"]           # menos a/c, más recubrimiento
+    assert all(a["pf"][k] <= a["pf"][j] for k, j in (("25", "50"), ("50", "75"), ("75", "100")))
+    # concreto común (Tipo I, a/c 0,55, 40 mm) a pocos metros del mar: no llega a 25 años (Life-365: 5–8 años)
+    assert confiabilidad(0.55, "I", "salpicadura", 2000, 20, 40)["cumple_anios"] == 0
+    # sin aerosol marino (S0) no se diseña por cloruros
+    assert confiabilidad(0.55, "I", "seco", 1, 20, 40)["cumple_anios"] == 100
+    # nunca se reportan más de 100 años
+    assert confiabilidad(0.35, "IP", "seco", 1, 20, 60)["t10_anios"] <= 101
 
 def test_deposicion_decae_y_niebla_la_extiende():
     amb = {"viento_medio_ms": 5, "frac_horas_niebla": 0.1, "nubes_bajas_media_pct": 40, "frac_horas_hr85": 0.8}
@@ -83,6 +88,11 @@ def test_geojson_recetas_completas():
             assert r["agente"] != "ninguno"
             assert r["dosificacion"]["a_c"] <= p["reglas"]["a_c_max"] + 1e-9
             assert r["viabilidad"]["costo_m3_pen"] > 0
+            # norma: agente permitido en el régimen, f′c especificado y cemento máximo
+            assert r["agente"] in p["reglas"]["agentes_permitidos"]
+            assert r["dosificacion"]["fc_especificado_mpa"] >= p["reglas"]["fc_min_mpa"]
+            assert r["dosificacion"]["cemento_kg"] <= p["reglas"]["cemento_max_kg"]
+            assert r["durabilidad"]["t10_anios"] <= 101
 
 
 # --------------------------------------------------------------------------- v2: relieve, urbano, fuentes
@@ -164,18 +174,18 @@ def test_frente_marino_es_salpicadura():
 
 
 def test_paridad_fick_python_typescript(tmp_path):
-    """El visor web (web/src/fick.ts) reproduce la vida útil de durabilidad.py con los parámetros exportados."""
+    """El visor web (web/src/fick.ts) reproduce el perfil medio de durabilidad.py con los parámetros exportados."""
     import shutil
     import subprocess
-    from atlas.durabilidad import parametros_fick, vida_util
+    from atlas.durabilidad import inicio_medio, parametros_fick
     esbuild = RAIZ / "web" / "node_modules" / ".bin" / "esbuild"
     if not shutil.which("node") or not esbuild.exists():
         pytest.skip("sin Node o sin web/node_modules (npm ci)")
-    casos = [(0.45, "IP", "atmosferico_marino", 80, 19, 50, 0.45, 0.6, "basilisk"),
-             (0.55, "I", "salpicadura", 2000, 22, 40, 0.3, 0.0, "ninguno"),
-             (0.40, "HS", "niebla_salina", 300, 17, 65, 0.6, 0.4, "cristalino")]
-    params = [parametros_fick(*c[:7], cierre_frac=c[7], agente=c[8]) for c in casos]
-    esperado = [vida_util(*c[:7], cierre_frac=c[7], agente=c[8]) for c in casos]
+    casos = [(0.45, "IP", "atmosferico_marino", 80, 19, 50, "basilisk"),
+             (0.55, "I", "salpicadura", 2000, 22, 40, "ninguno"),
+             (0.40, "HS", "niebla_salina", 300, 17, 65, "cristalino")]
+    params = [parametros_fick(*c[:6], agente=c[6]) for c in casos]
+    esperado = [inicio_medio(p) for p in params]
     web = RAIZ / "web"
     script = tmp_path / "p.mjs"
     out = tmp_path / "fick.mjs"
