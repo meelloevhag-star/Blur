@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       fuentes:
-        description: "Fuentes separadas por espacio (vacío = todas): ingemmet minam inei osm"
+        description: "Fuentes separadas por espacio (vacío = todas): ingemmet minam osm"
         default: ""
   push:
     paths:
