@@ -157,7 +157,9 @@ def construir(pais="PER") -> dict:
                           "ideal_disponibilidad": ideal["viabilidad"]["disponibilidad"],
                           "economica_costo_m3": r["recetas"]["economica"]["viabilidad"]["costo_m3_pen"],
                       }})
-    meta = {"modelo_version": modelo.p["version"], "cv_modelo": modelo.p["cv"],
+    reg = json.loads((DATOS.parent / "modelos" / "registro.json").read_text(encoding="utf-8"))
+    n_ensayos = next((r["n_registros"] for r in reversed(reg) if r["aceptado"]), None)
+    meta = {"modelo_version": modelo.p["version"], "n_ensayos": n_ensayos, "cv_modelo": modelo.p["cv"],
             "durabilidad": {"drcm": ajuste_drcm(), "agentes": efecto_agentes_cloruros()},
             "w0_diseno_mm": W0_DISENO, "edad_diseno_dias": EDAD_DISENO, "vida_objetivo": VIDA_OBJ,
             "zonas_con_clima_propio": sum(1 for f in feats if f["properties"]["ambiente"]["celda_propia"]),

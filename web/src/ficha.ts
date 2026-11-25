@@ -6,7 +6,7 @@ const n0 = (x: number) => Math.round(x).toLocaleString("es-PE");
 const n1 = (x: number) => x.toLocaleString("es-PE", { maximumFractionDigits: 1, minimumFractionDigits: 1 });
 const n2 = (x: number) => x.toLocaleString("es-PE", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
 const anios = (x: number) => (x >= 150 ? "150+" : n0(x));
-const FRANJA_TXT = ["a menos de 500 m del mar", "a 0,5–2 km del mar", "a 2–5 km del mar", "a 5–10 km del mar", "a 10–20 km del mar", "a 20–35 km del mar"];
+const FRANJA_TXT = ["A menos de 500 m del mar", "A 0,5–2 km del mar", "A 2–5 km del mar", "A 5–10 km del mar", "A 10–20 km del mar", "A 20–35 km del mar"];
 export const TIPOS = [
   ["ideal", "Mejor desempeño"],
   ["economica", "Más económica"],
@@ -90,7 +90,7 @@ export function htmlFicha(p: PropsZona, tipo: string): string {
       <span class="sep">·</span>${esc(p.clase_urbana)}${p.poblacion ? `, ${n0(p.poblacion)} hab.` : ""}</p>
     <p class="porque">${esc(porQue(p))}</p>
 
-    <section class="bloque-receta" aria-labelledby="t-receta">
+    <section class="bloque-receta luz" aria-labelledby="t-receta">
       <h3 id="t-receta">Qué concreto usar aquí</h3>
       <div class="segmentos" role="tablist" aria-label="Tipo de receta">
         ${TIPOS.map(([k, n]) => `<button role="tab" type="button" data-tipo="${k}" aria-selected="${k === tipo}">${n}</button>`).join("")}
@@ -100,7 +100,7 @@ export function htmlFicha(p: PropsZona, tipo: string): string {
 
     <section class="bloque-terreno" aria-labelledby="t-terreno">
       <h3 id="t-terreno">El terreno de este tramo</h3>
-      <div class="maqueta">
+      <div class="maqueta luz">
         <canvas id="maqueta" role="img" aria-label="Maqueta 3D del tramo de costa: mar al frente, cerros al fondo"></canvas>
         <p class="maqueta-ayuda">Pasa el cursor para girar el tramo y soltar la neblina de las laderas.</p>
         <div class="maqueta-botones">
@@ -114,7 +114,7 @@ export function htmlFicha(p: PropsZona, tipo: string): string {
       <div id="perfil" class="perfil"></div>
     </section>
 
-    <details class="plegable">
+    <details class="plegable luz">
       <summary>Clima y territorio</summary>
       <dl class="datos">
         <div><dt>Neblina</dt><dd>${n2(p.indice_niebla)} de 1</dd></div>
@@ -127,7 +127,7 @@ export function htmlFicha(p: PropsZona, tipo: string): string {
         <div><dt>Carretera principal</dt><dd>a ${n1(Number(urb.dist_via_principal_km ?? 0))} km</dd></div>
       </dl>
     </details>
-    <details class="plegable">
+    <details class="plegable luz">
       <summary>Datos técnicos</summary>
       <p class="nota">Clase de exposición ${esc(p.reglas?.clase)} (${esc(p.reglas?.fuente)}): a/c máximo ${n2(p.reglas?.a_c_max ?? 0)},
         cemento mínimo ${p.reglas?.cemento_min_kg} kg/m³, f′c mínimo ${p.reglas?.fc_min_mpa} MPa, recubrimiento ${p.reglas?.recubrimiento_mm} mm.
@@ -154,7 +154,7 @@ export function htmlPerfil(zonas: PropsZona[], sel: string): string {
     const xa = X([0, 0.5, 2, 5, 10, 20][z.franja]), xb = X([0.5, 2, 5, 10, 20, 35][z.franja]);
     const r = 3 + z.indice_niebla * 6;
     return `<g class="pf-franja${z.id === sel ? " sel" : ""}" data-zona="${z.id}" role="button" tabindex="0"
-      aria-label="Franja ${FRANJA_TXT[z.franja]}: neblina ${n2(z.indice_niebla)}, altura ${n0(z.elevacion_media_m ?? 0)} m">
+      aria-label="Franja ${(FRANJA_TXT[z.franja] ?? "").toLowerCase()}: neblina ${n2(z.indice_niebla)}, altura ${n0(z.elevacion_media_m ?? 0)} m">
       <rect x="${xa}" y="6" width="${xb - xa}" height="${H - 28}" class="pf-hit"/>
       <circle cx="${pts[i][0]}" cy="${pts[i][1] - 10}" r="${r.toFixed(1)}" class="pf-niebla"/></g>`;
   }).join("");

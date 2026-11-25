@@ -18,7 +18,8 @@ from atlas.rutas import GEO
 # Franjas de distancia al mar (km). La 1.ª concentra mareas/salpicadura; las siguientes cubren la
 # costa urbana, los cerros y las lomas (cinturón de niebla, ≈ 2–30 km tierra adentro).
 FRANJAS_KM = [(0.0, 0.5), (0.5, 2.0), (2.0, 5.0), (5.0, 10.0), (10.0, 20.0), (20.0, 35.0)]
-PASO_KM = 10.0
+PASO_KM = 5.0
+DENSIDAD_KM = 1.0          # un vértice por km a lo largo de la costa: bordes que siguen su forma
 R_TIERRA = 6371.0
 
 
@@ -115,11 +116,12 @@ def generar_zonas(pais: str = "PER") -> list[Zona]:
               json.loads((GEO / f"departamentos_{pais.lower()}.geojson").read_text(encoding="utf-8"))["features"]]
     distritos = _distritos(pais)
 
-    pts = _remuestrear(costa, PASO_KM / 2)   # puntos a medio paso: pares = centros, impares = bordes
-    # normales hacia tierra
+    pts = _remuestrear(costa, DENSIDAD_KM)
+    m = int(round(PASO_KM / DENSIDAD_KM))     # vértices por tramo
+    # normales hacia tierra, suavizadas con ±3 km para que las franjas no se crucen en cada quiebre
     normales = []
     for i, p in enumerate(pts):
-        a, b = pts[max(i - 1, 0)], pts[min(i + 1, len(pts) - 1)]
+        a, b = pts[max(i - 3, 0)], pts[min(i + 3, len(pts) - 1)]
         ky, kx = _km(p[1])
         tx, ty = (b[0] - a[0]) * kx, (b[1] - a[1]) * ky
         n = math.hypot(tx, ty) or 1.0
@@ -130,11 +132,12 @@ def generar_zonas(pais: str = "PER") -> list[Zona]:
         normales.append(cand)
 
     zonas = []
-    for k, i in enumerate(range(1, len(pts) - 1, 2)):
-        izq, cen, der = i - 1, i, i + 1
+    for k, i0 in enumerate(range(0, len(pts) - m, m)):
+        seg = list(range(i0, i0 + m + 1))
+        cen = i0 + m // 2
         for f, (d0, d1) in enumerate(FRANJAS_KM):
-            anillo = [_desplazar(pts[izq], normales[izq], d0), _desplazar(pts[der], normales[der], d0),
-                      _desplazar(pts[der], normales[der], d1), _desplazar(pts[izq], normales[izq], d1)]
+            anillo = ([_desplazar(pts[j], normales[j], d0) for j in seg]
+                      + [_desplazar(pts[j], normales[j], d1) for j in reversed(seg)])
             anillo.append(anillo[0])
             dm = (d0 + d1) / 2
             c = _desplazar(pts[cen], normales[cen], dm)

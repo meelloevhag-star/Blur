@@ -66,13 +66,15 @@ export async function crearMapa(el: HTMLElement, col: Coleccion): Promise<Mapa> 
     const v = capa.valor(p);
     const on = visible(v);
     return { color: p.id === sel ? tok("--tinta") : tok("--borde-zona"), weight: p.id === sel ? 2.4 : 0.35,
-      fillColor: color(capa, v), fillOpacity: on ? 0.8 : 0.08, opacity: on ? 1 : 0.2 };
+      fillColor: color(capa, v), fillOpacity: on ? (document.documentElement.dataset.theme === "dark" ? 0.62 : 0.8) : 0.08, opacity: on ? 1 : 0.2 };
   }
   const tip = (p: PropsZona) =>
     `<strong>${p.distrito}</strong><span>${capa.nombre}: ${capa.formato(capa.valor(p))}</span>`;
 
   const cinta = L.layerGroup();
+  const halo = L.layerGroup();                       // resplandor ancho y tenue bajo la cinta (mapa de cobertura)
   const segmentos = new Map<number, L.Polyline>();
+  const halos = new Map<number, L.Polyline>();
   tramos.forEach((t, i) => {
     const a = costa.get(tramos[Math.max(i - 1, 0)])!, b = costa.get(t)!, c = costa.get(tramos[Math.min(i + 1, tramos.length - 1)])!;
     const ab: [number, number] = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], bc: [number, number] = [(b[0] + c[0]) / 2, (b[1] + c[1]) / 2];
@@ -87,23 +89,36 @@ export async function crearMapa(el: HTMLElement, col: Coleccion): Promise<Mapa> 
       return `<strong>${z0.distrito}</strong><span>${capa.nombre}: ${capa.formato(resumirTramo(capa, zs))}</span>`;
     }, { sticky: true, direction: "top", offset: [0, -8], className: "tip" });
     segmentos.set(t, seg);
+    const h = L.polyline([ab, b, bc], { renderer: lienzo, interactive: false, lineCap: "round", lineJoin: "round" });
+    halos.set(t, h);
+    halo.addLayer(h);
     cinta.addLayer(seg);
   });
   function pintarCinta() {
     const z = mapa.getZoom();
     const ancho = Math.max(5, Math.min(16, (z - 3.5) * 3.2));
+    const oscuro = document.documentElement.dataset.theme === "dark";
+    const zSel = sel ? props.find((p) => p.id === sel) : null;
     segmentos.forEach((seg, t) => {
       const v = resumirTramo(capa, porTramo.get(t)!);
-      const zSel = sel ? props.find((p) => p.id === sel) : null;
-      seg.setStyle({ color: color(capa, v), weight: zSel?.tramo === t ? ancho + 5 : ancho, opacity: visible(v) ? 1 : 0.15 });
+      const c = color(capa, v), on = visible(v);
+      seg.setStyle({ color: c, weight: zSel?.tramo === t ? ancho + 5 : ancho, opacity: on ? 1 : 0.15 });
+      halos.get(t)!.setStyle({ color: c, weight: ancho * (oscuro ? 4.5 : 3), opacity: on ? (oscuro ? 0.16 : 0.1) : 0 });
     });
   }
   function nivel() {
     const alto = mapa.getZoom() >= ZOOM_POLIGONOS;
-    if (alto && !mapa.hasLayer(poligonos)) { mapa.removeLayer(cinta); poligonos.addTo(mapa); }
-    if (!alto && !mapa.hasLayer(cinta)) { mapa.removeLayer(poligonos); cinta.addTo(mapa); }
+    if (alto && !mapa.hasLayer(poligonos)) { mapa.removeLayer(cinta); mapa.removeLayer(halo); mapa.removeLayer(luces); poligonos.addTo(mapa); }
+    if (!alto && !mapa.hasLayer(cinta)) { mapa.removeLayer(poligonos); halo.addTo(mapa); luces.addTo(mapa); cinta.addTo(mapa); }
     if (!alto) pintarCinta();
   }
+  // ciudades como puntos de luz: radio ∝ √población de las zonas urbanas y periurbanas
+  const luces = L.layerGroup();
+  props.filter((p) => p.clase_urbana === "urbano" || p.clase_urbana === "periurbano").forEach((p) => {
+    const r = Math.max(2, Math.min(16, Math.sqrt(p.poblacion) / 70));
+    L.circleMarker([p.lat, p.lon], { renderer: lienzo, interactive: false, radius: r * 2.4, stroke: false, fillColor: "#ffd27a", fillOpacity: 0.08 }).addTo(luces);
+    L.circleMarker([p.lat, p.lon], { renderer: lienzo, interactive: false, radius: r * 0.9, stroke: false, fillColor: "#fff1c9", fillOpacity: 0.55 }).addTo(luces);
+  });
   mapa.on("zoomend", nivel);
   mapa.fitBounds(L.latLngBounds(props.map((p) => [p.lat, p.lon] as [number, number])), { padding: [30, 30] });
   nivel();

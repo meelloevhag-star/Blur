@@ -11,7 +11,7 @@ const repo = join(raiz, "..");
 const artefacto = process.argv.includes("--artefacto");
 const LEAFLET = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js";
 const THREE_JS = "https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js";
-const FUENTES = "https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=Familjen+Grotesk:wght@500;600;700&display=swap";
+const FUENTES = "https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=Familjen+Grotesk:wght@500;600;700&family=Instrument+Serif:ital@0;1&display=swap";
 const TITULO = "Atlas del concreto que se repara";
 
 const js = (await build({ entryPoints: [join(raiz, "src/main.ts")], bundle: true, minify: true, format: "iife",

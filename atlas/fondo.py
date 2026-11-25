@@ -101,3 +101,22 @@ if __name__ == "__main__":
     a = ap.parse_args()
     r = generar(a.res)
     print(r, r.stat().st_size // 1024, "KB")
+
+
+def portada(lon0=-77.62, lon1=-77.02, lat0=-11.62, lat1=-11.12, nx=180, ny=110, nombre="lachay"):
+    """Rejilla de alturas para la portada (relieve grabado): mar al frente (oeste) y lomas detrás.
+
+    Filas = distancia tierra adentro (oeste→este), columnas = a lo largo de la costa (sur→norte).
+    """
+    from atlas.relieve import Mosaico
+    dem = Mosaico(max_mem=8)
+    lons = np.linspace(lon0, lon1, ny)          # filas: del mar hacia el interior
+    lats = np.linspace(lat0, lat1, nx)          # columnas
+    L, A = np.meshgrid(lons, lats, indexing="ij")
+    h = dem.muestrear(L.ravel(), A.ravel()).reshape(L.shape)
+    SALIDA.mkdir(parents=True, exist_ok=True)
+    datos = {"nombre": nombre, "nx": nx, "ny": ny, "lon": [lon0, lon1], "lat": [lat0, lat1],
+             "h": np.round(np.where(h > 0, h, -1)).astype(int).ravel().tolist(),
+             "fuente": "Copernicus DEM GLO-90", "lugar": "Lomas de Lachay, Huaura (Lima)"}
+    (SALIDA / f"portada_{nombre}.json").write_text(json.dumps(datos, separators=(",", ":")), encoding="utf-8")
+    return datos

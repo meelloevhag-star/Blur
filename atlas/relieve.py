@@ -145,10 +145,8 @@ def estadisticas_zona(dem: Mosaico, z, costa_lonlat, d=0.0009) -> dict:
 def calcular(pais="PER") -> dict:
     zonas = cargar_zonas(pais)
     costa = {}
-    for z in zonas:          # punto de costa de cada tramo = borde marino de la franja 0
-        if z.franja == 0:
-            costa[z.tramo] = (z.poligono[0][0] + (z.poligono[1][0] - z.poligono[0][0]) / 2,
-                              z.poligono[0][1] + (z.poligono[1][1] - z.poligono[0][1]) / 2)
+    for z in sorted(zonas, key=lambda z: z.franja):   # punto de costa de cada tramo ≈ centro de su franja 0
+        costa.setdefault(z.tramo, (z.lon, z.lat))
     dem = Mosaico()
     ruta = DATOS / f"relieve_{pais.lower()}.json"
     out = {}

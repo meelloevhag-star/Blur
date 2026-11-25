@@ -3,6 +3,8 @@ import { CAPAS, AGENTES, clase, type Capa } from "./capas";
 import { htmlFicha, htmlPerfil, htmlReceta, recetaEnPalabras, TIPOS } from "./ficha";
 import { crearMapa } from "./mapa";
 import { crearMaqueta, type Maqueta } from "./maqueta3d";
+import { iniciarLuz } from "./luz";
+import { iniciarPortada } from "./portada";
 import type { PropsZona, Zona } from "./tipos";
 
 const $ = <T extends HTMLElement = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector<T>(s)!;
@@ -11,6 +13,10 @@ const n0 = (x: number) => Math.round(x).toLocaleString("es-PE");
 const sinTildes = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 const guardar = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch { /* sin almacenamiento */ } };
 const leer = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
+
+// ---------------- tema: oscuro por defecto (mapa de cobertura), el visitante puede cambiarlo ----------------
+function ponerTema(t: string) { document.documentElement.dataset.theme = t; guardar("atlas-tema", t); }
+ponerTema(leer("atlas-tema") ?? "dark");
 
 const movil = matchMedia("(max-width: 760px)");
 function marcarMovil() { document.body.classList.toggle("movil", movil.matches); }
@@ -21,8 +27,24 @@ async function iniciar() {
   const col = await fuente.zonas();
   const props = col.features.map((f) => f.properties);
   const porId = new Map(props.map((p) => [p.id, p]));
+  // portada: se muestra al entrar, salvo enlace directo a una zona
+  const portada = $("#portada");
+  $("#pc-zonas").textContent = props.length.toLocaleString("es-PE");
+  $("#pc-ensayos").textContent = (col.metadata.n_ensayos ?? 0).toLocaleString("es-PE");
+  $("#pc-clima").textContent = String(col.metadata.celdas_era5 ?? "—");
+  const conEnlace = location.hash.length > 1;
+  if (conEnlace) portada.hidden = true;
+  else { portada.focus({ preventScroll: true }); }
+  iniciarPortada(portada, () => $<HTMLInputElement>("#buscar").focus({ preventScroll: true }));
+  $("#volver-portada").addEventListener("click", () => { portada.classList.remove("saliendo"); portada.hidden = false; portada.focus(); });
+
   const m = await crearMapa($("#mapa"), col);
   document.body.classList.add("listo");
+  iniciarLuz();
+  $("#btn-tema").addEventListener("click", () => {
+    ponerTema(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+    m.repintarTema();
+  });
 
   // ---------------- capas (chips) + leyenda ----------------
   let capa: Capa = CAPAS.find((c) => c.id === leer("atlas-capa")) ?? CAPAS[0];
