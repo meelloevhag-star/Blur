@@ -1,0 +1,189 @@
+{
+  "version_motor": {
+    "version": 2,
+    "fecha": "2026-11-26T05:19:17+00:00",
+    "huella_datos": "fd29d7f2ca6ba8cf",
+    "n_filas": 2166,
+    "K_redes": 5,
+    "generaciones": 50,
+    "archivo": "motor_v002.pkl"
+  },
+  "datos": {
+    "filas_aceptadas": 2378,
+    "filas_usadas": 2166,
+    "campos_que_faltan": {
+      "mezcla_curado_previo": 212,
+      "mezcla_agente_cristalino": 212,
+      "resultado_cierre_pct": 28,
+      "dano_ancho_fisura_mm": 2,
+      "resultado_edad_dias": 2,
+      "mezcla_nivel_proteccion": 2,
+      "zona_ambiente_marino": 2,
+      "mezcla_lactato_calcio": 2
+    }
+  },
+  "necesidades": [
+    {
+      "ambiente": "marino",
+      "proteccion": "sin bacterias",
+      "lactato_calcio": true,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "ancho fuera del rango marino entrenado",
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 5.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "directa/comercial",
+      "lactato_calcio": true,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "ancho fuera del rango marino entrenado",
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 5.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "portador",
+      "lactato_calcio": false,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "ancho fuera del rango marino entrenado",
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 5.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "portador",
+      "lactato_calcio": true,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "ancho fuera del rango marino entrenado",
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 5.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "encapsulación",
+      "lactato_calcio": false,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "ancho fuera del rango marino entrenado",
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 5.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "encapsulación",
+      "lactato_calcio": true,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "ancho fuera del rango marino entrenado",
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 5.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "no marino",
+      "proteccion": "directa/comercial",
+      "lactato_calcio": false,
+      "ancho_mm": 0.1,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 4.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "no marino",
+      "proteccion": "directa/comercial",
+      "lactato_calcio": false,
+      "ancho_mm": 0.2,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 4.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "no marino",
+      "proteccion": "directa/comercial",
+      "lactato_calcio": false,
+      "ancho_mm": 0.3,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 4.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "no marino",
+      "proteccion": "directa/comercial",
+      "lactato_calcio": false,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 4.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "no marino",
+      "proteccion": "directa/comercial",
+      "lactato_calcio": true,
+      "ancho_mm": 0.1,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 4.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "no marino",
+      "proteccion": "directa/comercial",
+      "lactato_calcio": true,
+      "ancho_mm": 0.2,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 8.0,
+      "puntaje": 4.8,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Contrato de salida BioCrete (motor de cierre + vida útil)",
+  "description": "Lo que el producto final puede leer. El motor NEAT da cierre de fisura (%) entre 3 y 480 días; NUNCA años de servicio. Los años vienen de nucleo.vida_util, con P(inicio de corrosión) = 10 %, y nunca se informan por encima del horizonte (25 o 40 años) ni por encima de 100 años.",
+  "type": "object",
+  "$defs": {
+    "motor_cierre": {
+      "type": "object",
+      "required": ["cierre_pct", "modo", "confiable", "avisos", "horizonte_valido"],
+      "properties": {
+        "cierre_pct": {"type": ["number", "null"], "minimum": 0, "maximum": 100, "description": "null = fuera de horizonte: no usar"},
+        "modo": {"type": "string"},
+        "confiable": {"type": "boolean", "description": "false = extrapolación o fuera de horizonte"},
+        "avisos": {"type": "array", "items": {"type": "string"}},
+        "horizonte_valido": {"type": "object", "properties": {"edad_dias": {"type": "array"}, "w0_max_mm": {"type": "number"}, "unidad": {"type": "string"}}},
+        "motivo": {"type": "string"},
+        "error_esperado_pp": {"type": "number"},
+        "intervalo_80": {"type": "array"},
+        "intervalo_90": {"type": "array"}
+      }
+    },
+    "vida_util": {
+      "type": "object",
+      "required": ["estado", "anios", "reporte", "horizonte_anios"],
+      "properties": {
+        "estado": {"enum": ["numero", "cumple", "menor_1", "fuera_de_alcance"]},
+        "anios": {"type": ["number", "null"], "maximum": 40, "description": "solo con estado = numero; nunca mayor que horizonte_anios"},
+        "reporte": {"type": "string", "description": "texto para mostrar, p. ej. '18 años' o 'cumple 40 años'"},
+        "horizonte_anios": {"type": "number", "maximum": 100},
+        "criterio": {"type": "string"},
+        "avisos": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "cierre_requerido": {
+      "type": "object",
+      "required": ["estado", "cierre_min", "objetivo_anios"],
+      "properties": {
+        "estado": {"enum": ["sin_reparacion_basta", "requiere_reparacion", "no_alcanzable", "fuera_de_alcance"]},
+        "cierre_min": {"type": ["number", "null"], "minimum": 0, "maximum": 1},
+        "objetivo_anios": {"type": "number", "maximum": 100}
+      }
+    }
+  }
+}

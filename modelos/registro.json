@@ -1,0 +1,20 @@
+[
+  {
+    "version": 1,
+    "fecha": "2026-11-24T20:42:20+00:00",
+    "huella_datos": "fd29d7f2ca6ba8cf",
+    "n_filas": 2166,
+    "K_redes": 5,
+    "generaciones": 50,
+    "archivo": "motor_v001.pkl"
+  },
+  {
+    "version": 2,
+    "fecha": "2026-11-26T05:19:17+00:00",
+    "huella_datos": "fd29d7f2ca6ba8cf",
+    "n_filas": 2166,
+    "K_redes": 5,
+    "generaciones": 50,
+    "archivo": "motor_v002.pkl"
+  }
+]

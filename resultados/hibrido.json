@@ -1,0 +1,402 @@
+{
+  "generaciones": 50,
+  "semillas": 5,
+  "Cappellesso2024": {
+    "entrenado_en": "Mousa2022",
+    "n_grupos_B": 119,
+    "modelos": {
+      "NEAT": {
+        "0": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "2": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "5": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "10": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "20": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "40": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "n_min_para_<20pp": 0,
+        "n_min_para_<15pp": null
+      },
+      "RF": {
+        "0": {
+          "MAE_pp_medio": 38.83,
+          "MAE_pp_de": 1.75
+        },
+        "2": {
+          "MAE_pp_medio": 27.22,
+          "MAE_pp_de": 8.37
+        },
+        "5": {
+          "MAE_pp_medio": 20.39,
+          "MAE_pp_de": 2.79
+        },
+        "10": {
+          "MAE_pp_medio": 17.55,
+          "MAE_pp_de": 2.07
+        },
+        "20": {
+          "MAE_pp_medio": 14.68,
+          "MAE_pp_de": 0.74
+        },
+        "40": {
+          "MAE_pp_medio": 13.56,
+          "MAE_pp_de": 0.57
+        },
+        "n_min_para_<20pp": 10,
+        "n_min_para_<15pp": 20
+      },
+      "H1 residual": {
+        "0": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "2": {
+          "MAE_pp_medio": 23.87,
+          "MAE_pp_de": 7.07
+        },
+        "5": {
+          "MAE_pp_medio": 23.64,
+          "MAE_pp_de": 7.74
+        },
+        "10": {
+          "MAE_pp_medio": 19.16,
+          "MAE_pp_de": 3.76
+        },
+        "20": {
+          "MAE_pp_medio": 15.36,
+          "MAE_pp_de": 0.63
+        },
+        "40": {
+          "MAE_pp_medio": 13.49,
+          "MAE_pp_de": 1.08
+        },
+        "n_min_para_<20pp": 0,
+        "n_min_para_<15pp": 40
+      },
+      "H3 contraído": {
+        "0": {
+          "MAE_pp_medio": 19.91,
+          "MAE_pp_de": 0.55
+        },
+        "2": {
+          "MAE_pp_medio": 19.41,
+          "MAE_pp_de": 0.85
+        },
+        "5": {
+          "MAE_pp_medio": 18.9,
+          "MAE_pp_de": 2.28
+        },
+        "10": {
+          "MAE_pp_medio": 17.63,
+          "MAE_pp_de": 1.77
+        },
+        "20": {
+          "MAE_pp_medio": 15.45,
+          "MAE_pp_de": 0.71
+        },
+        "40": {
+          "MAE_pp_medio": 13.43,
+          "MAE_pp_de": 0.71
+        },
+        "n_min_para_<20pp": 0,
+        "n_min_para_<15pp": 40
+      },
+      "H2 apilado": {
+        "0": {
+          "MAE_pp_medio": 35.22,
+          "MAE_pp_de": 2.12
+        },
+        "2": {
+          "MAE_pp_medio": 26.26,
+          "MAE_pp_de": 7.79
+        },
+        "5": {
+          "MAE_pp_medio": 19.87,
+          "MAE_pp_de": 2.19
+        },
+        "10": {
+          "MAE_pp_medio": 17.54,
+          "MAE_pp_de": 1.82
+        },
+        "20": {
+          "MAE_pp_medio": 14.67,
+          "MAE_pp_de": 0.76
+        },
+        "40": {
+          "MAE_pp_medio": 13.39,
+          "MAE_pp_de": 0.44
+        },
+        "n_min_para_<20pp": 5,
+        "n_min_para_<15pp": 20
+      }
+    },
+    "conforme_H1": {
+      "5": {
+        "90%": {
+          "cobertura_real": 0.882,
+          "semiancho_pp": 55.0
+        },
+        "80%": {
+          "cobertura_real": 0.779,
+          "semiancho_pp": 41.0
+        }
+      },
+      "10": {
+        "90%": {
+          "cobertura_real": 0.872,
+          "semiancho_pp": 48.5
+        },
+        "80%": {
+          "cobertura_real": 0.759,
+          "semiancho_pp": 32.1
+        }
+      },
+      "20": {
+        "90%": {
+          "cobertura_real": 0.912,
+          "semiancho_pp": 38.5
+        },
+        "80%": {
+          "cobertura_real": 0.781,
+          "semiancho_pp": 26.4
+        }
+      },
+      "40": {
+        "90%": {
+          "cobertura_real": 0.877,
+          "semiancho_pp": 30.1
+        },
+        "80%": {
+          "cobertura_real": 0.78,
+          "semiancho_pp": 21.7
+        }
+      }
+    },
+    "estabilidad_base": {
+      "K_redes": 5,
+      "MAE_pp_una_red": [
+        19.6,
+        0.32
+      ],
+      "MAE_pp_promedio_K": [
+        19.58,
+        0.12
+      ]
+    }
+  },
+  "Mousa2022": {
+    "entrenado_en": "Cappellesso2024",
+    "n_grupos_B": 191,
+    "modelos": {
+      "NEAT": {
+        "0": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "2": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "5": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "10": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "20": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "40": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "n_min_para_<20pp": null,
+        "n_min_para_<15pp": null
+      },
+      "RF": {
+        "0": {
+          "MAE_pp_medio": 24.94,
+          "MAE_pp_de": 0.62
+        },
+        "2": {
+          "MAE_pp_medio": 22.68,
+          "MAE_pp_de": 1.74
+        },
+        "5": {
+          "MAE_pp_medio": 20.7,
+          "MAE_pp_de": 1.66
+        },
+        "10": {
+          "MAE_pp_medio": 20.08,
+          "MAE_pp_de": 1.53
+        },
+        "20": {
+          "MAE_pp_medio": 16.23,
+          "MAE_pp_de": 1.24
+        },
+        "40": {
+          "MAE_pp_medio": 15.13,
+          "MAE_pp_de": 1.09
+        },
+        "n_min_para_<20pp": 20,
+        "n_min_para_<15pp": null
+      },
+      "H1 residual": {
+        "0": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "2": {
+          "MAE_pp_medio": 26.7,
+          "MAE_pp_de": 9.26
+        },
+        "5": {
+          "MAE_pp_medio": 20.76,
+          "MAE_pp_de": 4.01
+        },
+        "10": {
+          "MAE_pp_medio": 19.06,
+          "MAE_pp_de": 1.98
+        },
+        "20": {
+          "MAE_pp_medio": 16.88,
+          "MAE_pp_de": 2.37
+        },
+        "40": {
+          "MAE_pp_medio": 15.41,
+          "MAE_pp_de": 1.65
+        },
+        "n_min_para_<20pp": 10,
+        "n_min_para_<15pp": null
+      },
+      "H3 contraído": {
+        "0": {
+          "MAE_pp_medio": 20.35,
+          "MAE_pp_de": 1.65
+        },
+        "2": {
+          "MAE_pp_medio": 20.99,
+          "MAE_pp_de": 2.55
+        },
+        "5": {
+          "MAE_pp_medio": 19.65,
+          "MAE_pp_de": 2.34
+        },
+        "10": {
+          "MAE_pp_medio": 18.5,
+          "MAE_pp_de": 1.52
+        },
+        "20": {
+          "MAE_pp_medio": 16.65,
+          "MAE_pp_de": 1.46
+        },
+        "40": {
+          "MAE_pp_medio": 15.23,
+          "MAE_pp_de": 1.2
+        },
+        "n_min_para_<20pp": 5,
+        "n_min_para_<15pp": null
+      },
+      "H2 apilado": {
+        "0": {
+          "MAE_pp_medio": 23.83,
+          "MAE_pp_de": 0.8
+        },
+        "2": {
+          "MAE_pp_medio": 21.99,
+          "MAE_pp_de": 2.36
+        },
+        "5": {
+          "MAE_pp_medio": 20.61,
+          "MAE_pp_de": 1.57
+        },
+        "10": {
+          "MAE_pp_medio": 19.53,
+          "MAE_pp_de": 1.19
+        },
+        "20": {
+          "MAE_pp_medio": 17.36,
+          "MAE_pp_de": 0.76
+        },
+        "40": {
+          "MAE_pp_medio": 15.67,
+          "MAE_pp_de": 0.74
+        },
+        "n_min_para_<20pp": 10,
+        "n_min_para_<15pp": null
+      }
+    },
+    "conforme_H1": {
+      "5": {
+        "90%": {
+          "cobertura_real": 0.942,
+          "semiancho_pp": 51.2
+        },
+        "80%": {
+          "cobertura_real": 0.898,
+          "semiancho_pp": 42.5
+        }
+      },
+      "10": {
+        "90%": {
+          "cobertura_real": 0.874,
+          "semiancho_pp": 38.0
+        },
+        "80%": {
+          "cobertura_real": 0.757,
+          "semiancho_pp": 28.4
+        }
+      },
+      "20": {
+        "90%": {
+          "cobertura_real": 0.903,
+          "semiancho_pp": 37.8
+        },
+        "80%": {
+          "cobertura_real": 0.806,
+          "semiancho_pp": 28.0
+        }
+      },
+      "40": {
+        "90%": {
+          "cobertura_real": 0.907,
+          "semiancho_pp": 34.8
+        },
+        "80%": {
+          "cobertura_real": 0.81,
+          "semiancho_pp": 25.6
+        }
+      }
+    },
+    "estabilidad_base": {
+      "K_redes": 5,
+      "MAE_pp_una_red": [
+        23.9,
+        6.01
+      ],
+      "MAE_pp_promedio_K": [
+        20.53,
+        1.7
+      ]
+    }
+  }
+}

@@ -1,0 +1,596 @@
+<title>BioCrete NEAT y agentes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cuaderno de ingeniería en una columna; esquema del sistema, luego las 5 redes reales y un calculador vivo. */
+:root{
+  --bg:#f3f4f2; --panel:#ffffff; --ink:#1d2321; --muted:#5d6763; --line:#cdd3cf;
+  --pos:#1f5fa8; --neg:#b4562a; --calc:#2f7d6b; --warn:#a8761a; --faint:#e4e8e5;
+  --display:"Archivo",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141817; --panel:#1c2120; --ink:#e6ebe8; --muted:#9aa59f; --line:#36403c;
+  --pos:#79a9e6; --neg:#e48d62; --calc:#5fbfa6; --warn:#d9a748; --faint:#252c2a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141817; --panel:#1c2120; --ink:#e6ebe8; --muted:#9aa59f; --line:#36403c;
+  --pos:#79a9e6; --neg:#e48d62; --calc:#5fbfa6; --warn:#d9a748; --faint:#252c2a; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55}
+.wrap{max-width:1000px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:40px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:2.1rem;font-weight:800;letter-spacing:-.01em}
+h2{font-size:1.35rem;font-weight:700}
+h3{font-size:1rem;font-weight:700}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+section{display:grid;gap:16px;min-width:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+.meta b{color:var(--ink);font-weight:500}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;min-width:0}
+.scroll{overflow-x:auto}
+svg text{font-family:var(--body);fill:var(--ink)}
+svg .mono{font-family:var(--mono)}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{font:500 .85rem var(--mono);padding:6px 12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:4px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tabs button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--pos);outline-offset:2px}
+.formula{font-family:var(--mono);font-size:.85rem;color:var(--muted);overflow-x:auto;white-space:nowrap}
+.calc{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+@media (max-width:720px){.calc{grid-template-columns:1fr}}
+.controls{display:grid;gap:12px;min-width:0}
+.ctl{display:grid;grid-template-columns:130px minmax(0,1fr) 64px;align-items:center;gap:10px;font-size:.88rem}
+.ctl output{font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+.ctl input[type=range]{width:100%;accent-color:var(--pos)}
+.ctl select{font:inherit;padding:3px 6px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:4px;min-width:0}
+.switch{display:flex;gap:16px;flex-wrap:wrap;font-size:.88rem}
+.switch label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.result{display:grid;gap:10px;align-content:start;min-width:0}
+.big{font-family:var(--display);font-size:3rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:1rem;font-weight:500;color:var(--muted);margin-left:6px}
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:56px minmax(0,1fr) 52px;gap:8px;align-items:center;font-family:var(--mono);font-size:.8rem;font-variant-numeric:tabular-nums}
+.track{height:10px;background:var(--faint);border-radius:2px;position:relative;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--pos)}
+.bar.mean .fill{background:var(--calc)}
+.chip{display:inline-block;font-family:var(--mono);font-size:.75rem;padding:2px 8px;border-radius:999px;border:1px solid var(--line)}
+.chip.ok{color:var(--calc);border-color:var(--calc)}
+.chip.warn{color:var(--warn);border-color:var(--warn)}
+.avisos{display:grid;gap:6px;font-size:.85rem;color:var(--warn)}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;font-variant-numeric:tabular-nums}
+th{font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+th.n,td.n{font-family:var(--mono);text-align:right}
+td.good{color:var(--calc);font-weight:600}
+.findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:720px){.findings{grid-template-columns:1fr}}
+.finding{display:grid;gap:6px;padding-top:12px;border-top:2px solid var(--ink);align-content:start}
+.finding .num{font-family:var(--display);font-size:1.8rem;font-weight:800}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:var(--muted)}
+.legend i{display:inline-block;width:22px;height:3px;vertical-align:middle;margin-right:6px}
+code{font-family:var(--mono);font-size:.88em}
+@media (prefers-reduced-motion:no-preference){.fill{transition:width .2s ease}}
+</style>
+
+<div class="wrap">
+<header style="display:grid;gap:12px">
+  <div class="eyebrow">Blur-con-esteroides · motor v2 · 26-11-2026</div>
+  <h1>Las redes NEAT y los agentes que las alimentan</h1>
+  <p>Tres agentes buscan datos cada semana, el curador los filtra y el orquestador reentrena 5 redes NEAT. Abajo están las 5 redes tal como quedaron en <code>modelos/motor_v002.pkl</code> (idénticas a v1: mismos datos y semillas), con sus pesos reales, y un calculador que reproduce su predicción.</p>
+  <div class="meta"><span>Filas aceptadas <b>2 378</b></span><span>Usadas por el motor <b>2 166</b></span><span>Redes <b>5</b></span><span>Generaciones <b>50</b></span><span>Penalización λ <b>8·10⁻⁴</b></span><span>Huella <b>fd29d7f2ca6ba8cf</b></span></div>
+</header>
+
+<section>
+  <div class="eyebrow">El sistema</div>
+  <h2>Cómo circulan los datos</h2>
+  <div class="panel scroll">
+  <svg viewBox="0 0 960 430" width="960" role="img" aria-label="Diagrama: agentes ZONA, DAÑO y MATERIALES entregan datos al curador, que pasa los aceptados al orquestador; este entrena el motor de 5 redes NEAT con corrección local y devuelve el mapa de necesidades a los agentes.">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"/></marker>
+      <marker id="ahc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--calc)"/></marker>
+    </defs>
+    <g font-size="13">
+      <text x="20" y="30" class="mono" font-size="11" style="fill:var(--muted)">AGENTES RECOLECTORES</text>
+      <rect x="20" y="44" width="190" height="66" rx="5" fill="var(--panel)" stroke="var(--pos)" stroke-width="1.5"/>
+      <text x="34" y="68" font-weight="600">ZONA</text><text x="34" y="86" font-size="11.5" style="fill:var(--muted)">clima, niebla, viento, cloruros</text><text x="34" y="101" class="mono" font-size="11" style="fill:var(--muted)">lunes 15:17</text>
+      <rect x="20" y="124" width="190" height="66" rx="5" fill="var(--panel)" stroke="var(--pos)" stroke-width="1.5"/>
+      <text x="34" y="148" font-weight="600">DAÑO</text><text x="34" y="166" font-size="11.5" style="fill:var(--muted)">patologías por zona y uso</text><text x="34" y="181" class="mono" font-size="11" style="fill:var(--muted)">miércoles 15:37</text>
+      <rect x="20" y="204" width="190" height="66" rx="5" fill="var(--panel)" stroke="var(--pos)" stroke-width="1.5"/>
+      <text x="34" y="228" font-weight="600">MATERIALES</text><text x="34" y="246" font-size="11.5" style="fill:var(--muted)">dosificaciones y cierre %</text><text x="34" y="261" class="mono" font-size="11" style="fill:var(--muted)">viernes 15:47</text>
+      <path d="M210 77 C240 77 240 157 262 157" fill="none" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#ah)"/>
+      <path d="M210 157 L262 157" fill="none" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#ah)"/>
+      <path d="M210 237 C240 237 240 157 262 157" fill="none" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#ah)"/>
+      <rect x="266" y="124" width="140" height="66" rx="5" fill="var(--faint)" stroke="var(--line)"/>
+      <text x="280" y="150" font-weight="600">Curador</text><text x="280" y="168" font-size="11.5" style="fill:var(--muted)">esquema, rangos,</text><text x="280" y="182" font-size="11.5" style="fill:var(--muted)">duplicados</text>
+      <text x="270" y="214" class="mono" font-size="11" style="fill:var(--muted)">2 378 aceptadas</text>
+      <text x="270" y="229" class="mono" font-size="11" style="fill:var(--neg)">11 rechazadas</text>
+      <path d="M406 157 L452 157" fill="none" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#ah)"/>
+      <rect x="456" y="124" width="140" height="66" rx="5" fill="var(--faint)" stroke="var(--line)"/>
+      <text x="470" y="150" font-weight="600">Orquestador</text><text x="470" y="168" font-size="11.5" style="fill:var(--muted)">entrena, registra,</text><text x="470" y="182" font-size="11.5" style="fill:var(--muted)">decide qué falta</text>
+      <path d="M596 157 L638 157" fill="none" stroke="var(--muted)" stroke-width="1.3" marker-end="url(#ah)"/>
+      <rect x="642" y="44" width="300" height="250" rx="6" fill="var(--panel)" stroke="var(--ink)" stroke-width="1.6"/>
+      <text x="658" y="68" font-weight="700" style="font-family:var(--display)">Motor BioCrete · 5 redes NEAT</text>
+      <g id="mini"></g>
+      <text x="658" y="190" font-size="12" style="fill:var(--muted)">promedio de las 5 redes = base global</text>
+      <rect x="658" y="198" width="268" height="34" rx="4" fill="var(--faint)"/>
+      <text x="668" y="220" font-size="12">+ corrección local RF (H3), peso n/(n+10)</text>
+      <rect x="658" y="240" width="268" height="34" rx="4" fill="var(--faint)"/>
+      <text x="668" y="262" font-size="12">+ intervalos conformes 80 % / 90 %</text>
+      <path d="M792 294 L792 330" fill="none" stroke="var(--calc)" stroke-width="1.6" marker-end="url(#ahc)"/>
+      <rect x="652" y="334" width="280" height="56" rx="5" fill="var(--panel)" stroke="var(--calc)" stroke-width="1.6"/>
+      <text x="666" y="358" font-weight="600" style="fill:var(--calc)">Predicción por zona y uso</text>
+      <text x="666" y="376" font-size="11.5" style="fill:var(--muted)">cierre %, intervalo, avisos de dominio</text>
+      <path d="M526 190 L526 330 L115 330 L115 274" fill="none" stroke="var(--calc)" stroke-width="1.4" stroke-dasharray="5 4" marker-end="url(#ahc)"/>
+      <text x="135" y="322" font-size="12" style="fill:var(--calc)">necesidades.md: combinaciones sin datos, los agentes las buscan primero</text>
+      <path d="M210 60 C420 44 560 44 652 52" fill="none" stroke="var(--warn)" stroke-width="1.3" stroke-dasharray="2 4"/>
+      <text x="300" y="34" font-size="11.5" style="fill:var(--warn)">humedad, viento y cloruros aún no son entradas de las redes</text>
+      <text x="20" y="412" class="mono" font-size="11" style="fill:var(--muted)">Cada recolector abre un pull request sin merge: tú revisas antes de que el dato entre.</text>
+    </g>
+  </svg>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Las 5 redes evolucionadas</div>
+  <h2>Qué aprendió cada red</h2>
+  <p>NEAT empezó con las 7 entradas, y la penalización de complejidad eliminó las conexiones que no mejoraban la validación entre laboratorios. Las entradas en gris quedaron sin conexión en la red elegida. Los números dentro de cada nodo cambian con el calculador de abajo.</p>
+  <div class="tabs" id="tabs" role="group" aria-label="Elegir red"></div>
+  <div class="panel scroll"><svg id="net" viewBox="0 0 820 400" width="820" role="img" aria-label="Topología de la red NEAT elegida"></svg></div>
+  <div class="legend"><span><i style="background:var(--pos)"></i>peso positivo</span><span><i style="background:var(--neg)"></i>peso negativo</span><span>grosor = |peso|</span><span>activación sigmoide; salida = cierre de fisura (0–1)</span></div>
+  <div class="formula" id="formula"></div>
+</section>
+
+<section>
+  <div class="eyebrow">Probar el motor</div>
+  <h2>Calculador con los pesos reales</h2>
+  <p>Mueve las condiciones del ensayo. Cada red calcula su cierre y el motor promedia las 5. Sin ensayos locales, el error esperado es de unos ±20 puntos. El motor solo predice entre 3 y 480 días de cierre y nunca da años de servicio: fuera de ese rango devuelve "sin predicción". Los años salen del modelo de vida útil de abajo.</p>
+  <div class="panel calc">
+    <div class="controls">
+      <div class="ctl"><label for="w0">Ancho de fisura</label><input id="w0" type="range" min="0.05" max="1" step="0.05" value="0.3"><output id="w0o"></output></div>
+      <div class="ctl"><label for="edad">Edad</label><input id="edad" type="range" min="3" max="480" step="1" value="28"><output id="edado"></output></div>
+      <div class="ctl"><label for="prot">Protección</label><select id="prot"><option value="0">0 · sin bacterias</option><option value="1" selected>1 · directa / comercial</option><option value="2">2 · portador</option><option value="3">3 · encapsulación</option></select><span></span></div>
+      <div class="switch">
+        <label><input id="marino" type="checkbox" checked> Ambiente marino</label>
+        <label><input id="lact" type="checkbox"> Lactato de calcio</label>
+        <label><input id="cur" type="checkbox"> Curado previo</label>
+        <label><input id="cris" type="checkbox"> Agente cristalino</label>
+      </div>
+    </div>
+    <div class="result">
+      <div class="eyebrow">Cierre de fisura predicho</div>
+      <div class="big" id="big"></div>
+      <div><span class="chip" id="estado"></span></div>
+      <div class="bars" id="bars"></div>
+      <div class="avisos" id="avisos"></div>
+    </div>
+  </div>
+</section>
+
+<section id="vida">
+  <div class="eyebrow">Vida útil · objetivo 25 a 40 años</div>
+  <h2>Cuánta reparación hace falta en cada zona</h2>
+  <p>Inicio de la corrosión por cloruros con el modelo de la fib B34, corregido: la difusión se congela a los 25 años, la reparación se cuenta una sola vez y se usa el 10 % de probabilidad como criterio de diseño. La fisura de diseño es de 0,3 mm. Nunca se informa un valor mayor que el horizonte: por encima de 40 años la salida dice "cumple 40 años". El Atlas anterior daba 150 años en 342 de las 384 zonas.</p>
+  <div class="findings">
+    <div class="finding"><div class="num">268 de 268</div><h3>zonas con cloruros llegan a 25 años</h3><p>Siempre con la mezcla adecuada. El cierre requerido tiene una mediana de 86 % (p10 30 %, p90 98 %).</p></div>
+    <div class="finding"><div class="num">87 de 268</div><h3>zonas pueden llegar a 40 años</h3><p>Con un cierre de 60–76 %. En el resto, ni cerrando la fisura del todo se llega con mezclas de norma.</p></div>
+    <div class="finding"><div class="num">78 %</div><h3>cierre que predice NEAT a 90 días</h3><p>Es igual para todas las opciones, porque las redes solo usan la edad y el curado. Con ±20 pp: a 25 años, 87 zonas cumplen, 9 quedan inciertas y 172 no cumplen.</p></div>
+  </div>
+  <div class="tabs" id="tabsObj" role="group" aria-label="Objetivo de vida útil">
+    <button aria-pressed="true" data-o="25">25 años</button><button aria-pressed="false" data-o="40">40 años</button>
+  </div>
+  <div class="panel calc">
+    <div class="scroll" style="min-width:0"><svg id="mapa" viewBox="0 0 420 520" width="420" role="img" aria-label="Zonas costeras del Perú coloreadas por el cierre requerido"></svg></div>
+    <div class="result">
+      <div class="eyebrow">Zona seleccionada</div>
+      <h3 id="zNom">Toca un punto del mapa</h3>
+      <div id="zDet" style="display:grid;gap:6px;font-size:.88rem"></div>
+      <div class="legend" id="leyenda"></div>
+    </div>
+  </div>
+  <h3>Sensibilidad en 5 zonas tipo: cierre requerido para 25 años</h3>
+  <div class="panel scroll"><table id="sens"></table></div>
+  <p style="font-size:.85rem;color:var(--muted)">Supuestos marcados como provisionales: el efecto de la fisura (Cappellesso 2024, 2 anchos), Cs de DuraCrete, α para IP/HS y los coeficientes de niebla y depósito. Los recolectores ZONA y MATERIALES deben reemplazarlos con mediciones. Fuente: <code>resultados/vida_zonas.json</code> y <code>resultados/sensibilidad_vida.json</code>.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Lectura</div>
+  <h2>Lo que dicen estas redes</h2>
+  <div class="findings">
+    <div class="finding"><div class="num">5 de 5</div><h3>usan la edad</h3><p>Es la única variable que todas conservan: el cierre sube con el tiempo en cualquier laboratorio.</p></div>
+    <div class="finding"><div class="num">3 de 5</div><h3>usan el curado previo</h3><p>Su efecto neto baja el cierre: fisurar una probeta ya madura deja menos margen de reparación.</p></div>
+    <div class="finding"><div class="num">5 entradas</div><h3>podadas en todas</h3><p>Ancho, protección, marino, lactato y cristalino no se sostienen entre Mousa y Cappellesso. Para que cuenten hacen falta ensayos que los varíen dentro de un mismo laboratorio.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Meta: menos de 20 puntos</div>
+  <h2>Error al predecir otro laboratorio</h2>
+  <p>Error absoluto medio (puntos de cierre) del híbrido H3 según cuántos grupos de ensayo locales se usan para calibrar. Fuente: <code>resultados/hibrido.json</code>.</p>
+  <div class="panel scroll">
+    <table>
+      <thead><tr><th>Grupos locales</th><th class="n">0</th><th class="n">2</th><th class="n">5</th><th class="n">10</th><th class="n">20</th><th class="n">40</th></tr></thead>
+      <tbody>
+        <tr><td>Predice Cappellesso (entrena con Mousa)</td><td class="n good">19,9</td><td class="n good">19,4</td><td class="n good">18,9</td><td class="n good">17,6</td><td class="n good">15,5</td><td class="n good">13,4</td></tr>
+        <tr><td>Predice Mousa (entrena con Cappellesso)</td><td class="n">20,4</td><td class="n">21,0</td><td class="n good">19,7</td><td class="n good">18,5</td><td class="n good">16,7</td><td class="n good">15,2</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Lo que el orquestador pide a los agentes</div>
+  <h2>Combinaciones sin ningún dato</h2>
+  <div class="panel scroll">
+    <table>
+      <thead><tr><th>Ambiente</th><th>Protección</th><th>Lactato Ca</th><th>Ancho</th><th>Filas</th></tr></thead>
+      <tbody>
+        <tr><td>marino</td><td>sin bacterias</td><td>sí</td><td class="n">0,5 mm</td><td class="n">0</td></tr>
+        <tr><td>marino</td><td>directa / comercial</td><td>sí</td><td class="n">0,5 mm</td><td class="n">0</td></tr>
+        <tr><td>marino</td><td>portador</td><td>no</td><td class="n">0,5 mm</td><td class="n">0</td></tr>
+        <tr><td>marino</td><td>portador</td><td>sí</td><td class="n">0,5 mm</td><td class="n">0</td></tr>
+        <tr><td>marino</td><td>encapsulación</td><td>no</td><td class="n">0,5 mm</td><td class="n">0</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+</div>
+
+<script>
+const REDES=[[{"id":164,"b":-0.18293,"in":[[-6,2.76653]]},{"id":0,"b":-0.00807,"in":[[-2,2.44432],[164,-0.3875]]}],[{"id":0,"b":-0.07469,"in":[[-2,1.30429]]}],[{"id":0,"b":-0.09914,"in":[[-2,2.89747],[-6,-0.35727]]}],[{"id":0,"b":-0.06605,"in":[[-2,1.2591]]}],[{"id":0,"b":-0.05547,"in":[[-2,1.58232],[-6,-0.07233]]}]];
+const ENTRADAS=["Ancho fisura w0","Edad","Protección bio","Ambiente marino","Lactato de calcio","Curado previo","Agente cristalino"];
+const MAX=[1,480,3,1,1,1,1];
+const COMB=["0,0,0","0,0,1","0,2,0","0,2,1","0,3,0","0,3,1","1,0,0","1,1,0"];
+const sig=z=>1/(1+Math.exp(-Math.max(-60,Math.min(60,5*z))));
+function activar(red,x){const v={};x.forEach((xi,i)=>v[-(i+1)]=xi);for(const n of red){let s=0;for(const[i,w]of n.in)s+=v[i]*w;v[n.id]=sig(n.b+s)}return v}
+const NS="http://www.w3.org/2000/svg";
+function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+let actual=0,xs=[];
+function dibujar(k){
+  const svg=document.getElementById('net');svg.replaceChildren();
+  const red=REDES[k],usadas=new Set();red.forEach(n=>n.in.forEach(([i])=>usadas.add(i)));
+  const pos={};ENTRADAS.forEach((_,i)=>pos[-(i+1)]=[170,40+i*52]);
+  const ocultas=red.filter(n=>n.id!==0);ocultas.forEach((n,j)=>pos[n.id]=[450,300+j*60]);pos[0]=[680,170];
+  const v=activar(red,xs);
+  for(const n of red)for(const[i,w]of n.in){const[a,b]=pos[i],[c,d]=pos[n.id];const mx=(a+c)/2;
+    svg.append(el('path',{d:`M${a+14} ${b} C${mx} ${b} ${mx} ${d} ${c-18} ${d}`,fill:'none',stroke:w>0?'var(--pos)':'var(--neg)','stroke-width':1+Math.abs(w)*2.2,'stroke-linecap':'round',opacity:.9}));
+    svg.append(el('text',{x:mx,y:(b+d)/2-12,'text-anchor':'middle','font-size':12,class:'mono',style:`fill:${w>0?'var(--pos)':'var(--neg)'}`},(w>0?'+':'')+w.toFixed(2)))}
+  ENTRADAS.forEach((nom,i)=>{const id=-(i+1),[x,y]=pos[id],on=usadas.has(id);
+    svg.append(el('circle',{cx:x,cy:y,r:13,fill:on?'var(--panel)':'var(--faint)',stroke:on?'var(--ink)':'var(--line)','stroke-width':1.5}));
+    svg.append(el('text',{x:x-22,y:y+4,'text-anchor':'end','font-size':13,style:on?'':'fill:var(--muted)'},nom));
+    svg.append(el('text',{x:x,y:y+4,'text-anchor':'middle','font-size':9.5,class:'mono',style:'fill:var(--muted)'},xs[i].toFixed(2)))});
+  for(const n of red){const[x,y]=pos[n.id],out=n.id===0;
+    svg.append(el('circle',{cx:x,cy:y,r:out?24:17,fill:out?'var(--calc)':'var(--panel)',stroke:out?'var(--calc)':'var(--ink)','stroke-width':1.5}));
+    svg.append(el('text',{x:x,y:y+4,'text-anchor':'middle','font-size':11,class:'mono',style:out?'fill:var(--bg)':''},(100*v[n.id]).toFixed(0)+'%'));
+    svg.append(el('text',{x:x,y:y+(out?42:34),'text-anchor':'middle','font-size':11.5,style:'fill:var(--muted)'},(out?'salida · ':'oculta '+n.id+' · ')+'sesgo '+n.b.toFixed(3)))}
+  svg.append(el('text',{x:680,y:132,'text-anchor':'middle','font-size':13,'font-weight':600},'Cierre'));
+  const nodos=red.length,conex=red.reduce((s,n)=>s+n.in.length,0);
+  svg.append(el('text',{x:810,y:390,'text-anchor':'end','font-size':11.5,class:'mono',style:'fill:var(--muted)'},`red ${k+1}: ${nodos} nodo${nodos>1?'s':''} (${nodos-1} oculto${nodos-1===1?'':'s'}), ${conex} conexion${conex>1?'es':''}`));
+  const o=red.find(n=>n.id===0);
+  const nom=i=>i<0?(i===-2?'edad/480':ENTRADAS[-i-1].toLowerCase()):'h'+i;
+  document.getElementById('formula').textContent='cierre = σ(5·( '+o.b.toFixed(3)+' '+o.in.map(([i,w])=>(w<0?'− ':'+ ')+Math.abs(w).toFixed(3)+'·'+nom(i)).join(' ')+' ))'+(ocultas.length?'      h164 = σ(5·( −0.183 + 2.767·curado previo ))':'');
+}
+function mini(){const g=document.getElementById('mini');g.replaceChildren();
+  REDES.forEach((red,k)=>{const x=660+k*55,y=84;g.append(el('rect',{x,y,width:47,height:84,rx:4,fill:'var(--faint)'}));
+    for(let i=0;i<7;i++){const on=red.some(n=>n.in.some(([j])=>j===-(i+1)));g.append(el('circle',{cx:x+9,cy:y+10+i*10,r:3,fill:on?'var(--ink)':'var(--line)'}))}
+    if(red.length>1)g.append(el('circle',{cx:x+24,cy:y+40,r:3.5,fill:'var(--pos)'}));
+    g.append(el('circle',{cx:x+38,cy:y+40,r:4.5,fill:'var(--calc)'}));
+    g.append(el('text',{x:x+23,y:y+80,'text-anchor':'middle','font-size':10.5,class:'mono',style:'fill:var(--muted)'},'red '+(k+1)))})}
+const $=id=>document.getElementById(id);
+function leer(){const raw=[+$('w0').value,+$('edad').value,+$('prot').value,$('marino').checked?1:0,$('lact').checked?1:0,$('cur').checked?1:0,$('cris').checked?1:0];
+  xs=raw.map((x,i)=>Math.min(1,Math.max(0,x/MAX[i])));return raw}
+function calcular(){const raw=leer();$('w0o').textContent=raw[0].toFixed(2)+' mm';$('edado').textContent=raw[1]+' d';
+  const ps=REDES.map(r=>activar(r,xs)[0]),m=ps.reduce((a,b)=>a+b,0)/ps.length;
+  $('big').innerHTML=(100*m).toFixed(1)+'<small>% ± 20 pp</small>';
+  const bars=$('bars');bars.replaceChildren();
+  ps.concat([m]).forEach((p,i)=>{const d=document.createElement('div');d.className='bar'+(i===5?' mean':'');
+    d.innerHTML=`<span>${i===5?'motor':'red '+(i+1)}</span><div class="track"><div class="fill" style="width:${(100*p).toFixed(1)}%"></div></div><span style="text-align:right">${(100*p).toFixed(1)}%</span>`;bars.append(d)});
+  const av=[];if(raw[3]===1&&raw[0]>0.375)av.push('Ancho mayor que el máximo visto en ambiente marino (0,375 mm).');
+  if(!COMB.includes(`${raw[3]},${raw[2]},${raw[4]}`))av.push('Combinación de ambiente, protección y lactato sin ningún dato: la predicción es una extrapolación.');
+  const ch=$('estado');ch.className='chip '+(av.length?'warn':'ok');ch.textContent=av.length?'fuera del dominio de datos':'dentro del dominio de datos';
+  $('avisos').replaceChildren(...av.map(t=>{const p=document.createElement('div');p.textContent='⚠ '+t;return p}));
+  dibujar(actual)}
+const tabs=$('tabs');REDES.forEach((_,k)=>{const b=document.createElement('button');b.textContent='Red '+(k+1);b.setAttribute('aria-pressed',k===0);
+  b.onclick=()=>{actual=k;[...tabs.children].forEach((c,j)=>c.setAttribute('aria-pressed',j===k));dibujar(k)};tabs.append(b)});
+['w0','edad','prot','marino','lact','cur','cris'].forEach(id=>$(id).addEventListener('input',calcular));
+mini();calcular();
+</script>
+<script type="application/json" id="datosZonas">[["PER-000-0","Tumbes",-3.459,-80.364,"salpicadura",90.3,null,"IP a/b 0.35 · 80 mm","4 años","30.5 años"],["PER-000-1","Tumbes",-3.474,-80.347,"atmosferico_marino",53.4,82.1,"IP a/b 0.35 · 50 mm","9 años","cumple 40 años"],["PER-000-2","Tumbes",-3.546,-80.263,"seco",null,null,"","",""],["PER-001-0","Tumbes",-3.505,-80.53,"salpicadura",89.0,null,"IP a/b 0.35 · 80 mm","4.5 años","31.5 años"],["PER-001-1","Tumbes",-3.524,-80.517,"atmosferico_marino",51.1,80.4,"IP a/b 0.35 · 50 mm","9.5 años","cumple 40 años"],["PER-001-2","Tumbes",-3.616,-80.457,"seco",null,null,"","",""],["PER-002-0","Tumbes",-3.637,-80.644,"salpicadura",90.6,null,"IP a/b 0.35 · 80 mm","4 años","30.5 años"],["PER-002-1","Tumbes",-3.655,-80.631,"seco",null,null,"","",""],["PER-002-2","Tumbes",-3.745,-80.567,"seco",null,null,"","",""],["PER-003-0","Tumbes",-3.733,-80.796,"salpicadura",88.6,null,"IP a/b 0.35 · 80 mm","4.5 años","31.5 años"],["PER-003-1","Tumbes",-3.749,-80.78,"seco",null,null,"","",""],["PER-003-2","Tumbes",-3.828,-80.704,"seco",null,null,"","",""],["PER-004-0","Tumbes",-3.886,-80.879,"salpicadura",89.1,null,"IP a/b 0.35 · 80 mm","4.5 años","31 años"],["PER-004-1","Tumbes",-3.9,-80.861,"seco",null,null,"","",""],["PER-004-2","Tumbes",-3.969,-80.775,"seco",null,null,"","",""],["PER-005-0","Tumbes",-4.004,-81.011,"salpicadura",91.2,null,"IP a/b 0.35 · 80 mm","4 años","30 años"],["PER-005-1","Tumbes",-4.017,-80.993,"seco",null,null,"","",""],["PER-005-2","Tumbes",-4.081,-80.903,"seco",null,null,"","",""],["PER-006-0","Piura",-4.132,-81.127,"salpicadura",91.5,null,"IP a/b 0.35 · 80 mm","4 años","29.5 años"],["PER-006-1","Piura",-4.149,-81.112,"atmosferico_marino",55.1,83.4,"IP a/b 0.35 · 50 mm","8.5 años","cumple 40 años"],["PER-006-2","Piura",-4.231,-81.038,"seco",null,null,"","",""],["PER-007-0","Piura",-4.25,-81.258,"salpicadura",86.7,null,"IP a/b 0.35 · 80 mm","4.5 años","32.5 años"],["PER-007-1","Piura",-4.264,-81.24,"atmosferico_marino",46.9,77.0,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-007-2","Piura",-4.33,-81.152,"seco",null,null,"","",""],["PER-008-0","Piura",-4.417,-81.286,"salpicadura",86.8,null,"IP a/b 0.35 · 80 mm","4.5 años","32.5 años"],["PER-008-1","Piura",-4.421,-81.263,"atmosferico_marino",46.4,76.6,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-008-2","Piura",-4.443,-81.155,"seco",null,null,"","",""],["PER-009-0","Piura",-4.577,-81.311,"salpicadura",83.9,null,"IP a/b 0.35 · 80 mm","5 años","34.5 años"],["PER-009-1","Piura",-4.576,-81.288,"atmosferico_marino",44.6,75.2,"IP a/b 0.35 · 50 mm","11 años","cumple 40 años"],["PER-009-2","Piura",-4.574,-81.178,"seco",null,null,"","",""],["PER-010-0","Piura",-4.725,-81.297,"salpicadura",83.4,null,"IP a/b 0.35 · 80 mm","5 años","35 años"],["PER-010-1","Piura",-4.713,-81.278,"atmosferico_marino",43.9,74.7,"IP a/b 0.35 · 50 mm","11 años","cumple 40 años"],["PER-010-2","Piura",-4.655,-81.184,"seco",null,null,"","",""],["PER-011-0","Piura",-4.862,-81.181,"salpicadura",83.1,null,"IP a/b 0.35 · 80 mm","5 años","35 años"],["PER-011-1","Piura",-4.848,-81.163,"atmosferico_marino",44.0,74.7,"IP a/b 0.35 · 50 mm","11 años","cumple 40 años"],["PER-011-2","Piura",-4.781,-81.075,"seco",null,null,"","",""],["PER-012-0","Piura",-5.001,-81.07,"salpicadura",87.6,null,"IP a/b 0.35 · 80 mm","4.5 años","32 años"],["PER-012-1","Piura",-4.995,-81.049,"atmosferico_marino",48.1,78.0,"IP a/b 0.35 · 50 mm","10 años","cumple 40 años"],["PER-012-2","Piura",-4.966,-80.942,"seco",null,null,"","",""],["PER-013-0","Piura",-5.079,-81.164,"salpicadura",86.6,null,"IP a/b 0.35 · 80 mm","4.5 años","32.5 años"],["PER-013-1","Piura",-5.096,-81.149,"atmosferico_marino",46.9,77.0,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-013-2","Piura",-5.179,-81.077,"seco",null,null,"","",""],["PER-014-0","Piura",-5.223,-81.186,"salpicadura",82.5,null,"IP a/b 0.35 · 80 mm","5 años","35.5 años"],["PER-014-1","Piura",-5.218,-81.164,"atmosferico_marino",41.5,72.7,"IP a/b 0.35 · 50 mm","11.5 años","cumple 40 años"],["PER-014-2","Piura",-5.191,-81.057,"seco",null,null,"","",""],["PER-015-0","Piura",-5.331,-81.06,"salpicadura",81.0,null,"IP a/b 0.35 · 80 mm","5.5 años","36.5 años"],["PER-015-1","Piura",-5.313,-81.046,"atmosferico_marino",40.6,72.0,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-015-2","Piura",-5.224,-80.981,"atmosferico_marino",44.6,75.2,"IP a/b 0.35 · 50 mm","11 años","cumple 40 años"],["PER-016-0","Piura",-5.46,-80.933,"salpicadura",84.6,null,"IP a/b 0.35 · 80 mm","5 años","34 años"],["PER-016-1","Piura",-5.447,-80.914,"atmosferico_marino",45.6,75.9,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-016-2","Piura",-5.384,-80.823,"seco",null,null,"","",""],["PER-017-0","Piura",-5.625,-80.862,"salpicadura",85.7,null,"IP a/b 0.35 · 80 mm","4.5 años","33.5 años"],["PER-017-1","Piura",-5.621,-80.84,"atmosferico_marino",46.4,76.6,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-017-2","Piura",-5.6,-80.731,"seco",null,null,"","",""],["PER-018-0","Piura",-5.798,-80.891,"salpicadura",85.9,null,"IP a/b 0.35 · 80 mm","4.5 años","33 años"],["PER-018-1","Piura",-5.811,-80.873,"atmosferico_marino",47.3,77.3,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-018-2","Piura",-5.875,-80.783,"atmosferico_marino",46.3,76.5,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-019-0","Piura",-5.817,-81.041,"salpicadura",86.7,null,"IP a/b 0.35 · 80 mm","4.5 años","32.5 años"],["PER-019-1","Piura",-5.839,-81.045,"atmosferico_marino",44.4,75.0,"IP a/b 0.35 · 50 mm","11 años","cumple 40 años"],["PER-019-2","Piura",-5.947,-81.066,"niebla_salina",89.0,null,"IP a/b 0.35 · 65 mm","4 años","31.5 años"],["PER-020-0","Piura",-5.881,-81.145,"salpicadura",85.6,null,"IP a/b 0.35 · 80 mm","4.5 años","33.5 años"],["PER-020-1","Piura",-5.89,-81.124,"atmosferico_marino",45.2,75.6,"IP a/b 0.35 · 50 mm","10.5 años","cumple 40 años"],["PER-020-2","Piura",-5.933,-81.022,"niebla_salina",86.7,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-021-0","Piura",-6.049,-81.117,"salpicadura",79.5,null,"IP a/b 0.35 · 80 mm","5.5 años","37.5 años"],["PER-021-1","Piura",-6.036,-81.098,"niebla_salina",94.8,null,"IP a/b 0.35 · 65 mm","3.5 años","28 años"],["PER-021-2","Piura",-5.973,-81.007,"niebla_salina",88.1,null,"IP a/b 0.35 · 65 mm","4.5 años","32 años"],["PER-022-0","Piura",-6.158,-80.976,"salpicadura",98.2,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-022-1","Piura",-6.139,-80.963,"niebla_salina",88.3,null,"IP a/b 0.35 · 65 mm","4.5 años","31.5 años"],["PER-022-2","Piura",-6.047,-80.903,"niebla_salina",87.3,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-023-0","Piura",-6.261,-80.828,"salpicadura",80.3,null,"IP a/b 0.35 · 80 mm","5.5 años","37 años"],["PER-023-1","Piura",-6.243,-80.814,"atmosferico_marino",39.9,71.5,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-023-2","Piura",-6.156,-80.746,"atmosferico_marino",43.9,74.6,"IP a/b 0.35 · 50 mm","11 años","cumple 40 años"],["PER-024-0","Piura",-6.354,-80.676,"salpicadura",80.0,null,"IP a/b 0.35 · 80 mm","5.5 años","37 años"],["PER-024-1","Piura",-6.334,-80.666,"niebla_salina",94.5,null,"IP a/b 0.35 · 65 mm","3.5 años","28 años"],["PER-024-2","Piura",-6.236,-80.616,"atmosferico_marino",42.1,73.2,"IP a/b 0.35 · 50 mm","11.5 años","cumple 40 años"],["PER-025-0","Lambayeque",-6.435,-80.514,"salpicadura",79.2,null,"IP a/b 0.35 · 80 mm","5.5 años","37.5 años"],["PER-025-1","Lambayeque",-6.415,-80.504,"niebla_salina",93.3,null,"IP a/b 0.35 · 65 mm","3.5 años","28.5 años"],["PER-025-2","Lambayeque",-6.316,-80.454,"atmosferico_marino",39.9,71.5,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-026-0","Lambayeque",-6.515,-80.352,"salpicadura",78.9,null,"IP a/b 0.35 · 80 mm","5.5 años","38 años"],["PER-026-1","Lambayeque",-6.495,-80.342,"atmosferico_marino",37.7,69.8,"IP a/b 0.35 · 50 mm","12.5 años","cumple 40 años"],["PER-026-2","Lambayeque",-6.397,-80.291,"atmosferico_marino",42.5,73.5,"IP a/b 0.35 · 50 mm","11.5 años","cumple 40 años"],["PER-027-0","Lambayeque",-6.603,-80.195,"salpicadura",78.9,null,"IP a/b 0.35 · 80 mm","5.5 años","38 años"],["PER-027-1","Lambayeque",-6.584,-80.183,"niebla_salina",93.2,null,"IP a/b 0.35 · 65 mm","4 años","28.5 años"],["PER-027-2","Lambayeque",-6.489,-80.126,"atmosferico_marino",41.7,72.9,"IP a/b 0.35 · 50 mm","11.5 años","cumple 40 años"],["PER-028-0","Lambayeque",-6.705,-80.046,"salpicadura",78.7,null,"IP a/b 0.35 · 80 mm","5.5 años","38 años"],["PER-028-1","Lambayeque",-6.688,-80.031,"niebla_salina",93.2,null,"IP a/b 0.35 · 65 mm","4 años","29 años"],["PER-028-2","Lambayeque",-6.605,-79.959,"atmosferico_marino",42.9,73.9,"IP a/b 0.35 · 50 mm","11 años","cumple 40 años"],["PER-029-0","Lambayeque",-6.847,-79.944,"salpicadura",78.1,null,"IP a/b 0.35 · 80 mm","6 años","38.5 años"],["PER-029-1","Lambayeque",-6.835,-79.924,"niebla_salina",90.7,null,"IP a/b 0.35 · 65 mm","4 años","30 años"],["PER-029-2","Lambayeque",-6.779,-79.829,"seco",null,null,"","",""],["PER-030-0","Lambayeque",-6.982,-79.831,"salpicadura",99.6,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-030-1","Lambayeque",-6.966,-79.815,"niebla_salina",91.0,null,"IP a/b 0.35 · 65 mm","4 años","30 años"],["PER-030-2","Lambayeque",-6.891,-79.734,"atmosferico_marino",37.1,69.3,"IP a/b 0.35 · 50 mm","12.5 años","cumple 40 años"],["PER-031-0","Lambayeque",-7.109,-79.703,"salpicadura",97.1,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-031-1","Lambayeque",-7.098,-79.684,"atmosferico_marino",40.9,72.3,"IP a/b 0.35 · 50 mm","11.5 años","cumple 40 años"],["PER-031-2","Lambayeque",-7.043,-79.588,"seco",null,null,"","",""],["PER-032-0","La Libertad",-7.254,-79.622,"salpicadura",79.1,null,"IP a/b 0.35 · 80 mm","5.5 años","37.5 años"],["PER-032-1","La Libertad",-7.242,-79.603,"atmosferico_marino",42.6,73.6,"IP a/b 0.35 · 50 mm","11.5 años","cumple 40 años"],["PER-032-2","La Libertad",-7.184,-79.508,"seco",null,null,"","",""],["PER-033-0","La Libertad",-7.417,-79.586,"salpicadura",80.3,null,"IP a/b 0.35 · 80 mm","5.5 años","37 años"],["PER-033-1","La Libertad",-7.412,-79.564,"atmosferico_marino",39.7,71.3,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-033-2","La Libertad",-7.386,-79.456,"seco",null,null,"","",""],["PER-034-0","La Libertad",-7.569,-79.499,"salpicadura",81.2,null,"IP a/b 0.35 · 80 mm","5.5 años","36 años"],["PER-034-1","La Libertad",-7.556,-79.481,"niebla_salina",94.2,null,"IP a/b 0.35 · 65 mm","3.5 años","28 años"],["PER-034-2","La Libertad",-7.494,-79.389,"atmosferico_marino",40.5,72.0,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-035-0","La Libertad",-7.715,-79.463,"salpicadura",78.3,null,"IP a/b 0.35 · 80 mm","5.5 años","38 años"],["PER-035-1","La Libertad",-7.707,-79.442,"atmosferico_marino",36.9,69.1,"IP a/b 0.35 · 50 mm","12.5 años","cumple 40 años"],["PER-035-2","La Libertad",-7.672,-79.337,"atmosferico_marino",40.2,71.7,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-036-0","La Libertad",-7.859,-79.364,"salpicadura",99.0,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-036-1","La Libertad",-7.847,-79.345,"niebla_salina",89.4,null,"IP a/b 0.35 · 65 mm","4 años","31 años"],["PER-036-2","La Libertad",-7.787,-79.252,"atmosferico_marino",39.6,71.2,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-037-0","La Libertad",-7.984,-79.236,"salpicadura",95.7,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-037-1","La Libertad",-7.966,-79.222,"niebla_salina",89.3,null,"IP a/b 0.35 · 65 mm","4 años","31 años"],["PER-037-2","La Libertad",-7.879,-79.154,"seco",null,null,"","",""],["PER-038-0","La Libertad",-8.1,-79.109,"salpicadura",78.2,null,"IP a/b 0.35 · 80 mm","5.5 años","38 años"],["PER-038-1","La Libertad",-8.084,-79.093,"atmosferico_marino",35.7,68.2,"IP a/b 0.35 · 50 mm","13 años","cumple 40 años"],["PER-038-2","La Libertad",-8.007,-79.014,"seco",null,null,"","",""],["PER-039-0","La Libertad",-8.226,-78.987,"salpicadura",79.2,null,"IP a/b 0.35 · 80 mm","5.5 años","37.5 años"],["PER-039-1","La Libertad",-8.214,-78.967,"niebla_salina",86.7,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-039-2","La Libertad",-8.156,-78.873,"seco",null,null,"","",""],["PER-040-0","La Libertad",-8.38,-78.9,"salpicadura",99.5,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-040-1","La Libertad",-8.377,-78.877,"niebla_salina",86.8,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-040-2","La Libertad",-8.365,-78.767,"seco",null,null,"","",""],["PER-041-0","La Libertad",-8.488,-78.86,"salpicadura",99.3,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-041-1","La Libertad",-8.471,-78.846,"niebla_salina",86.6,null,"IP a/b 0.35 · 65 mm","4.5 años","33 años"],["PER-041-2","La Libertad",-8.387,-78.773,"seco",null,null,"","",""],["PER-042-0","La Libertad",-8.63,-78.752,"salpicadura",81.8,null,"IP a/b 0.35 · 80 mm","5 años","36 años"],["PER-042-1","La Libertad",-8.622,-78.73,"atmosferico_marino",41.6,72.8,"IP a/b 0.35 · 50 mm","11.5 años","cumple 40 años"],["PER-042-2","La Libertad",-8.586,-78.625,"seco",null,null,"","",""],["PER-043-0","La Libertad",-8.794,-78.747,"salpicadura",80.5,null,"IP a/b 0.35 · 80 mm","5.5 años","36.5 años"],["PER-043-1","La Libertad",-8.787,-78.725,"niebla_salina",90.4,null,"IP a/b 0.35 · 65 mm","4 años","30.5 años"],["PER-043-2","La Libertad",-8.754,-78.619,"atmosferico_marino",36.3,68.6,"IP a/b 0.35 · 50 mm","13 años","cumple 40 años"],["PER-044-0","La Libertad",-8.944,-78.65,"salpicadura",99.5,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-044-1","La Libertad",-8.936,-78.629,"niebla_salina",89.0,null,"IP a/b 0.35 · 65 mm","4 años","31.5 años"],["PER-044-2","Áncash",-8.894,-78.526,"seco",null,null,"","",""],["PER-045-0","Áncash",-9.078,-78.618,"salpicadura",97.0,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-045-1","Áncash",-9.066,-78.598,"niebla_salina",89.0,null,"IP a/b 0.35 · 65 mm","4 años","31.5 años"],["PER-045-2","Áncash",-9.009,-78.503,"seco",null,null,"","",""],["PER-046-0","Áncash",-9.162,-78.611,"salpicadura",98.7,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-046-1","Áncash",-9.163,-78.589,"niebla_salina",91.1,null,"IP a/b 0.35 · 65 mm","4 años","30 años"],["PER-046-2","Áncash",-9.171,-78.478,"seco",null,null,"","",""],["PER-047-0","Áncash",-9.177,-78.55,"salpicadura",98.9,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-047-1","Áncash",-9.155,-78.555,"niebla_salina",91.4,null,"IP a/b 0.35 · 65 mm","4 años","30 años"],["PER-047-2","Áncash",-9.047,-78.576,"atmosferico_marino",37.2,69.4,"IP a/b 0.35 · 50 mm","12.5 años","cumple 40 años"],["PER-048-0","Áncash",-9.283,-78.508,"salpicadura",79.3,null,"IP a/b 0.35 · 80 mm","5.5 años","37.5 años"],["PER-048-1","Áncash",-9.276,-78.487,"atmosferico_marino",38.3,70.2,"IP a/b 0.35 · 50 mm","12.5 años","cumple 40 años"],["PER-048-2","Áncash",-9.24,-78.381,"seco",null,null,"","",""],["PER-049-0","Áncash",-9.392,-78.429,"salpicadura",99.7,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-049-1","Áncash",-9.383,-78.409,"atmosferico_marino",38.1,70.1,"IP a/b 0.35 · 50 mm","12.5 años","cumple 40 años"],["PER-049-2","Áncash",-9.336,-78.308,"seco",null,null,"","",""],["PER-050-0","Áncash",-9.536,-78.387,"salpicadura",80.2,null,"IP a/b 0.35 · 80 mm","5.5 años","37 años"],["PER-050-1","Áncash",-9.534,-78.365,"atmosferico_marino",37.8,69.8,"IP a/b 0.35 · 50 mm","12.5 años","cumple 40 años"],["PER-050-2","Áncash",-9.52,-78.254,"seco",null,null,"","",""],["PER-051-0","Áncash",-9.686,-78.317,"salpicadura",78.1,null,"IP a/b 0.35 · 80 mm","6 años","38.5 años"],["PER-051-1","Áncash",-9.673,-78.298,"atmosferico_marino",32.7,65.8,"IP a/b 0.35 · 50 mm","13.5 años","cumple 40 años"],["PER-051-2","Áncash",-9.611,-78.206,"seco",null,null,"","",""],["PER-052-0","Áncash",-9.831,-78.232,"salpicadura",99.9,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-052-1","Áncash",-9.826,-78.21,"niebla_salina",84.0,null,"IP a/b 0.35 · 65 mm","5 años","34.5 años"],["PER-052-2","Áncash",-9.8,-78.101,"seco",null,null,"","",""],["PER-053-0","Áncash",-9.989,-78.201,"salpicadura",98.5,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-053-1","Áncash",-9.981,-78.179,"atmosferico_marino",31.7,65.0,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-053-2","Áncash",-9.947,-78.073,"seco",null,null,"","",""],["PER-054-0","Áncash",-10.143,-78.162,"salpicadura",98.9,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-054-1","Áncash",-10.132,-78.142,"niebla_salina",88.3,null,"IP a/b 0.35 · 65 mm","4.5 años","31.5 años"],["PER-054-2","Áncash",-10.08,-78.043,"seco",null,null,"","",""],["PER-055-0","Áncash",-10.287,-78.072,"salpicadura",99.3,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-055-1","Áncash",-10.278,-78.051,"niebla_salina",91.3,null,"IP a/b 0.35 · 65 mm","4 años","30 años"],["PER-055-2","Áncash",-10.235,-77.948,"seco",null,null,"","",""],["PER-056-0","Áncash",-10.427,-77.997,"salpicadura",98.3,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-056-1","Áncash",-10.417,-77.977,"niebla_salina",90.5,null,"IP a/b 0.35 · 65 mm","4 años","30.5 años"],["PER-056-2","Áncash",-10.364,-77.878,"seco",null,null,"","",""],["PER-057-0","Áncash",-10.571,-77.906,"salpicadura",99.0,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-057-1","Áncash",-10.559,-77.887,"niebla_salina",85.2,null,"IP a/b 0.35 · 65 mm","4.5 años","33.5 años"],["PER-057-2","Lima",-10.501,-77.793,"seco",null,null,"","",""],["PER-058-0","Lima",-10.72,-77.807,"salpicadura",98.8,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-058-1","Lima",-10.706,-77.789,"atmosferico_marino",34.2,67.0,"IP a/b 0.35 · 50 mm","13.5 años","cumple 40 años"],["PER-058-2","Lima",-10.638,-77.702,"seco",null,null,"","",""],["PER-059-0","Lima",-10.853,-77.707,"salpicadura",98.6,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-059-1","Lima",-10.842,-77.688,"atmosferico_marino",35.2,67.8,"IP a/b 0.35 · 50 mm","13 años","cumple 40 años"],["PER-059-2","Lima",-10.788,-77.59,"seco",null,null,"","",""],["PER-060-0","Lima",-11.011,-77.657,"salpicadura",99.0,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-060-1","Lima",-11.005,-77.635,"niebla_salina",85.5,null,"IP a/b 0.35 · 65 mm","4.5 años","33.5 años"],["PER-060-2","Lima",-10.98,-77.526,"seco",null,null,"","",""],["PER-061-0","Lima",-11.163,-77.594,"salpicadura",99.6,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-061-1","Lima",-11.164,-77.571,"niebla_salina",90.1,null,"IP a/b 0.35 · 65 mm","4 años","30.5 años"],["PER-061-2","Lima",-11.172,-77.459,"seco",null,null,"","",""],["PER-062-0","Lima",-11.294,-77.641,"salpicadura",98.4,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-062-1","Lima",-11.283,-77.621,"niebla_salina",91.8,null,"IP a/b 0.35 · 65 mm","4 años","29.5 años"],["PER-062-2","Lima",-11.23,-77.523,"niebla_salina",83.4,null,"IP a/b 0.35 · 65 mm","5 años","34.5 años"],["PER-063-0","Lima",-11.385,-77.485,"salpicadura",97.9,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-063-1","Lima",-11.365,-77.473,"niebla_salina",87.2,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-063-2","Lima",-11.271,-77.416,"atmosferico_marino",22.4,57.6,"IP a/b 0.35 · 50 mm","16.5 años","cumple 40 años"],["PER-064-0","Lima",-11.485,-77.336,"salpicadura",95.3,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-064-1","Lima",-11.469,-77.32,"atmosferico_marino",29.4,63.2,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-064-2","Lima",-11.389,-77.244,"seco",null,null,"","",""],["PER-065-0","Lima",-11.62,-77.237,"salpicadura",99.1,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-065-1","Lima",-11.608,-77.217,"atmosferico_marino",34.0,66.8,"IP a/b 0.35 · 50 mm","13.5 años","cumple 40 años"],["PER-065-2","Lima",-11.551,-77.121,"seco",null,null,"","",""],["PER-066-0","Lima Province",-11.77,-77.18,"salpicadura",99.3,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-066-1","Lima Province",-11.768,-77.157,"seco",null,null,"","",""],["PER-066-2","Lima Province",-11.761,-77.045,"seco",null,null,"","",""],["PER-067-0","Lima Province",-11.921,-77.147,"salpicadura",99.9,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-067-1","Lima Province",-11.916,-77.125,"niebla_salina",83.5,null,"IP a/b 0.35 · 65 mm","5 años","34.5 años"],["PER-067-2","Lima Province",-11.891,-77.015,"seco",null,null,"","",""],["PER-068-0","Callao",-12.072,-77.153,"salpicadura",98.5,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-068-1","Callao",-12.059,-77.135,"niebla_salina",87.2,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-068-2","Lima Province",-11.991,-77.046,"atmosferico_marino",33.0,66.0,"IP a/b 0.35 · 50 mm","13.5 años","cumple 40 años"],["PER-069-0","Lima Province",-12.18,-77.045,"salpicadura",95.8,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-069-1","Lima Province",-12.168,-77.026,"atmosferico_marino",28.1,62.2,"IP a/b 0.35 · 50 mm","15 años","cumple 40 años"],["PER-069-2","Lima Province",-12.109,-76.93,"seco",null,null,"","",""],["PER-070-0","Lima Province",-12.274,-76.901,"salpicadura",95.5,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-070-1","Lima Province",-12.256,-76.888,"atmosferico_marino",28.9,62.8,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-070-2","Lima Province",-12.165,-76.824,"seco",null,null,"","",""],["PER-071-0","Lima Province",-12.405,-76.783,"salpicadura",97.1,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-071-1","Lima Province",-12.401,-76.761,"niebla_salina",77.6,null,"IP a/b 0.35 · 65 mm","5.5 años","38.5 años"],["PER-071-2","Lima",-12.383,-76.65,"seco",null,null,"","",""],["PER-072-0","Lima",-12.545,-76.743,"salpicadura",95.9,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-072-1","Lima",-12.529,-76.727,"atmosferico_marino",29.5,63.3,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-072-2","Lima",-12.454,-76.645,"seco",null,null,"","",""],["PER-073-0","Lima",-12.696,-76.657,"salpicadura",96.8,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-073-1","Lima",-12.687,-76.636,"atmosferico_marino",31.1,64.5,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-073-2","Lima",-12.641,-76.534,"seco",null,null,"","",""],["PER-074-0","Lima",-12.831,-76.54,"salpicadura",97.8,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-074-1","Lima",-12.818,-76.521,"atmosferico_marino",28.8,62.7,"IP a/b 0.35 · 50 mm","15 años","cumple 40 años"],["PER-074-2","Lima",-12.756,-76.428,"seco",null,null,"","",""],["PER-075-0","Lima",-13.0,-76.496,"salpicadura",97.0,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-075-1","Lima",-12.992,-76.475,"atmosferico_marino",31.4,64.8,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-075-2","Lima",-12.952,-76.37,"seco",null,null,"","",""],["PER-076-0","Lima",-13.145,-76.391,"salpicadura",97.4,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-076-1","Lima",-13.131,-76.373,"atmosferico_marino",32.1,65.3,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-076-2","Lima",-13.065,-76.283,"seco",null,null,"","",""],["PER-077-0","Lima",-13.284,-76.275,"salpicadura",96.0,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-077-1","Lima",-13.269,-76.257,"atmosferico_marino",29.8,63.5,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-077-2","Lima",-13.2,-76.169,"seco",null,null,"","",""],["PER-078-0","Ica",-13.442,-76.191,"salpicadura",99.4,null,"IP a/b 0.35 · 65 mm","3 años","25 años"],["PER-078-1","Ica",-13.437,-76.168,"atmosferico_marino",35.5,68.0,"IP a/b 0.35 · 50 mm","13 años","cumple 40 años"],["PER-078-2","Ica",-13.413,-76.058,"seco",null,null,"","",""],["PER-079-0","Ica",-13.62,-76.195,"salpicadura",78.6,null,"IP a/b 0.35 · 80 mm","5.5 años","38 años"],["PER-079-1","Ica",-13.625,-76.173,"atmosferico_marino",36.6,68.9,"IP a/b 0.35 · 50 mm","13 años","cumple 40 años"],["PER-079-2","Ica",-13.649,-76.062,"seco",null,null,"","",""],["PER-080-0","Ica",-13.793,-76.24,"salpicadura",81.9,null,"IP a/b 0.35 · 80 mm","5 años","36 años"],["PER-080-1","Ica",-13.801,-76.218,"atmosferico_marino",40.0,71.6,"IP a/b 0.35 · 50 mm","12 años","cumple 40 años"],["PER-080-2","Ica",-13.838,-76.111,"seco",null,null,"","",""],["PER-081-0","Ica",-13.794,-76.311,"salpicadura",97.2,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-081-1","Ica",-13.816,-76.316,"atmosferico_marino",31.9,65.1,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-081-2","Ica",-13.923,-76.343,"niebla_salina",80.4,null,"IP a/b 0.35 · 65 mm","5 años","37 años"],["PER-082-0","Ica",-13.907,-76.386,"salpicadura",91.3,null,"IP a/b 0.35 · 65 mm","4 años","30 años"],["PER-082-1","Ica",-13.893,-76.368,"niebla_salina",86.4,null,"IP a/b 0.35 · 65 mm","4.5 años","33 años"],["PER-082-2","Ica",-13.825,-76.279,"atmosferico_marino",31.9,65.1,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-083-0","Ica",-13.95,-76.273,"salpicadura",99.0,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-083-1","Ica",-13.943,-76.251,"niebla_salina",87.4,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-083-2","Ica",-13.908,-76.143,"seco",null,null,"","",""],["PER-084-0","Ica",-14.102,-76.281,"salpicadura",95.6,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-084-1","Ica",-14.103,-76.258,"niebla_salina",86.6,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-084-2","Ica",-14.108,-76.145,"seco",null,null,"","",""],["PER-085-0","Ica",-14.152,-76.235,"salpicadura",97.7,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-085-1","Ica",-14.13,-76.229,"niebla_salina",86.6,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-085-2","Ica",-14.024,-76.2,"atmosferico_marino",32.1,65.4,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-086-0","Ica",-14.28,-76.118,"salpicadura",99.3,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-086-1","Ica",-14.275,-76.095,"atmosferico_marino",26.7,61.0,"IP a/b 0.35 · 50 mm","15.5 años","cumple 40 años"],["PER-086-2","Ica",-14.247,-75.985,"seco",null,null,"","",""],["PER-087-0","Ica",-14.387,-76.071,"salpicadura",95.1,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-087-1","Ica",-14.37,-76.056,"atmosferico_marino",29.5,63.3,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-087-2","Ica",-14.285,-75.984,"seco",null,null,"","",""],["PER-088-0","Ica",-14.518,-75.974,"salpicadura",99.3,null,"IP a/b 0.35 · 65 mm","3 años","25.5 años"],["PER-088-1","Ica",-14.508,-75.953,"atmosferico_marino",30.0,63.7,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-088-2","Ica",-14.46,-75.851,"seco",null,null,"","",""],["PER-089-0","Ica",-14.669,-75.901,"salpicadura",98.5,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-089-1","Ica",-14.656,-75.882,"niebla_salina",90.7,null,"IP a/b 0.35 · 65 mm","4 años","30 años"],["PER-089-2","Ica",-14.594,-75.789,"seco",null,null,"","",""],["PER-090-0","Ica",-14.767,-75.752,"salpicadura",96.8,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-090-1","Ica",-14.748,-75.74,"niebla_salina",76.3,null,"IP a/b 0.35 · 65 mm","6 años","39.5 años"],["PER-090-2","Ica",-14.654,-75.68,"seco",null,null,"","",""],["PER-091-0","Ica",-14.861,-75.595,"salpicadura",96.2,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-091-1","Ica",-14.841,-75.584,"atmosferico_marino",25.6,60.2,"IP a/b 0.35 · 50 mm","15.5 años","cumple 40 años"],["PER-091-2","Ica",-14.745,-75.528,"seco",null,null,"","",""],["PER-092-0","Ica",-14.982,-75.477,"salpicadura",97.8,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-092-1","Ica",-14.97,-75.457,"niebla_salina",76.1,null,"IP a/b 0.35 · 65 mm","6 años","39.5 años"],["PER-092-2","Ica",-14.91,-75.361,"seco",null,null,"","",""],["PER-093-0","Ica",-15.128,-75.377,"salpicadura",79.3,null,"IP a/b 0.35 · 80 mm","5.5 años","37.5 años"],["PER-093-1","Ica",-15.111,-75.362,"atmosferico_marino",26.6,60.9,"IP a/b 0.35 · 50 mm","15.5 años","cumple 40 años"],["PER-093-2","Ica",-15.027,-75.288,"seco",null,null,"","",""],["PER-094-0","Ica",-15.223,-75.23,"salpicadura",78.1,null,"IP a/b 0.35 · 80 mm","6 años","38.5 años"],["PER-094-1","Ica",-15.213,-75.209,"niebla_salina",88.0,null,"IP a/b 0.35 · 65 mm","4.5 años","32 años"],["PER-094-2","Ica",-15.167,-75.105,"seco",null,null,"","",""],["PER-095-0","Ica",-15.321,-75.157,"salpicadura",98.0,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-095-1","Ica",-15.309,-75.138,"niebla_salina",85.4,null,"IP a/b 0.35 · 65 mm","4.5 años","33.5 años"],["PER-095-2","Ica",-15.25,-75.041,"atmosferico_marino",17.8,54.0,"IP a/b 0.35 · 50 mm","18 años","cumple 40 años"],["PER-096-0","Ica",-15.414,-75.097,"salpicadura",95.4,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-096-1","Ica",-15.395,-75.085,"niebla_salina",86.8,null,"IP a/b 0.35 · 65 mm","4.5 años","32.5 años"],["PER-096-2","Ica",-15.3,-75.027,"atmosferico_marino",10.6,48.4,"IP a/b 0.35 · 50 mm","21 años","cumple 40 años"],["PER-097-0","Arequipa",-15.498,-74.943,"salpicadura",95.0,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-097-1","Arequipa",-15.479,-74.931,"niebla_salina",83.8,null,"IP a/b 0.35 · 65 mm","5 años","34.5 años"],["PER-097-2","Arequipa",-15.382,-74.876,"atmosferico_marino",20.1,55.8,"IP a/b 0.35 · 50 mm","17.5 años","cumple 40 años"],["PER-098-0","Arequipa",-15.588,-74.786,"salpicadura",97.0,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-098-1","Arequipa",-15.569,-74.775,"niebla_salina",88.5,null,"IP a/b 0.35 · 65 mm","4.5 años","31.5 años"],["PER-098-2","Arequipa",-15.473,-74.719,"seco",null,null,"","",""],["PER-099-0","Arequipa",-15.666,-74.618,"salpicadura",93.9,null,"IP a/b 0.35 · 65 mm","3.5 años","28.5 años"],["PER-099-1","Arequipa",-15.646,-74.609,"niebla_salina",77.7,null,"IP a/b 0.35 · 65 mm","5.5 años","38.5 años"],["PER-099-2","Arequipa",-15.546,-74.561,"seco",null,null,"","",""],["PER-100-0","Arequipa",-15.742,-74.456,"salpicadura",92.2,null,"IP a/b 0.35 · 65 mm","4 años","29.5 años"],["PER-100-1","Arequipa",-15.726,-74.44,"niebla_salina",78.5,null,"IP a/b 0.35 · 65 mm","5.5 años","38 años"],["PER-100-2","Arequipa",-15.647,-74.36,"seco",null,null,"","",""],["PER-101-0","Arequipa",-15.846,-74.326,"salpicadura",96.6,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-101-1","Arequipa",-15.824,-74.319,"niebla_salina",80.0,null,"IP a/b 0.35 · 65 mm","5.5 años","37 años"],["PER-101-2","Arequipa",-15.72,-74.283,"seco",null,null,"","",""],["PER-102-0","Arequipa",-15.899,-74.164,"salpicadura",93.1,null,"IP a/b 0.35 · 65 mm","4 años","29 años"],["PER-102-1","Arequipa",-15.878,-74.154,"seco",null,null,"","",""],["PER-102-2","Arequipa",-15.778,-74.106,"seco",null,null,"","",""],["PER-103-0","Arequipa",-16.004,-74.031,"salpicadura",95.8,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-103-1","Arequipa",-15.989,-74.014,"seco",null,null,"","",""],["PER-103-2","Arequipa",-15.914,-73.93,"seco",null,null,"","",""],["PER-104-0","Arequipa",-16.113,-73.888,"salpicadura",84.4,null,"IP a/b 0.35 · 80 mm","5 años","34 años"],["PER-104-1","Arequipa",-16.095,-73.875,"seco",null,null,"","",""],["PER-104-2","Arequipa",-16.003,-73.812,"seco",null,null,"","",""],["PER-105-0","Arequipa",-16.197,-73.724,"salpicadura",96.1,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-105-1","Arequipa",-16.177,-73.713,"atmosferico_marino",17.3,53.6,"IP a/b 0.35 · 50 mm","18.5 años","cumple 40 años"],["PER-105-2","Arequipa",-16.079,-73.662,"seco",null,null,"","",""],["PER-106-0","Arequipa",-16.244,-73.579,"salpicadura",95.0,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-106-1","Arequipa",-16.222,-73.573,"atmosferico_marino",19.9,55.7,"IP a/b 0.35 · 50 mm","17.5 años","cumple 40 años"],["PER-106-2","Arequipa",-16.116,-73.543,"seco",null,null,"","",""],["PER-107-0","Arequipa",-16.3,-73.401,"salpicadura",97.4,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-107-1","Arequipa",-16.279,-73.393,"atmosferico_marino",17.3,53.6,"IP a/b 0.35 · 50 mm","18.5 años","cumple 40 años"],["PER-107-2","Arequipa",-16.176,-73.352,"seco",null,null,"","",""],["PER-108-0","Arequipa",-16.392,-73.268,"salpicadura",92.8,null,"IP a/b 0.35 · 65 mm","4 años","29 años"],["PER-108-1","Arequipa",-16.372,-73.257,"niebla_salina",78.6,null,"IP a/b 0.35 · 65 mm","5.5 años","38 años"],["PER-108-2","Arequipa",-16.275,-73.202,"seco",null,null,"","",""],["PER-109-0","Arequipa",-16.456,-73.098,"salpicadura",95.6,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-109-1","Arequipa",-16.437,-73.085,"atmosferico_marino",20.6,56.2,"IP a/b 0.35 · 50 mm","17 años","cumple 40 años"],["PER-109-2","Arequipa",-16.344,-73.023,"seco",null,null,"","",""],["PER-110-0","Arequipa",-16.536,-72.935,"salpicadura",97.8,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-110-1","Arequipa",-16.515,-72.926,"atmosferico_marino",29.9,63.5,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-110-2","Arequipa",-16.415,-72.88,"seco",null,null,"","",""],["PER-111-0","Arequipa",-16.629,-72.776,"salpicadura",96.6,null,"IP a/b 0.35 · 65 mm","3.5 años","27 años"],["PER-111-1","Arequipa",-16.609,-72.766,"atmosferico_marino",30.7,64.2,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-111-2","Arequipa",-16.511,-72.713,"seco",null,null,"","",""],["PER-112-0","Arequipa",-16.657,-72.595,"salpicadura",94.3,null,"IP a/b 0.35 · 65 mm","3.5 años","28 años"],["PER-112-1","Arequipa",-16.635,-72.592,"seco",null,null,"","",""],["PER-112-2","Arequipa",-16.526,-72.574,"seco",null,null,"","",""],["PER-113-0","Arequipa",-16.726,-72.425,"salpicadura",97.1,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-113-1","Arequipa",-16.707,-72.414,"seco",null,null,"","",""],["PER-113-2","Arequipa",-16.612,-72.356,"seco",null,null,"","",""],["PER-114-0","Arequipa",-16.845,-72.296,"salpicadura",98.4,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-114-1","Arequipa",-16.831,-72.278,"atmosferico_marino",29.4,63.2,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-114-2","Arequipa",-16.761,-72.189,"seco",null,null,"","",""],["PER-115-0","Arequipa",-16.948,-72.164,"salpicadura",98.5,null,"IP a/b 0.35 · 65 mm","3.5 años","25.5 años"],["PER-115-1","Arequipa",-16.932,-72.147,"atmosferico_marino",28.7,62.6,"IP a/b 0.35 · 50 mm","15 años","cumple 40 años"],["PER-115-2","Arequipa",-16.854,-72.066,"seco",null,null,"","",""],["PER-116-0","Arequipa",-17.031,-72.027,"salpicadura",97.8,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-116-1","Arequipa",-17.009,-72.019,"atmosferico_marino",28.1,62.2,"IP a/b 0.35 · 50 mm","15 años","cumple 40 años"],["PER-116-2","Arequipa",-16.906,-71.981,"seco",null,null,"","",""],["PER-117-0","Arequipa",-17.141,-71.882,"salpicadura",97.4,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-117-1","Arequipa",-17.124,-71.867,"atmosferico_marino",32.1,65.3,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-117-2","Arequipa",-17.041,-71.791,"seco",null,null,"","",""],["PER-118-0","Arequipa",-17.212,-71.714,"salpicadura",96.8,null,"IP a/b 0.35 · 65 mm","3.5 años","26.5 años"],["PER-118-1","Arequipa",-17.19,-71.708,"atmosferico_marino",31.1,64.5,"IP a/b 0.35 · 50 mm","14 años","cumple 40 años"],["PER-118-2","Arequipa",-17.084,-71.675,"seco",null,null,"","",""],["PER-119-0","Arequipa",-17.276,-71.541,"salpicadura",93.7,null,"IP a/b 0.35 · 65 mm","3.5 años","28.5 años"],["PER-119-1","Arequipa",-17.257,-71.528,"seco",null,null,"","",""],["PER-119-2","Arequipa",-17.165,-71.466,"seco",null,null,"","",""],["PER-120-0","Moquegua",-17.393,-71.408,"salpicadura",95.7,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-120-1","Moquegua",-17.381,-71.388,"seco",null,null,"","",""],["PER-120-2","Moquegua",-17.323,-71.29,"seco",null,null,"","",""],["PER-121-0","Moquegua",-17.566,-71.368,"salpicadura",98.3,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-121-1","Moquegua",-17.564,-71.345,"seco",null,null,"","",""],["PER-121-2","Moquegua",-17.553,-71.23,"seco",null,null,"","",""],["PER-122-0","Moquegua",-17.69,-71.341,"salpicadura",97.7,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-122-1","Moquegua",-17.673,-71.326,"atmosferico_marino",29.1,62.9,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-122-2","Moquegua",-17.587,-71.254,"seco",null,null,"","",""],["PER-123-0","Moquegua",-17.782,-71.183,"salpicadura",95.6,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-123-1","Moquegua",-17.765,-71.168,"atmosferico_marino",25.2,59.9,"IP a/b 0.35 · 50 mm","15.5 años","cumple 40 años"],["PER-123-2","Moquegua",-17.678,-71.097,"seco",null,null,"","",""],["PER-124-0","Tacna",-17.88,-71.032,"salpicadura",93.5,null,"IP a/b 0.35 · 65 mm","4 años","28.5 años"],["PER-124-1","Tacna",-17.86,-71.02,"seco",null,null,"","",""],["PER-124-2","Tacna",-17.764,-70.966,"seco",null,null,"","",""],["PER-125-0","Tacna",-17.991,-70.895,"salpicadura",98.3,null,"IP a/b 0.35 · 65 mm","3.5 años","26 años"],["PER-125-1","Tacna",-17.974,-70.879,"seco",null,null,"","",""],["PER-125-2","Tacna",-17.894,-70.801,"seco",null,null,"","",""],["PER-126-0","Tacna",-18.093,-70.747,"salpicadura",95.7,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-126-1","Tacna",-18.076,-70.731,"atmosferico_marino",29.2,63.0,"IP a/b 0.35 · 50 mm","14.5 años","cumple 40 años"],["PER-126-2","Tacna",-17.995,-70.653,"seco",null,null,"","",""],["PER-127-0","Tacna",-18.203,-70.602,"salpicadura",95.5,null,"IP a/b 0.35 · 65 mm","3.5 años","27.5 años"],["PER-127-1","Tacna",-18.183,-70.59,"atmosferico_marino",25.0,59.7,"IP a/b 0.35 · 50 mm","16 años","cumple 40 años"],["PER-127-2","Tacna",-18.088,-70.532,"seco",null,null,"","",""]]</script>
+<script type="application/json" id="datosSens">{
+ "Talara": {
+  "zona": "PER-009-1",
+  "regimen": "atmosferico_marino",
+  "deposicion_mg_m2_d": 59.0,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 50.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "11 años",
+    "cierre_req_25_pct": 44.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 75.2,
+    "estado_40": "requiere_reparacion"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "30.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 43.6,
+    "estado_40": "requiere_reparacion"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "9 años",
+    "cierre_req_25_pct": 52.2,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 81.0,
+    "estado_40": "requiere_reparacion"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "cumple 40 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 0.0,
+    "estado_40": "sin_reparacion_basta"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "25.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 38.9,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Paita": {
+  "zona": "PER-013-1",
+  "regimen": "atmosferico_marino",
+  "deposicion_mg_m2_d": 41.9,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 50.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "10.5 años",
+    "cierre_req_25_pct": 46.9,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 77.0,
+    "estado_40": "requiere_reparacion"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "29.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 48.2,
+    "estado_40": "requiere_reparacion"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "9 años",
+    "cierre_req_25_pct": 54.4,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 82.8,
+    "estado_40": "requiere_reparacion"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "cumple 40 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 0.0,
+    "estado_40": "sin_reparacion_basta"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "24 años",
+    "cierre_req_25_pct": 1.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 41.3,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Piura": {
+  "zona": "PER-015-2",
+  "regimen": "atmosferico_marino",
+  "deposicion_mg_m2_d": 16.8,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 50.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "11 años",
+    "cierre_req_25_pct": 44.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 75.2,
+    "estado_40": "requiere_reparacion"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "30.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 43.6,
+    "estado_40": "requiere_reparacion"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "9 años",
+    "cierre_req_25_pct": 52.2,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 81.0,
+    "estado_40": "requiere_reparacion"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "cumple 40 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 0.0,
+    "estado_40": "sin_reparacion_basta"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "25.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 38.9,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Callao": {
+  "zona": "PER-068-1",
+  "regimen": "niebla_salina",
+  "deposicion_mg_m2_d": 52.0,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 65.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "32.5 años",
+    "fisura_sin_reparar": "4.5 años",
+    "cierre_req_25_pct": 87.2,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "32.5 años",
+    "fisura_sin_reparar": "12.5 años",
+    "cierre_req_25_pct": 72.7,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "33 años",
+    "fisura_sin_reparar": "4.5 años",
+    "cierre_req_25_pct": 86.0,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "30.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 23.5,
+    "estado_40": "requiere_reparacion"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "8 años",
+    "cierre_req_25_pct": 61.9,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 88.9,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Chimbote": {
+  "zona": "PER-045-1",
+  "regimen": "niebla_salina",
+  "deposicion_mg_m2_d": 48.5,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 65.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "31.5 años",
+    "fisura_sin_reparar": "4 años",
+    "cierre_req_25_pct": 89.0,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "31.5 años",
+    "fisura_sin_reparar": "12 años",
+    "cierre_req_25_pct": 76.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "32 años",
+    "fisura_sin_reparar": "4 años",
+    "cierre_req_25_pct": 87.8,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "29.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 26.1,
+    "estado_40": "requiere_reparacion"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "8 años",
+    "cierre_req_25_pct": 64.0,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 90.5,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ }
+}</script>
+<script>
+(function(){
+const Z=JSON.parse(document.getElementById('datosZonas').textContent);
+const SENS=JSON.parse(document.getElementById('datosSens').textContent);
+const svg=document.getElementById('mapa');let obj=25,sel=null;
+const lat0=-18.6,lat1=-3.2,lon0=-81.6,lon1=-70.2;
+const px=lon=>20+(lon-lon0)/(lon1-lon0)*380, py=lat=>20+(lat1-lat)/(lat1-lat0)*480;
+function color(v,reg){if(reg==='seco')return 'var(--line)';if(v===null)return 'var(--neg)';
+  return v<=1?'var(--calc)':v<60?'var(--pos)':v<85?'var(--warn)':'var(--neg)'}
+function dibujar(){svg.replaceChildren();
+  for(const z of Z){const v=obj===25?z[5]:z[6];const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',px(z[3]));c.setAttribute('cy',py(z[2]));c.setAttribute('r',sel===z[0]?6:3.6);
+    c.setAttribute('fill',color(v,z[4]));c.setAttribute('stroke',sel===z[0]?'var(--ink)':'none');c.setAttribute('tabindex','0');
+    c.style.cursor='pointer';c.addEventListener('click',()=>{sel=z[0];detalle(z);dibujar()});
+    c.addEventListener('keydown',e=>{if(e.key==='Enter'){sel=z[0];detalle(z);dibujar()}});svg.append(c)}
+  const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('x',30);t.setAttribute('y',500);t.setAttribute('font-size',11);
+  t.setAttribute('style','fill:var(--muted)');t.textContent='Océano Pacífico · 384 zonas costeras';svg.append(t)}
+function detalle(z){const v=obj===25?z[5]:z[6];document.getElementById('zNom').textContent=z[1]+' · '+z[0];
+  const reg={salpicadura:'salpicadura / mareas (XS3)',niebla_salina:'niebla salina (XS2)',atmosferico_marino:'atmosférico marino (XS1)',seco:'seco (sin cloruros)'}[z[4]];
+  const filas=[['Exposición',reg]];
+  if(z[4]==='seco')filas.push(['Resultado','fuera de alcance: gobierna la carbonatación']);
+  else{filas.push(['Mezcla',z[7]],['Sin fisura',z[9]],['Fisura 0,3 mm sin reparar',z[8]],
+    ['Cierre requerido · '+obj+' años',v===null?'no alcanzable con mezclas de norma':(v<=1?'no hace falta':v.toFixed(0)+' %')],
+    ['NEAT a 90 días','78 % ± 20 pp'])}
+  document.getElementById('zDet').replaceChildren(...filas.map(([a,b])=>{const d=document.createElement('div');
+    d.style.cssText='display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px';d.innerHTML='<span style="color:var(--muted)"></span><b style="font-weight:500"></b>';
+    d.children[0].textContent=a;d.children[1].textContent=b;return d}))}
+document.getElementById('leyenda').innerHTML=[['var(--calc)','no requiere reparación'],['var(--pos)','menos de 60 %'],['var(--warn)','60–85 %'],['var(--neg)','más de 85 % o no alcanzable'],['var(--line)','seco: fuera de alcance']]
+  .map(([c,t])=>`<span><i style="background:${c};height:10px;width:10px;border-radius:50%"></i>${t}</span>`).join('');
+document.querySelectorAll('#tabsObj button').forEach(b=>b.onclick=()=>{obj=+b.dataset.o;
+  document.querySelectorAll('#tabsObj button').forEach(x=>x.setAttribute('aria-pressed',x===b));dibujar();const z=Z.find(q=>q[0]===sel);if(z)detalle(z)});
+const VAR={base:'Base',fisura_lineal:'Fisura menos severa',"cs_cov_0.5":'Más dispersión de Cs',p_50:'Vida media (P 50 %)',"recub_+15":'Recubrimiento +15 mm'};
+const fmt=r=>r.cierre_req_25_pct===null?'no alcanzable':r.cierre_req_25_pct<=1?'no hace falta':r.cierre_req_25_pct.toFixed(0)+' %';
+const tb=document.getElementById('sens');tb.innerHTML='<thead><tr><th>Zona</th>'+Object.values(VAR).map(v=>`<th class="n">${v}</th>`).join('')+'</tr></thead><tbody>'+
+  Object.entries(SENS).map(([n,x])=>`<tr><td>${n}<br><small style="color:var(--muted)">${x.mezcla.cemento} a/b ${x.mezcla.a_b} · ${x.mezcla.recubrimiento_mm} mm</small></td>`+
+  Object.keys(VAR).map(k=>`<td class="n">${fmt(x.variantes[k])}</td>`).join('')+'</tr>').join('')+'</tbody>';
+dibujar();const ini=Z.find(z=>z[1]==='Piura'&&z[4]!=='seco')||Z[0];sel=ini[0];detalle(ini);dibujar();
+})();
+</script>

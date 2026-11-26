@@ -1,0 +1,143 @@
+{
+  "generaciones": 8,
+  "lambda": 0.0008,
+  "k_rango_1_dia": [
+    0.001,
+    1.0
+  ],
+  "E3_neat_cinetico": {
+    "grupos": {
+      "MAE_pp_medio": 19.97,
+      "MAE_pp_de": 0.0
+    },
+    "laboratorio": {
+      "→Cappellesso2024": 75.19,
+      "→Mousa2022": 31.39
+    },
+    "neuronas_ocultas_prom": 0.14
+  },
+  "E4_conjunto": {
+    "K": 3,
+    "escenarios": {
+      "grupos": {
+        "MAE_pp": 19.3,
+        "DE_media_pp": 11.16,
+        "spearman_duda_error": 0.031,
+        "cobertura_intervalos": {
+          "80%": 0.474,
+          "90%": 0.561
+        },
+        "MAE_pp_mitad_confiable": 20.99,
+        "MAE_pp_mitad_dudosa": 17.6
+      },
+      "→Cappellesso2024": {
+        "MAE_pp": 53.19,
+        "DE_media_pp": 44.83,
+        "spearman_duda_error": -0.309,
+        "cobertura_intervalos": {
+          "80%": 0.69,
+          "90%": 0.729
+        },
+        "MAE_pp_mitad_confiable": 58.24,
+        "MAE_pp_mitad_dudosa": 48.14
+      },
+      "→Mousa2022": {
+        "MAE_pp": 21.76,
+        "DE_media_pp": 40.22,
+        "spearman_duda_error": 0.047,
+        "cobertura_intervalos": {
+          "80%": 0.946,
+          "90%": 0.992
+        },
+        "MAE_pp_mitad_confiable": 19.32,
+        "MAE_pp_mitad_dudosa": 24.19
+      }
+    }
+  },
+  "E5_calibracion_local": {
+    "Cappellesso2024": {
+      "entrenado_en": "Mousa2022",
+      "n_grupos_B": 119,
+      "curvas": {
+        "caliente": {
+          "0": {
+            "MAE_pp_medio": 69.81,
+            "MAE_pp_de": 0.0
+          },
+          "5": {
+            "MAE_pp_medio": 21.12,
+            "MAE_pp_de": 0.0
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "frio": {
+          "0": {
+            "MAE_pp_medio": 69.81,
+            "MAE_pp_de": 0.0
+          },
+          "5": {
+            "MAE_pp_medio": 40.16,
+            "MAE_pp_de": 0.0
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "RandomForest": {
+          "0": {
+            "MAE_pp_medio": 38.32,
+            "MAE_pp_de": 0.0
+          },
+          "5": {
+            "MAE_pp_medio": 21.75,
+            "MAE_pp_de": 0.0
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        }
+      }
+    },
+    "Mousa2022": {
+      "entrenado_en": "Cappellesso2024",
+      "n_grupos_B": 191,
+      "curvas": {
+        "caliente": {
+          "0": {
+            "MAE_pp_medio": 33.39,
+            "MAE_pp_de": 0.0
+          },
+          "5": {
+            "MAE_pp_medio": 30.29,
+            "MAE_pp_de": 0.0
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "frio": {
+          "0": {
+            "MAE_pp_medio": 33.39,
+            "MAE_pp_de": 0.0
+          },
+          "5": {
+            "MAE_pp_medio": 46.67,
+            "MAE_pp_de": 0.0
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "RandomForest": {
+          "0": {
+            "MAE_pp_medio": 25.3,
+            "MAE_pp_de": 0.0
+          },
+          "5": {
+            "MAE_pp_medio": 18.85,
+            "MAE_pp_de": 0.0
+          },
+          "n_min_para_<20pp": 5,
+          "n_min_para_<15pp": null
+        }
+      }
+    }
+  }
+}

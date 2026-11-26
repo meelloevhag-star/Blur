@@ -1,0 +1,262 @@
+{
+ "Talara": {
+  "zona": "PER-009-1",
+  "regimen": "atmosferico_marino",
+  "deposicion_mg_m2_d": 59.0,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 50.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "11 años",
+    "cierre_req_25_pct": 44.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 75.2,
+    "estado_40": "requiere_reparacion"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "30.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 43.6,
+    "estado_40": "requiere_reparacion"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "9 años",
+    "cierre_req_25_pct": 52.2,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 81.0,
+    "estado_40": "requiere_reparacion"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "cumple 40 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 0.0,
+    "estado_40": "sin_reparacion_basta"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "25.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 38.9,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Paita": {
+  "zona": "PER-013-1",
+  "regimen": "atmosferico_marino",
+  "deposicion_mg_m2_d": 41.9,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 50.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "10.5 años",
+    "cierre_req_25_pct": 46.9,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 77.0,
+    "estado_40": "requiere_reparacion"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "29.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 48.2,
+    "estado_40": "requiere_reparacion"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "9 años",
+    "cierre_req_25_pct": 54.4,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 82.8,
+    "estado_40": "requiere_reparacion"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "cumple 40 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 0.0,
+    "estado_40": "sin_reparacion_basta"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "24 años",
+    "cierre_req_25_pct": 1.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 41.3,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Piura": {
+  "zona": "PER-015-2",
+  "regimen": "atmosferico_marino",
+  "deposicion_mg_m2_d": 16.8,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 50.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "11 años",
+    "cierre_req_25_pct": 44.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 75.2,
+    "estado_40": "requiere_reparacion"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "30.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 43.6,
+    "estado_40": "requiere_reparacion"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "9 años",
+    "cierre_req_25_pct": 52.2,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 81.0,
+    "estado_40": "requiere_reparacion"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "cumple 40 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 0.0,
+    "estado_40": "sin_reparacion_basta"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "25.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 38.9,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Callao": {
+  "zona": "PER-068-1",
+  "regimen": "niebla_salina",
+  "deposicion_mg_m2_d": 52.0,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 65.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "32.5 años",
+    "fisura_sin_reparar": "4.5 años",
+    "cierre_req_25_pct": 87.2,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "32.5 años",
+    "fisura_sin_reparar": "12.5 años",
+    "cierre_req_25_pct": 72.7,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "33 años",
+    "fisura_sin_reparar": "4.5 años",
+    "cierre_req_25_pct": 86.0,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "30.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 23.5,
+    "estado_40": "requiere_reparacion"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "8 años",
+    "cierre_req_25_pct": 61.9,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 88.9,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ },
+ "Chimbote": {
+  "zona": "PER-045-1",
+  "regimen": "niebla_salina",
+  "deposicion_mg_m2_d": 48.5,
+  "mezcla": {
+   "cemento": "IP",
+   "a_b": 0.35,
+   "recubrimiento_mm": 65.0
+  },
+  "variantes": {
+   "base": {
+    "sin_fisura": "31.5 años",
+    "fisura_sin_reparar": "4 años",
+    "cierre_req_25_pct": 89.0,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "fisura_lineal": {
+    "sin_fisura": "31.5 años",
+    "fisura_sin_reparar": "12 años",
+    "cierre_req_25_pct": 76.6,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "cs_cov_0.5": {
+    "sin_fisura": "32 años",
+    "fisura_sin_reparar": "4 años",
+    "cierre_req_25_pct": 87.8,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": null,
+    "estado_40": "no_alcanzable"
+   },
+   "p_50": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "29.5 años",
+    "cierre_req_25_pct": 0.0,
+    "estado_25": "sin_reparacion_basta",
+    "cierre_req_40_pct": 26.1,
+    "estado_40": "requiere_reparacion"
+   },
+   "recub_+15": {
+    "sin_fisura": "cumple 40 años",
+    "fisura_sin_reparar": "8 años",
+    "cierre_req_25_pct": 64.0,
+    "estado_25": "requiere_reparacion",
+    "cierre_req_40_pct": 90.5,
+    "estado_40": "requiere_reparacion"
+   }
+  }
+ }
+}

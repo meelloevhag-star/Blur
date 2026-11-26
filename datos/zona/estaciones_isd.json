@@ -1,0 +1,36 @@
+{
+  "periodo": [
+    2015,
+    2024
+  ],
+  "estaciones": {
+    "84390099999": {
+      "estacion": "Talara · aeropuerto Capitán Montes",
+      "anios_con_datos": 10,
+      "n_obs_humedad": 49734,
+      "obs_tiempo_presente": 11885,
+      "hr_media_pct": 66.7,
+      "viento_medio_ms": 6.5,
+      "pct_obs_neblina": 0.29,
+      "dias_neblina_por_anio": 1.8,
+      "pct_obs_niebla": 0.03,
+      "dias_niebla_por_anio": 0.2,
+      "pct_obs_llovizna": 0.78,
+      "dias_llovizna_por_anio": 6.2
+    },
+    "84401099999": {
+      "estacion": "Piura · aeropuerto Concha Ibérico",
+      "anios_con_datos": 10,
+      "n_obs_humedad": 39133,
+      "obs_tiempo_presente": 23825,
+      "hr_media_pct": 67.7,
+      "viento_medio_ms": 3.8,
+      "pct_obs_neblina": 0.13,
+      "dias_neblina_por_anio": 2.3,
+      "pct_obs_niebla": 0.0,
+      "dias_niebla_por_anio": 0.0,
+      "pct_obs_llovizna": 0.17,
+      "dias_llovizna_por_anio": 3.1
+    }
+  }
+}

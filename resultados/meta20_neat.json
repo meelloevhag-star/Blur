@@ -1,0 +1,363 @@
+{
+  "generaciones": 50,
+  "lambda": 0.0008,
+  "k_rango_1_dia": [
+    0.001,
+    1.0
+  ],
+  "E3_neat_cinetico": {
+    "grupos": {
+      "MAE_pp_medio": 19.97,
+      "MAE_pp_de": 0.3
+    },
+    "laboratorio": {
+      "→Cappellesso2024": 31.1,
+      "→Mousa2022": 31.65
+    },
+    "neuronas_ocultas_prom": 0.24
+  },
+  "E4_conjunto": {
+    "K": 10,
+    "escenarios": {
+      "grupos": {
+        "MAE_pp": 19.33,
+        "DE_media_pp": 6.17,
+        "spearman_duda_error": -0.107,
+        "cobertura_intervalos": {
+          "80%": 0.229,
+          "90%": 0.294
+        },
+        "MAE_pp_mitad_confiable": 20.82,
+        "MAE_pp_mitad_dudosa": 17.85
+      },
+      "→Cappellesso2024": {
+        "MAE_pp": 30.04,
+        "DE_media_pp": 3.68,
+        "spearman_duda_error": -0.052,
+        "cobertura_intervalos": {
+          "80%": 0.086,
+          "90%": 0.098
+        },
+        "MAE_pp_mitad_confiable": 32.16,
+        "MAE_pp_mitad_dudosa": 27.68
+      },
+      "→Mousa2022": {
+        "MAE_pp": 27.26,
+        "DE_media_pp": 18.37,
+        "spearman_duda_error": -0.107,
+        "cobertura_intervalos": {
+          "80%": 0.452,
+          "90%": 0.524
+        },
+        "MAE_pp_mitad_confiable": 29.22,
+        "MAE_pp_mitad_dudosa": 25.29
+      }
+    }
+  },
+  "E5_calibracion_local": {
+    "Cappellesso2024": {
+      "entrenado_en": "Mousa2022",
+      "n_grupos_B": 119,
+      "curvas": {
+        "caliente": {
+          "0": {
+            "MAE_pp_medio": 30.36,
+            "MAE_pp_de": 1.95
+          },
+          "2": {
+            "MAE_pp_medio": 25.66,
+            "MAE_pp_de": 2.48
+          },
+          "5": {
+            "MAE_pp_medio": 25.41,
+            "MAE_pp_de": 3.25
+          },
+          "10": {
+            "MAE_pp_medio": 24.88,
+            "MAE_pp_de": 2.11
+          },
+          "20": {
+            "MAE_pp_medio": 24.57,
+            "MAE_pp_de": 1.67
+          },
+          "40": {
+            "MAE_pp_medio": 23.18,
+            "MAE_pp_de": 1.37
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "frio": {
+          "0": {
+            "MAE_pp_medio": 30.36,
+            "MAE_pp_de": 1.95
+          },
+          "2": {
+            "MAE_pp_medio": 26.69,
+            "MAE_pp_de": 3.14
+          },
+          "5": {
+            "MAE_pp_medio": 26.37,
+            "MAE_pp_de": 5.17
+          },
+          "10": {
+            "MAE_pp_medio": 24.68,
+            "MAE_pp_de": 2.55
+          },
+          "20": {
+            "MAE_pp_medio": 23.86,
+            "MAE_pp_de": 1.0
+          },
+          "40": {
+            "MAE_pp_medio": 21.83,
+            "MAE_pp_de": 1.92
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "RandomForest": {
+          "0": {
+            "MAE_pp_medio": 38.64,
+            "MAE_pp_de": 1.73
+          },
+          "2": {
+            "MAE_pp_medio": 27.14,
+            "MAE_pp_de": 8.51
+          },
+          "5": {
+            "MAE_pp_medio": 20.32,
+            "MAE_pp_de": 3.03
+          },
+          "10": {
+            "MAE_pp_medio": 17.65,
+            "MAE_pp_de": 2.06
+          },
+          "20": {
+            "MAE_pp_medio": 14.72,
+            "MAE_pp_de": 0.76
+          },
+          "40": {
+            "MAE_pp_medio": 13.58,
+            "MAE_pp_de": 0.56
+          },
+          "n_min_para_<20pp": 10,
+          "n_min_para_<15pp": 20
+        }
+      }
+    },
+    "Mousa2022": {
+      "entrenado_en": "Cappellesso2024",
+      "n_grupos_B": 191,
+      "curvas": {
+        "caliente": {
+          "0": {
+            "MAE_pp_medio": 32.51,
+            "MAE_pp_de": 0.59
+          },
+          "2": {
+            "MAE_pp_medio": 32.81,
+            "MAE_pp_de": 1.66
+          },
+          "5": {
+            "MAE_pp_medio": 32.23,
+            "MAE_pp_de": 0.52
+          },
+          "10": {
+            "MAE_pp_medio": 32.67,
+            "MAE_pp_de": 0.88
+          },
+          "20": {
+            "MAE_pp_medio": 32.0,
+            "MAE_pp_de": 0.82
+          },
+          "40": {
+            "MAE_pp_medio": 29.4,
+            "MAE_pp_de": 6.19
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "frio": {
+          "0": {
+            "MAE_pp_medio": 32.51,
+            "MAE_pp_de": 0.59
+          },
+          "2": {
+            "MAE_pp_medio": 30.76,
+            "MAE_pp_de": 1.9
+          },
+          "5": {
+            "MAE_pp_medio": 32.24,
+            "MAE_pp_de": 1.39
+          },
+          "10": {
+            "MAE_pp_medio": 28.46,
+            "MAE_pp_de": 2.41
+          },
+          "20": {
+            "MAE_pp_medio": 27.71,
+            "MAE_pp_de": 4.81
+          },
+          "40": {
+            "MAE_pp_medio": 23.56,
+            "MAE_pp_de": 4.01
+          },
+          "n_min_para_<20pp": null,
+          "n_min_para_<15pp": null
+        },
+        "RandomForest": {
+          "0": {
+            "MAE_pp_medio": 24.91,
+            "MAE_pp_de": 0.58
+          },
+          "2": {
+            "MAE_pp_medio": 22.85,
+            "MAE_pp_de": 1.74
+          },
+          "5": {
+            "MAE_pp_medio": 20.75,
+            "MAE_pp_de": 1.68
+          },
+          "10": {
+            "MAE_pp_medio": 20.17,
+            "MAE_pp_de": 1.56
+          },
+          "20": {
+            "MAE_pp_medio": 16.29,
+            "MAE_pp_de": 1.3
+          },
+          "40": {
+            "MAE_pp_medio": 15.13,
+            "MAE_pp_de": 1.06
+          },
+          "n_min_para_<20pp": 20,
+          "n_min_para_<15pp": null
+        }
+      }
+    }
+  },
+  "E5_calibracion_local_neat_directo": {
+    "Cappellesso2024": {
+      "entrenado_en": "Mousa2022",
+      "curvas": {
+        "caliente": {
+          "0": {
+            "MAE_pp_medio": 19.96,
+            "MAE_pp_de": 0.58
+          },
+          "2": {
+            "MAE_pp_medio": 19.18,
+            "MAE_pp_de": 2.66
+          },
+          "5": {
+            "MAE_pp_medio": 20.1,
+            "MAE_pp_de": 1.74
+          },
+          "10": {
+            "MAE_pp_medio": 18.89,
+            "MAE_pp_de": 1.4
+          },
+          "20": {
+            "MAE_pp_medio": 17.69,
+            "MAE_pp_de": 0.65
+          },
+          "40": {
+            "MAE_pp_medio": 18.06,
+            "MAE_pp_de": 0.43
+          },
+          "n_min_para_<20pp": 0,
+          "n_min_para_<15pp": null
+        },
+        "frio": {
+          "0": {
+            "MAE_pp_medio": 19.96,
+            "MAE_pp_de": 0.58
+          },
+          "2": {
+            "MAE_pp_medio": 19.83,
+            "MAE_pp_de": 2.32
+          },
+          "5": {
+            "MAE_pp_medio": 19.25,
+            "MAE_pp_de": 2.7
+          },
+          "10": {
+            "MAE_pp_medio": 18.24,
+            "MAE_pp_de": 0.88
+          },
+          "20": {
+            "MAE_pp_medio": 18.08,
+            "MAE_pp_de": 0.37
+          },
+          "40": {
+            "MAE_pp_medio": 18.11,
+            "MAE_pp_de": 1.08
+          },
+          "n_min_para_<20pp": 0,
+          "n_min_para_<15pp": null
+        }
+      }
+    },
+    "Mousa2022": {
+      "entrenado_en": "Cappellesso2024",
+      "curvas": {
+        "caliente": {
+          "0": {
+            "MAE_pp_medio": 20.42,
+            "MAE_pp_de": 1.35
+          },
+          "2": {
+            "MAE_pp_medio": 22.25,
+            "MAE_pp_de": 3.56
+          },
+          "5": {
+            "MAE_pp_medio": 21.34,
+            "MAE_pp_de": 2.63
+          },
+          "10": {
+            "MAE_pp_medio": 21.61,
+            "MAE_pp_de": 4.0
+          },
+          "20": {
+            "MAE_pp_medio": 18.77,
+            "MAE_pp_de": 2.27
+          },
+          "40": {
+            "MAE_pp_medio": 19.1,
+            "MAE_pp_de": 1.82
+          },
+          "n_min_para_<20pp": 20,
+          "n_min_para_<15pp": null
+        },
+        "frio": {
+          "0": {
+            "MAE_pp_medio": 20.42,
+            "MAE_pp_de": 1.35
+          },
+          "2": {
+            "MAE_pp_medio": 27.97,
+            "MAE_pp_de": 5.56
+          },
+          "5": {
+            "MAE_pp_medio": 23.97,
+            "MAE_pp_de": 2.42
+          },
+          "10": {
+            "MAE_pp_medio": 32.01,
+            "MAE_pp_de": 9.31
+          },
+          "20": {
+            "MAE_pp_medio": 20.64,
+            "MAE_pp_de": 2.28
+          },
+          "40": {
+            "MAE_pp_medio": 19.39,
+            "MAE_pp_de": 0.88
+          },
+          "n_min_para_<20pp": 40,
+          "n_min_para_<15pp": null
+        }
+      }
+    }
+  }
+}

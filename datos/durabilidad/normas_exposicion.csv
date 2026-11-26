@@ -1,0 +1,5 @@
+regimen,clase,a_c_max,cemento_min_kg,fc_min_mpa,recubrimiento_mm,cementos_permitidos,fuente
+salpicadura,XS3,0.40,340,35,65,HS;IP,E.060 cap. 4 / ACI 318-19 19.3 / EN 206 F.1 (valor más exigente)
+niebla_salina,XS2,0.45,320,32,50,HS;IP;I;GU,E.060 cap. 4 / ACI 318-19 19.3 / EN 206 F.1; niebla tratada como XS2 (criterio del proyecto)
+atmosferico_marino,XS1,0.50,300,28,50,HS;IP;I;GU,E.060 cap. 4 / ACI 318-19 19.3 / EN 206 F.1
+seco,XC,0.55,280,21,40,HS;IP;I;GU,E.060 cap. 4 / ACI 318-19 19.3 / EN 206 F.1

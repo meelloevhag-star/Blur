@@ -1,7 +1,0 @@
-id,empresa,planta,pais,lat,lon,cementos,fuente
-ATO,UNACEM,Atocongo (Villa María del Triunfo),PER,-12.19,-76.91,I;GU;HS;IP,https://www.gem.wiki/Atocongo_Cement_Plant
-CON,UNACEM,Condorcocha (Junín),PER,-11.39,-75.80,I;GU;HS,https://www.gem.wiki/Unacem_Per%C3%BA_Condorocha_Cement_Plant
-INK,Cementos Inka,Huachipa (Lima),PER,-12.01,-76.93,I;GU;IP,https://www.expreso.com.pe/opinion/suiza-holcim-remueve-el-mercado-cementero/
-PAC,Cementos Pacasmayo,Pacasmayo (La Libertad),PER,-7.38,-79.55,I;GU;HS;IP,https://globalcement.com/news/itemlist/tag/Peru?start=120
-PIU,Cementos Pacasmayo,Piura,PER,-5.33,-80.68,I;GU;HS;IP,https://www.expreso.com.pe/opinion/suiza-holcim-remueve-el-mercado-cementero/
-YUR,Yura (Grupo Gloria),Yura (Arequipa),PER,-16.25,-71.68,I;GU;HS;IP,https://globalcement.com/news/itemlist/tag/Peru?start=120
