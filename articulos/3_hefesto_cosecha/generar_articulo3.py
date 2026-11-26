@@ -91,6 +91,10 @@ class Datos:
                 "sin_fisura": med([v for v in num("sin_fisura")]), "fisura": med(num("fisura_sin_reparar")),
                 "req25": med(num("cierre_req_25_pct")), "neat": med(num("neat_cierre_pct"))}
         self.departamentos = Counter(r["departamento"] for r in zonas)
+        por_id = {r["id"]: r for r in zonas}
+        self.ejemplo = {"salp": por_id["PER-007-0"], "atm": por_id["PER-007-1"]}   # mismo sitio, 0,25 y 2,75 km
+        self.sens = json.loads((RES / "sensibilidad_vida.json").read_text(encoding="utf-8"))
+        self.hib = json.loads((RES / "hibrido.json").read_text(encoding="utf-8"))
         # Piura (UCV 72746): cierre por dosis y edad, tal como se transcribió
         self.piura = {}
         for r in csv.DictReader(open(RAIZ / "datos" / "aceptados" / "repositorios_2026-11-26e.csv", encoding="utf-8")):
@@ -210,6 +214,102 @@ def fig_mejora(D: "Datos", ruta):
     _estilo(ax)
     ax.grid(axis="y", color="#e6e6e6", lw=0.5)
     ax.grid(axis="x", visible=False)
+    fig.savefig(ruta, bbox_inches="tight", pad_inches=0.02)
+    plt.close(fig)
+
+
+def fig_colan(ruta):
+    """Tabla 7 de Morán Córdova (2023), transcrita: elementos por nivel de corrosión según la antigüedad."""
+    filas = list(csv.DictReader(open(RAIZ / "datos" / "aceptados" / "repositorios_2026-11-26.csv", encoding="utf-8")))
+    grupos = [("construida menor a 6 meses", "< 6 meses"), ("construida entre 2021 y 2023", "2021–2023"),
+              ("construida entre 2018 y 2020", "2018–2020"), ("construida entre 2015 y 2017", "2015–2017"),
+              ("construida de 2015 a más", "«de 2015 a más»")]
+    niveles = [("nulo", "Nulo"), ("bajo", "Bajo"), ("medio", "Medio"), ("alto", "Alto"), ("critico", "Crítico")]
+    tonos = ["#dfe9f5", "#84b9f3", "#2370cd", "#1757ac", "#0e3d7e"]
+    cuenta = Counter()
+    for r in filas:
+        cuenta[(r["id_grupo"].split("|")[1], r["dano_nivel_corrosion"])] += int(r["dano_n_elementos"] or 0)
+    fig, ax = plt.subplots(figsize=(3.35, 1.6), dpi=300)
+    for i, (g, et) in enumerate(grupos):
+        tot = sum(cuenta[(g, n)] for n, _ in niveles)
+        izq = 0
+        for k, (n, _) in enumerate(niveles):
+            v = cuenta[(g, n)] / tot * 100
+            ax.barh(i, v, left=izq, height=0.62, color=tonos[k], edgecolor="white", lw=0.8)
+            if v >= 12:
+                ax.text(izq + v / 2, i, f"{f1(v, 0)} %", ha="center", va="center", fontsize=4.8,
+                        color="white" if k >= 2 else TEXTO)
+            izq += v
+        ax.text(101, i, f"n = {tot}", va="center", fontsize=5, color=TEXTO2)
+    ax.set_yticks(range(len(grupos)), [et for _, et in grupos], fontsize=5.6)
+    ax.invert_yaxis()
+    ax.set_xlim(0, 116)
+    ax.set_xticks([0, 25, 50, 75, 100], ["0", "25", "50", "75", "100 %"])
+    _estilo(ax)
+    ax.legend([plt.Rectangle((0, 0), 1, 1, color=t) for t in tonos], [e for _, e in niveles], ncol=5, fontsize=5,
+              frameon=False, loc="upper center", bbox_to_anchor=(0.45, 1.25), handlelength=1, columnspacing=0.8)
+    fig.savefig(ruta, bbox_inches="tight", pad_inches=0.02)
+    plt.close(fig)
+
+
+MOTOR = RAIZ / "modelos" / "motor_v004.pkl"
+ETIQ = {-1: "w₀", -2: "edad", -3: "prot.", -4: "marino", -5: "lactato", -6: "curado", -7: "crist."}
+
+
+def importancia_v004() -> dict:
+    """Importancia por permutación del motor v004 sobre lo aceptado (pp de MAE). Se guarda en resultados/."""
+    ruta = RES / "importancia_v004.json"
+    if ruta.exists():
+        return json.loads(ruta.read_text(encoding="utf-8"))
+    import numpy as np
+    from hefesto.motor.datos import VARS_R
+    from hefesto.motor.evaluar_cosecha import DatosCosecha
+    from hefesto.motor.motor import Motor
+    m, d = Motor.cargar(MOTOR), DatosCosecha()
+    pred = lambda X: np.asarray(m.predecir(X)["cierre_pct"], dtype=float) / 100
+    base = float(np.nanmean(np.abs(pred(d.X) - d.y)) * 100)
+    rng, imp = np.random.default_rng(1), {}
+    for j, v in enumerate(VARS_R):
+        s = []
+        for _ in range(5):
+            X = d.X.copy()
+            X[:, j] = rng.permutation(X[:, j])
+            s.append(float(np.nanmean(np.abs(pred(X) - d.y)) * 100) - base)
+        imp[v] = round(float(np.mean(s)), 2)
+    out = {"mae_base_pp": round(base, 2), "importancia_pp": imp}
+    ruta.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    return out
+
+
+def fig_redes(ruta):
+    """Las 5 redes evolucionadas del motor v004: entradas usadas, nodos ocultos y pesos (signo y magnitud)."""
+    from hefesto.motor.motor import Motor
+    redes = Motor.cargar(MOTOR).matrices()
+    fig, axs = plt.subplots(1, len(redes), figsize=(3.35, 1.25), dpi=300)
+    for k, (ax, capas) in enumerate(zip(axs, redes)):
+        ax.axis("off")
+        ax.set_xlim(-0.35, 1.3), ax.set_ylim(-0.15, 1.15)
+        entradas = sorted({o for c in capas for o in c["origenes"] if o < 0}, reverse=True)
+        ocultos = [n for c in capas for n in c["nodos"] if n != 0]
+        pos = {e: (0.0, 1 - i / max(1, len(entradas) - 1) if len(entradas) > 1 else 0.5) for i, e in enumerate(entradas)}
+        for i, h in enumerate(ocultos):
+            pos[h] = (0.5, 0.85 - 0.6 * i)
+        pos[0] = (1.0, 0.5)
+        for c in capas:
+            for n, fila, b in zip(c["nodos"], c["W"], c["sesgos"]):
+                for o, w in zip(c["origenes"], fila):
+                    (x0, y0), (x1, y1) = pos[o], pos[n]
+                    ax.plot([x0, x1], [y0, y1], color=AZUL if w > 0 else NARANJA, lw=0.4 + 0.9 * min(abs(w), 2) / 2,
+                            zorder=1)
+        for n, (x, y) in pos.items():
+            ax.scatter([x], [y], s=26, color="white", edgecolor=TEXTO2 if n < 0 else TEXTO, lw=0.6, zorder=2)
+            if n < 0:
+                ax.text(x - 0.08, y, ETIQ[n], ha="right", va="center", fontsize=4.6, color=TEXTO)
+        ax.text(1.0, 0.33, "cierre", ha="center", va="top", fontsize=4.4, color=TEXTO2)
+        ax.set_title(f"Red {k + 1}", fontsize=5.2, color=TEXTO, pad=1)
+    fig.legend([plt.Line2D([], [], color=AZUL, lw=1), plt.Line2D([], [], color=NARANJA, lw=1)],
+               ["peso positivo", "peso negativo"], fontsize=4.8, frameon=False, ncol=2, loc="lower center",
+               bbox_to_anchor=(0.5, -0.06))
     fig.savefig(ruta, bbox_inches="tight", pad_inches=0.02)
     plt.close(fig)
 
@@ -502,6 +602,13 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     # ------------------------------------------------------------------ I
     doc.h1("I. INTRODUCCIÓN")
     doc.h2("A. Problema y expectativa")
+    doc.p("Una vivienda frente al mar en Colán se diseña para durar décadas, pero antes de cumplir 8 años el acero "
+          "de sus sobrecimientos ya se está oxidando. Mientras tanto, el cálculo que debía advertirlo podía "
+          "prometer 150 años. Entre esas dos cifras hay una pregunta que hoy ningún ingeniero en el Perú puede "
+          "responder con datos: si el concreto pudiera cerrar sus propias fisuras, ¿cuánto tendría que cerrarlas "
+          "para llegar a la vida útil que exige la norma en ese lugar, y lo lograría de verdad? Este artículo "
+          "responde esa pregunta para 384 zonas de la costa peruana con un motor de neuroevolución, y muestra "
+          "dónde la respuesta es sí, dónde es no y cuánta confianza merece cada una.")
     doc.p("En la playa La Esmeralda (Colán, Paita), el 98,4 % de los sobrecimientos evaluados presenta manchas de "
           "corrosión y el deterioro empezó a propagarse en menos de 8 años [1]. La Norma E.060 limita la relación "
           "agua–material cementante y fija recubrimientos para exposición a cloruros [2], y el EN 1990 asigna 25 o 50 "
@@ -610,6 +717,27 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     doc.p("Cada genoma NEAT [7] se compila a matrices por capa, de modo que la pasada hacia adelante es vectorial "
           "e idéntica a la evaluación nodo a nodo:")
     doc.ecuacion("h⁽ˡ⁾ = σ( W⁽ˡ⁾ · h⁽ˡ⁻¹⁾ + b⁽ˡ⁾ ),   ŷ_NEAT = (1/K) Σₖ ŷₖ")
+    doc.p("La evolución sigue NEAT [7]: cada red empieza con las siete entradas conectadas directamente a la "
+          "salida, sin capas ocultas, y la mutación puede añadir conexiones y nodos. Las redes se agrupan en especies "
+          "por distancia genética para proteger las innovaciones, y la aptitud es el error de cierre con una "
+          "penalización por complejidad, de modo que una conexión nueva solo sobrevive si mejora la predicción "
+          "(Tabla III). Las entradas se normalizan con límites físicos fijos (w₀ ≤ 1 mm, edad ≤ 480 días) y no con "
+          "los datos, para que una red entrenada en un laboratorio no cambie de escala en otro.")
+    doc.tabla("Configuración de la evolución NEAT", [
+        ["Parámetro", "Valor"],
+        ["Población / generaciones", "60 / 50 por red"],
+        ["Redes promediadas (K)", "5, con semillas distintas"],
+        ["Topología inicial", "7 entradas → salida, sin ocultos"],
+        ["Prob. de añadir conexión / nodo", "0,18 / 0,12"],
+        ["Activación / agregación", "sigmoide / suma"],
+        ["Umbral de especie", "2,5 (+1,0 por oculto inicial)"],
+        ["Élite / supervivencia", "2 / 25 %"],
+        ["Estancamiento máximo", "15 generaciones"],
+        ["Penalización por complejidad λ", "8 × 10⁻⁴ por conexión"],
+        ["Pesos / sesgos", "|w| ≤ 12; |b| ≤ 10"]],
+        [2.3, 2.7], alin=["left", "left"],
+        nota="neat-python con evaluación matricial propia (idéntica a la evaluación nodo a nodo hasta 10⁻¹²). "
+             "Fuente: hefesto/motor/config_neat.txt y ConfigNEAT.")
     doc.p("El motor H3 promedia K = 5 redes evolucionadas y, cuando hay ensayos del laboratorio nuevo, suma una "
           "corrección local por bosque aleatorio que pesa según el número n de grupos locales, con intervalos "
           "conformes [8]:")
@@ -633,7 +761,7 @@ def escribir(D: Datos, doc: Doc, figs: dict):
           "régimen, el motor predice el cierre a 90 días con cada protección y el veredicto descuenta un error de "
           "±20 pp: “cumple” si la predicción menos 20 alcanza el cierre requerido, “incierto” si solo la predicción "
           "central lo alcanza. El régimen seco queda fuera de alcance (gobierna la carbonatación) y ningún resultado "
-          "pasa del horizonte pedido. La Tabla III resume los parámetros.")
+          "pasa del horizonte pedido. La Tabla IV resume los parámetros.")
     doc.tabla("Parámetros del modelo de vida útil", [
         ["Parámetro", "Valor", "Fuente"],
         ["Probabilidad objetivo de inicio", "10 % (β ≈ 1,3)", "fib B34 [4]"],
@@ -664,7 +792,7 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     doc.figura(figs["cos"], "Distribución del rango de calidad por ámbito (todos los registros). A la derecha, el "
                             "número de registros. Elaboración propia.", 0.47)
     doc.p(f"De {m['ss_plus']['candidatos'] + m['ss_plus']['confirmados']} candidatos a SS+ se leyeron completos los de "
-          f"acceso abierto y se confirmaron {m['ss_plus']['confirmados']} (Tabla IV). Tres son de autorreparación en "
+          f"acceso abierto y se confirmaron {m['ss_plus']['confirmados']} (Tabla V). Tres son de autorreparación en "
           f"servicio: el ensayo de la A465 con cuatro tecnologías y su seguimiento hasta 231 días [19], el cierre "
           f"medido en campo de las microcápsulas [20] y la pasarela lituana con razón de cierre a 28 y 98 días [21]. "
           f"Los otros ocho dan perfiles de cloruros en estructuras reales, justo lo que el modelo de durabilidad "
@@ -689,14 +817,17 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     pi = D.piura
     prom = lambda v: sum(v) / len(v)
     doc.p(f"De la tesis de Colán [1] se transcribieron las Tablas 1–4, 7 y 9 (580 filas de inspección de 64 "
-          f"estructuras, por elemento, nivel de corrosión y antigüedad). La comprobación de sumas encontró que las "
+          f"estructuras, por elemento, nivel de corrosión y antigüedad; Fig. 3). La comprobación de sumas encontró que las "
           f"Tablas 1–4 difieren en ±1 de la Tabla 7 en dos rangos de antigüedad; el error es de la tesis y se anotó "
           f"sin corregirlo. De la tesis de Piura con *Lysinibacillus sphaericus* [34] se transcribió la Tabla 6: nueve "
           f"probetas prismáticas con ancho inicial y porcentaje de sellado medido por microscopía electrónica a 7 y "
-          f"14 días (Tabla V). El sellado crece con la dosis y con la edad; el patrón no muestra sellado visible y no "
+          f"14 días (Tabla VI). El sellado crece con la dosis y con la edad; el patrón no muestra sellado visible y no "
           f"se transcribió como cero. Se descartaron, con motivo escrito, una tesis sin autorreparación con fechas de "
           f"rotura imposibles, una tabla que contradice su propio texto (431 frente a 257,4 kg/cm² a 14 días) y dos "
           f"tesis sin datos de cierre.")
+    doc.figura(figs["colan"], "Nivel de corrosión (indicador «manchas») de los elementos de 64 estructuras de La "
+                              "Esmeralda, Colán, según su antigüedad. Rótulos de antigüedad tal como en la Tabla 7 de "
+                              "[1]; n: elementos evaluados. Elaboración propia con datos de [1].", 0.48)
     filas = [["Dosis de cultivo", "w₀ (µm)", "7 días", "14 días"]]
     for k, et in (("ABC15", "15 ml/m³"), ("ABC20", "20 ml/m³"), ("ABC25", "25 ml/m³")):
         w = sorted(set(pi[k]["w"]))
@@ -705,14 +836,14 @@ def escribir(D: Datos, doc: Doc, figs: dict):
               nota="Concreto f′c = 350 kg/cm², a/c = 0,43, cemento Portland tipo V, sin lactato ni aditivo cristalino "
                    "(Tabla 3 de [34]). Patrón (825, 128 y 265 µm): sin sellado visible.")
     doc.h2("C. Banco de motores")
-    doc.p(f"La Tabla VI resume el banco. Dentro de un mismo laboratorio, XGBoost y el bosque aleatorio son los más "
+    doc.p(f"La Tabla VII resume el banco. Dentro de un mismo laboratorio, XGBoost y el bosque aleatorio son los más "
           f"precisos ({f1(cand['XGBoost']['precision']['filas']['MAE_pp'])} y "
           f"{f1(cand['Random Forest']['precision']['filas']['MAE_pp'])} pp), pero al predecir otro laboratorio su "
           f"error se dispara a {f1(cand['XGBoost']['precision']['laboratorio']['media_MAE_pp'])} pp: aprenden rasgos "
           f"del laboratorio. Las redes más profundas (NEAT con capa oculta, perceptrón 32×16) también ajustan mejor y "
           f"generalizan peor. Las cinco redes NEAT sin capa oculta logran el menor error entre laboratorios "
           f"({f1(h3['precision']['laboratorio']['media_MAE_pp'])} pp); H3 empata en precisión y gana por su curva de "
-          f"mejora (Fig. 3): sin ensayos locales parte de {f1(h3['mejora']['0'])} pp, frente a "
+          f"mejora (Fig. 4): sin ensayos locales parte de {f1(h3['mejora']['0'])} pp, frente a "
           f"{f1(cand['Random Forest']['mejora']['0'])} pp del bosque aleatorio, y con 40 grupos locales baja a "
           f"{f1(h3['mejora']['40'])} pp. Para un sitio nuevo con pocos ensayos, que es el caso peruano, empezar bien "
           f"importa más que terminar bien. El motor usa sobre todo la edad, porque en las réplicas el ambiente marino "
@@ -731,9 +862,31 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     doc.figura(figs["mej"], "Curva de mejora: error en el laboratorio nuevo según los grupos de probetas locales que "
                             "se suman (H3 los usa para calibrar, sin reentrenar). Datos del banco. Elaboración propia.",
                0.53)
+    hc, hm = D.hib["Cappellesso2024"], D.hib["Mousa2022"]
+    ec, em = hc["estabilidad_base"], hm["estabilidad_base"]
+    doc.p(f"Promediar cinco redes no es un adorno. Entrenada sola, una red NEAT predice Cappellesso con "
+          f"{f1(ec['MAE_pp_una_red'][0])} ± {f1(ec['MAE_pp_una_red'][1])} pp según la semilla; el promedio de cinco "
+          f"baja a {f1(ec['MAE_pp_promedio_K'][0])} ± {f1(ec['MAE_pp_promedio_K'][1])} pp, y en Mousa de "
+          f"{f1(em['MAE_pp_una_red'][0])} ± {f1(em['MAE_pp_una_red'][1])} a {f1(em['MAE_pp_promedio_K'][0])} ± "
+          f"{f1(em['MAE_pp_promedio_K'][1])} pp: el conjunto reduce la dispersión entre semillas unas diez veces. "
+          f"Los intervalos conformes [8] calibrados con ensayos locales cumplen lo que prometen (Tabla VIII): con "
+          f"un nivel nominal de 90 %, la cobertura real queda entre {f1(min(h['conforme_H1'][n]['90%']['cobertura_real'] for h in (hc, hm) for n in ('5', '10', '20', '40')) * 100, 0)} "
+          f"y {f1(max(h['conforme_H1'][n]['90%']['cobertura_real'] for h in (hc, hm) for n in ('5', '10', '20', '40')) * 100, 0)} %, "
+          f"y su semiancho se estrecha a medida que hay más grupos locales. Para el diseñador eso significa que el "
+          f"motor no solo da un número: dice cuánto puede equivocarse.")
+    filas = [["Grupos locales", "Cobertura 90 % (C / M)", "Semiancho (pp, C / M)", "Cobertura 80 % (C / M)"]]
+    for n in ("5", "10", "20", "40"):
+        c9, m9 = hc["conforme_H1"][n]["90%"], hm["conforme_H1"][n]["90%"]
+        c8, m8 = hc["conforme_H1"][n]["80%"], hm["conforme_H1"][n]["80%"]
+        filas.append([n, f"{f1(c9['cobertura_real'] * 100, 0)} / {f1(m9['cobertura_real'] * 100, 0)} %",
+                      f"{f1(c9['semiancho_pp'], 0)} / {f1(m9['semiancho_pp'], 0)}",
+                      f"{f1(c8['cobertura_real'] * 100, 0)} / {f1(m8['cobertura_real'] * 100, 0)} %"])
+    doc.tabla("Intervalos conformes en el laboratorio nuevo", filas, [1.0, 1.4, 1.3, 1.3],
+              nota=f"C: Cappellesso predicho con motor entrenado en Mousa; M: al revés. {D.hib['semillas']} semillas, "
+                   f"{D.hib['generaciones']} generaciones. Fuente: resultados/hibrido.json.")
     doc.h2("D. Entrenamiento con la cosecha")
     doc.p(f"Con la cosecha, el error en fuente no vista bajó de {f1(tod['MAE_actual'])} a {f1(tod['MAE_cosecha'])} pp "
-          f"en conjunto y mejoró en {tod['fuentes_que_mejoran']} de {ev['fuentes']} fuentes (Tabla VII, Fig. 4). Entre "
+          f"en conjunto y mejoró en {tod['fuentes_que_mejoran']} de {ev['fuentes']} fuentes (Tabla IX, Fig. 5). Entre "
           f"los dos laboratorios de réplicas pasó de {f1(rep['MAE_actual'])} a {f1(rep['MAE_cosecha'])} pp, y en la "
           f"tesis de Piura de {f1(peru['MAE_actual'])} a {f1(peru['MAE_cosecha'])} pp. En los 24 estudios de la "
           f"literatura apenas cambió ({f1(nue['MAE_actual'])} → {f1(nue['MAE_cosecha'])} pp): cada estudio aporta de "
@@ -741,7 +894,7 @@ def escribir(D: Datos, doc: Doc, figs: dict):
           f"importante es cualitativo: el motor v003 predecía {f1(V003_CIERRE_MARINO)} % de cierre a 90 días en "
           f"ambiente marino para toda protección; el v004 distingue {f1(ops['sin bacterias'])} % sin bacterias, "
           f"{f1(ops['directa/comercial'])} % directa, {f1(ops['portador'])} % con portador y "
-          f"{f1(ops['encapsulación'])} % encapsulada (Fig. 5a). El lactato aún no tiene efecto: solo un laboratorio "
+          f"{f1(ops['encapsulación'])} % encapsulada (Fig. 7a). El lactato aún no tiene efecto: solo un laboratorio "
           f"lo ensayó con y sin él.")
     filas = [["Prueba", "Filas", "Fuentes", "v003", "v004"]]
     for et, g in [("Todas", tod), ("Entre laboratorios", rep), ("Perú (Piura)", peru), ("Estudios nuevos", nue)]:
@@ -751,6 +904,19 @@ def escribir(D: Datos, doc: Doc, figs: dict):
                    "laboratorios; v004: todo lo aceptado salvo la fuente evaluada.")
     doc.figura(figs["ev"], "Error en fuente no vista del motor actual (v003) y del entrenado con la cosecha (v004). "
                            "Elaboración propia.", 0.53)
+    imp = importancia_v004()["importancia_pp"]
+    doc.p(f"La Fig. 6 muestra lo que aprendió el motor v004. Las cinco redes conservan una topología mínima, como "
+          f"busca la penalización por complejidad, pero la evolución hizo algo que no ocurría con dos laboratorios: "
+          f"dos redes usan el nivel de protección (una directamente y otra a través de un nodo oculto que creó) y otra "
+          f"creó un nodo oculto para el curado previo. La importancia por permutación lo confirma con orden de "
+          f"magnitud: la edad domina ({f1(imp['Edad (d)'])} pp), y el ancho inicial ({f1(imp['Ancho fisura w0 (mm)'], 2)} "
+          f"pp), la protección ({f1(imp['Protección bio (0-3)'], 2)} pp) y el curado previo "
+          f"({f1(imp['Curado previo'], 2)} pp) aportan poco pero ya no cero; el ambiente marino, el lactato y el agente "
+          f"cristalino siguen en cero. Es una red que empieza a leer el material, no solo el reloj, y que lo hace con "
+          f"tres conexiones de media, lo que permite auditar cada peso.")
+    doc.figura(figs["redes"], "Las cinco redes evolucionadas del motor v004. Nodos de la izquierda: entradas que cada "
+                              "red usa (las demás se podaron); centro: nodos ocultos creados por la evolución; grosor "
+                              "proporcional al peso. Elaboración propia.", 0.40)
     doc.h2("E. Vida útil en 384 zonas costeras")
     doc.p(f"De 384 zonas, 116 son secas y quedan fuera de alcance; en las {n_cl} con cloruros, la fisura de diseño de "
           f"0,3 mm sin reparar lleva la corrosión a iniciarse entre 3 y 5,5 años en la mayoría de las zonas, lo que "
@@ -758,9 +924,9 @@ def escribir(D: Datos, doc: Doc, figs: dict):
           f"en las {c25['n']} zonas con un cierre requerido mediano de {f1(c25['mediana'])} % (p10 "
           f"{f1(c25['p10'])} %, p90 {f1(c25['p90'])} %); 40 años solo en {c40['n']} zonas, con un cierre de "
           f"{f1(c40['p10'])}–{f1(c40['p90'])} %. Con el motor v004 y el error de ±20 pp, 25 años se cumplen con "
-          f"certeza en {v25['cumple']} zonas y 40 años en {v40['cumple']} (Tabla IX y Fig. 5b).")
+          f"certeza en {v25['cumple']} zonas y 40 años en {v40['cumple']} (Tabla XII y Fig. 7b).")
     R = D.regimen
-    doc.p(f"El régimen de exposición lo decide casi todo (Tabla VIII). En las {R['atmosferico_marino']['n']} zonas "
+    doc.p(f"El régimen de exposición lo decide casi todo (Tabla X). En las {R['atmosferico_marino']['n']} zonas "
           f"atmosféricas marinas la mezcla de norma (cemento IP, a/b = 0,35, 50 mm) supera 40 años sin fisura y la "
           f"fisura sin reparar inicia la corrosión hacia los {f1(R['atmosferico_marino']['fisura'], 0)} años; basta "
           f"un cierre de {f1(R['atmosferico_marino']['req25'], 0)} % para llegar a 25 años, y el motor predice "
@@ -786,6 +952,26 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     doc.tabla("Vida útil por régimen de exposición (medianas)", filas, [1.15, 0.6, 1.25, 0.85, 0.75, 0.8, 0.8],
               nota="Sin fisura y fisura 0,3: años hasta el 10 % de probabilidad de inicio de la corrosión con la mezcla "
                    "elegida (la más sencilla que alcanza 25 años). Cierre 25 a: cierre requerido para 25 años.")
+    sens = D.sens
+    doc.p("¿Cuánto depende el cierre requerido de los supuestos del modelo de cloruros? La Tabla XI repite el cálculo "
+          "en cinco ciudades cambiando un supuesto a la vez. Tres lecciones de diseño salen de ella. Primera, 15 mm "
+          "más de recubrimiento valen más que cualquier protección bacteriana en las zonas atmosféricas: llevan el "
+          "cierre requerido para 25 años casi a cero. Segunda, el efecto de la fisura sobre la difusión es el "
+          "supuesto que más pesa (con efecto lineal en lugar de cuadrático, el cierre requerido cae a cero en las "
+          "zonas atmosféricas), y por eso medirlo en campo es la prioridad. Tercera, diseñar con P = 50 % en lugar "
+          "de 10 % haría desaparecer la necesidad de reparar en casi todas partes: la confiabilidad que fija la "
+          "norma decide el resultado tanto como el material.")
+    filas = [["Ciudad (régimen)", "Base", "Fisura lineal", "CoV Cs 0,5", "+15 mm", "P = 50 %"]]
+    nombres = {"atmosferico_marino": "atm.", "niebla_salina": "niebla"}
+    for c, v in sens.items():
+        x = v["variantes"]
+        celda = lambda k: f"{f1(x[k]['cierre_req_25_pct'], 0)} %"
+        filas.append([f"{c} ({nombres.get(v['regimen'], v['regimen'])})", celda("base"), celda("fisura_lineal"),
+                      celda("cs_cov_0.5"), celda("recub_+15"), celda("p_50")])
+    doc.tabla("Sensibilidad del cierre requerido para 25 años", filas, [1.55, 0.7, 0.85, 0.8, 0.65, 0.7],
+              nota="Una zona por ciudad con la mezcla de norma; se cambia un supuesto a la vez. Fisura lineal: D ∝ f "
+                   "en lugar de f²; CoV Cs: dispersión de Cs; +15 mm: recubrimiento; P: probabilidad de inicio de la "
+                   "corrosión. Fuente: resultados/sensibilidad_vida.json.")
     doc.tabla("Veredicto por zona con el motor v004", [
         ["Veredicto", "25 años", "40 años"],
         ["Cumple", str(v25.get("cumple", 0)), str(v40.get("cumple", 0))],
@@ -803,7 +989,7 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     doc.h2("F. Qué resuelve a nivel de ingeniería")
     mej20, mej40 = h3["mejora"]["20"], h3["mejora"]["40"]
     doc.p(f"Para el ingeniero que diseña en la costa, el motor convierte una suposición en una especificación "
-          f"verificable (Tabla X). Antes, la autorreparación entraba al cálculo como un porcentaje supuesto y la vida "
+          f"verificable (Tabla XIV). Antes, la autorreparación entraba al cálculo como un porcentaje supuesto y la vida "
           f"útil salía como un número sin incertidumbre, que podía llegar a 150 años. Con Hefesto, primero se obtiene "
           f"el cierre mínimo que la fisura de diseño debe alcanzar para cumplir 25 o 40 años en la zona; luego el motor "
           f"dice si la protección elegida llega a ese cierre, con su error medido en un laboratorio no visto; y el "
@@ -813,6 +999,33 @@ def escribir(D: Datos, doc: Doc, figs: dict):
           f"cuántos ensayos locales hacen falta para confiar en la predicción ({f1(mej20)} pp con 20 grupos de "
           f"probetas, {f1(mej40)} pp con 40).")
     R = D.regimen
+    a, s_ = D.ejemplo["atm"], D.ejemplo["salp"]
+    doc.p(f"Un ejemplo con dos zonas reales del litoral norte de Piura (lat. {a['lat'].replace('.', ',')}°) muestra "
+          f"el procedimiento completo (Tabla XIII). A {f1(float(s_['dist_mar_km']), 2)} km del mar (clase "
+          f"{s_['clase']}) el depósito de cloruros es {f1(float(s_['deposicion_mg_m2_d']))} mg/m²/día; la mezcla de "
+          f"norma resiste {s_['sin_fisura']} sin fisura, pero con la fisura de diseño sin reparar la corrosión se "
+          f"inicia a los {s_['fisura_sin_reparar']}. Para 25 años la fisura tendría que cerrarse un "
+          f"{f1(float(s_['cierre_req_25_pct']))} %, y el motor predice {f1(float(s_['neat_cierre_pct']))} %: no cumple. "
+          f"A {f1(float(a['dist_mar_km']), 2)} km (clase {a['clase']}) basta un cierre de "
+          f"{f1(float(a['cierre_req_25_pct']))} %, que la protección predicha supera con margen: cumple. El mismo "
+          f"concreto bacteriano es una buena solución a 2,75 km y una insuficiente a 250 m; en primera línea hay que "
+          f"limitar el ancho de fisura de diseño o exigir y verificar en laboratorio un cierre de al menos "
+          f"{f1(float(s_['cierre_req_25_pct']), 0)} %.")
+    sf = lambda z: "> 40 años" if z["sin_fisura"].startswith("cumple 40") else z["sin_fisura"]
+    doc.tabla("Ejemplo de diseño en el litoral norte de Piura", [
+        ["Paso", f"{f1(float(s_['dist_mar_km']), 2)} km del mar", f"{f1(float(a['dist_mar_km']), 2)} km del mar"],
+        ["Régimen / clase", f"salpicadura / {s_['clase']}", f"atmosférico / {a['clase']}"],
+        ["Depósito de Cl⁻ (mg/m²/d)", f1(float(s_["deposicion_mg_m2_d"])), f1(float(a["deposicion_mg_m2_d"]))],
+        ["Mezcla de norma", f"{s_['cemento']}, a/b {s_['a_b'].replace('.', ',')}, {int(float(s_['recubrimiento_mm']))} mm",
+         f"{a['cemento']}, a/b {a['a_b'].replace('.', ',')}, {int(float(a['recubrimiento_mm']))} mm"],
+        ["Sin fisura", sf(s_), sf(a)],
+        ["Fisura 0,3 mm sin reparar", s_["fisura_sin_reparar"], a["fisura_sin_reparar"]],
+        ["Cierre requerido 25 años", f"{f1(float(s_['cierre_req_25_pct']))} %", f"{f1(float(a['cierre_req_25_pct']))} %"],
+        ["Cierre predicho (motor)", f"{f1(float(s_['neat_cierre_pct']))} %", f"{f1(float(a['neat_cierre_pct']))} %"],
+        ["**Veredicto 25 años", f"**{s_['veredicto_25']}", f"**{a['veredicto_25']}"]],
+        [1.8, 1.6, 1.6], alin=["left", "center", "center"],
+        nota=f"Zonas {s_['id']} y {a['id']} de resultados/vida_zonas.csv. Cierre predicho a 90 días con la mejor "
+             f"protección confiable; veredicto con error de ±20 pp.")
     doc.tabla("Problemas de diseño que resuelve el motor", [
         ["Pregunta del diseñador", "Antes", "Con Hefesto"],
         ["¿Cuánto debe cerrar la fisura de 0,3 mm para 25 años?", "Supuesto",
@@ -827,7 +1040,7 @@ def escribir(D: Datos, doc: Doc, figs: dict):
         ["¿Cuántos ensayos locales hacer?", "Sin criterio", f"20 grupos → {f1(mej20)} pp; 40 → {f1(mej40)} pp"],
         ["¿Qué fuente de datos creer?", "Sin criterio", "Rango SS+…D por fuente"]],
         [1.9, 1.0, 2.1], alin=["left", "left", "left"],
-        nota="Cifras de las Tablas V–IX y de la Fig. 3. Cierre requerido: mediana por régimen con la mezcla de norma.")
+        nota="Cifras de las Tablas VI–XIII y de la Fig. 4. Cierre requerido: mediana por régimen con la mezcla de norma.")
     doc.h2("G. Limitaciones")
     doc.p("La pendiente de fisura proviene de un laboratorio y dos anchos; Cs y el depósito de cloruros por niebla "
           "son supuestos sin medición local, y las fuentes SS+ de perfiles de cloruros son las indicadas para "
@@ -920,11 +1133,13 @@ def ensamblar(doc: Doc):
 
 def main() -> int:
     D = Datos()
-    figs = {k: CARPETA / "ieee" / f"fig_{k}.png" for k in ("arq", "cos", "mej", "ev", "vida")}
+    figs = {k: CARPETA / "ieee" / f"fig_{k}.png" for k in ("arq", "cos", "colan", "mej", "ev", "redes", "vida")}
     (CARPETA / "ieee").mkdir(parents=True, exist_ok=True)
     fig_arquitectura(figs["arq"])
+    fig_redes(figs["redes"])
     fig_cosecha(D, figs["cos"])
     fig_mejora(D, figs["mej"])
+    fig_colan(figs["colan"])
     fig_evaluacion(D, figs["ev"])
     fig_vida(D, figs["vida"])
     doc = Doc()

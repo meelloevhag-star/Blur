@@ -1,0 +1,12 @@
+{
+ "mae_base_pp": 18.32,
+ "importancia_pp": {
+  "Ancho fisura w0 (mm)": 0.27,
+  "Edad (d)": 11.72,
+  "Protección bio (0-3)": 0.22,
+  "Ambiente marino": 0.0,
+  "Lactato de calcio": 0.0,
+  "Curado previo": 0.17,
+  "Agente cristalino": 0.0
+ }
+}
