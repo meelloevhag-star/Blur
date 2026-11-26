@@ -1,6 +1,6 @@
 {
  "resumen": {
-  "motor": "motor_v003.pkl",
+  "motor": "motor_v004.pkl",
   "zonas": 384,
   "fuera_de_alcance_carbonatacion": 116,
   "regimenes": {
@@ -20,15 +20,15 @@
    "14.5 años": 10
   },
   "veredicto_25": {
-   "no cumple": 179,
-   "cumple": 87,
-   "incierto": 2
+   "no cumple": 181,
+   "incierto": 2,
+   "cumple": 85
   },
   "veredicto_40": {
    "no alcanzable con esta mezcla": 181,
-   "no cumple": 4,
-   "incierto": 76,
-   "cumple": 7
+   "no cumple": 28,
+   "incierto": 58,
+   "cumple": 1
   },
   "cierre_requerido_25_pct": {
    "n": 268,
@@ -45,58 +45,58 @@
    "sin_dato_no_alcanzable": 181
   },
   "neat_mejor_opcion_marina": {
-   "proteccion": "sin bacterias",
-   "lactato_calcio": false,
-   "cierre_pct": 77.3,
+   "proteccion": "portador",
+   "lactato_calcio": true,
+   "cierre_pct": 71.9,
    "confiable": true
   },
   "neat_opciones_marinas": [
    {
     "proteccion": "sin bacterias",
     "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "cierre_pct": 68.5,
     "confiable": true
    },
    {
     "proteccion": "sin bacterias",
     "lactato_calcio": true,
-    "cierre_pct": 77.3,
+    "cierre_pct": 68.5,
     "confiable": false
    },
    {
     "proteccion": "directa/comercial",
     "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "cierre_pct": 70.3,
     "confiable": true
    },
    {
     "proteccion": "directa/comercial",
     "lactato_calcio": true,
-    "cierre_pct": 77.3,
+    "cierre_pct": 70.3,
     "confiable": false
    },
    {
     "proteccion": "portador",
     "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "cierre_pct": 71.9,
     "confiable": false
    },
    {
     "proteccion": "portador",
     "lactato_calcio": true,
-    "cierre_pct": 77.3,
-    "confiable": false
+    "cierre_pct": 71.9,
+    "confiable": true
    },
    {
     "proteccion": "encapsulación",
     "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "cierre_pct": 73.2,
     "confiable": false
    },
    {
     "proteccion": "encapsulación",
     "lactato_calcio": true,
-    "cierre_pct": 77.3,
+    "cierre_pct": 73.2,
     "confiable": false
    }
   ],
@@ -150,12 +150,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -212,17 +212,17 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
-    "25": "cumple",
+    "25": "incierto",
     "40": "no cumple"
    }
   },
@@ -302,12 +302,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -364,12 +364,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -454,12 +454,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -573,12 +573,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -692,12 +692,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -811,12 +811,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -930,12 +930,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -992,17 +992,17 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
-    "25": "cumple",
+    "25": "incierto",
     "40": "no cumple"
    }
   },
@@ -1082,12 +1082,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -1144,18 +1144,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -1234,12 +1234,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -1296,18 +1296,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -1386,12 +1386,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -1448,18 +1448,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -1538,12 +1538,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -1600,18 +1600,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -1690,12 +1690,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -1752,18 +1752,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -1842,12 +1842,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -1904,12 +1904,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -1994,12 +1994,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -2056,18 +2056,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2146,12 +2146,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -2208,18 +2208,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2298,12 +2298,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -2360,18 +2360,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2422,18 +2422,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2483,12 +2483,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -2545,18 +2545,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2635,12 +2635,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -2697,18 +2697,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2787,12 +2787,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -2849,18 +2849,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2911,18 +2911,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -2972,12 +2972,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3034,18 +3034,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -3097,12 +3097,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3158,12 +3158,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3220,18 +3220,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -3283,12 +3283,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3344,12 +3344,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3407,12 +3407,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3470,12 +3470,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3531,12 +3531,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3594,12 +3594,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3657,12 +3657,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3718,12 +3718,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3780,12 +3780,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3842,18 +3842,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -3903,12 +3903,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -3966,12 +3966,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4028,18 +4028,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -4089,12 +4089,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4152,12 +4152,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4214,12 +4214,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4275,12 +4275,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4337,12 +4337,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4399,18 +4399,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -4460,12 +4460,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4523,12 +4523,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4585,18 +4585,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -4646,12 +4646,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4709,12 +4709,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4771,18 +4771,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -4832,12 +4832,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4895,12 +4895,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -4985,12 +4985,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5048,12 +5048,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5110,12 +5110,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5171,12 +5171,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5233,18 +5233,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -5323,12 +5323,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5385,18 +5385,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -5475,12 +5475,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5537,12 +5537,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5627,12 +5627,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5690,12 +5690,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5752,18 +5752,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -5813,12 +5813,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5875,12 +5875,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5937,12 +5937,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -5998,12 +5998,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6061,12 +6061,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6123,12 +6123,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6184,12 +6184,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6247,12 +6247,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6337,12 +6337,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6399,12 +6399,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6489,12 +6489,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6552,12 +6552,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6642,12 +6642,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6705,12 +6705,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6795,12 +6795,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6858,12 +6858,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -6948,12 +6948,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7010,18 +7010,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "incierto"
+    "40": "no cumple"
    }
   },
   {
@@ -7100,12 +7100,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7163,12 +7163,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7225,12 +7225,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7286,12 +7286,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7349,12 +7349,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7439,12 +7439,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7502,12 +7502,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7592,12 +7592,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7655,12 +7655,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7745,12 +7745,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7808,12 +7808,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7870,12 +7870,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7931,12 +7931,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -7993,12 +7993,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8083,12 +8083,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8145,12 +8145,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8235,12 +8235,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8297,12 +8297,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8387,12 +8387,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8449,12 +8449,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8539,12 +8539,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8602,12 +8602,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8692,12 +8692,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8754,12 +8754,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8844,12 +8844,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8907,12 +8907,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -8997,12 +8997,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9060,12 +9060,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9150,12 +9150,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9213,12 +9213,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9303,12 +9303,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9366,12 +9366,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9456,12 +9456,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9518,12 +9518,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9608,12 +9608,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9670,12 +9670,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9760,12 +9760,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9823,12 +9823,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9913,12 +9913,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -9976,12 +9976,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10066,12 +10066,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10129,12 +10129,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10192,12 +10192,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10253,12 +10253,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10316,12 +10316,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10378,12 +10378,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10439,12 +10439,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10501,12 +10501,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10591,12 +10591,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10653,12 +10653,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10743,12 +10743,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10862,12 +10862,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -10925,12 +10925,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11015,12 +11015,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11078,12 +11078,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11140,12 +11140,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11201,12 +11201,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11263,12 +11263,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11353,12 +11353,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11415,12 +11415,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11505,12 +11505,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11568,12 +11568,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11658,12 +11658,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11720,12 +11720,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11810,12 +11810,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11872,12 +11872,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -11962,12 +11962,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12024,12 +12024,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12114,12 +12114,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12176,12 +12176,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12266,12 +12266,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12328,12 +12328,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12418,12 +12418,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12480,12 +12480,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12570,12 +12570,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12632,12 +12632,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12722,12 +12722,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12784,12 +12784,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12874,12 +12874,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -12936,12 +12936,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13026,12 +13026,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13088,12 +13088,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13151,12 +13151,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13212,12 +13212,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13275,12 +13275,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13337,12 +13337,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13398,12 +13398,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13461,12 +13461,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13551,12 +13551,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13614,12 +13614,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13704,12 +13704,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13767,12 +13767,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13829,12 +13829,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13890,12 +13890,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -13952,12 +13952,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14042,12 +14042,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14104,12 +14104,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14194,12 +14194,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14256,12 +14256,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14346,12 +14346,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14409,12 +14409,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14499,12 +14499,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14562,17 +14562,17 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
-    "25": "incierto",
+    "25": "no cumple",
     "40": "no alcanzable con esta mezcla"
    }
   },
@@ -14652,12 +14652,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14714,12 +14714,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14804,12 +14804,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -14867,17 +14867,17 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
-    "25": "incierto",
+    "25": "no cumple",
     "40": "no alcanzable con esta mezcla"
    }
   },
@@ -14957,12 +14957,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15019,12 +15019,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15109,12 +15109,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15172,12 +15172,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15262,12 +15262,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15325,12 +15325,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15387,18 +15387,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "cumple"
+    "40": "incierto"
    }
   },
   {
@@ -15448,12 +15448,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15511,12 +15511,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15573,12 +15573,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15634,12 +15634,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15697,12 +15697,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15759,18 +15759,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "cumple"
+    "40": "incierto"
    }
   },
   {
@@ -15820,12 +15820,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15883,12 +15883,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -15973,12 +15973,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16036,12 +16036,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16126,12 +16126,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16189,12 +16189,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16279,12 +16279,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16342,12 +16342,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16432,12 +16432,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16551,12 +16551,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16670,12 +16670,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16789,12 +16789,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -16851,18 +16851,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "cumple"
+    "40": "incierto"
    }
   },
   {
@@ -16941,12 +16941,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17003,18 +17003,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "cumple"
+    "40": "incierto"
    }
   },
   {
@@ -17093,12 +17093,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17155,18 +17155,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "cumple"
+    "40": "incierto"
    }
   },
   {
@@ -17245,12 +17245,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17308,12 +17308,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17398,12 +17398,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17460,18 +17460,18 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
    "veredicto": {
     "25": "cumple",
-    "40": "cumple"
+    "40": "incierto"
    }
   },
   {
@@ -17550,12 +17550,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17612,12 +17612,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17702,12 +17702,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17764,12 +17764,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17854,12 +17854,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -17973,12 +17973,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18092,12 +18092,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18154,12 +18154,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18244,12 +18244,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18306,12 +18306,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18396,12 +18396,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18458,12 +18458,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18548,12 +18548,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18610,12 +18610,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18700,12 +18700,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18762,12 +18762,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18852,12 +18852,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -18971,12 +18971,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19090,12 +19090,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19209,12 +19209,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19271,12 +19271,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19361,12 +19361,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19423,12 +19423,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19513,12 +19513,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19632,12 +19632,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19751,12 +19751,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19813,12 +19813,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19903,12 +19903,12 @@
    },
    "n_mezclas_evaluadas": 4,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
@@ -19965,12 +19965,12 @@
    },
    "n_mezclas_evaluadas": 12,
    "neat": {
-    "motor": "motor_v003.pkl",
+    "motor": "motor_v004.pkl",
     "edad_dias": 90,
     "w0_mm": 0.3,
-    "proteccion": "sin bacterias",
-    "lactato_calcio": false,
-    "cierre_pct": 77.3,
+    "proteccion": "portador",
+    "lactato_calcio": true,
+    "cierre_pct": 71.9,
     "confiable": true,
     "error_pp": 20.0
    },
