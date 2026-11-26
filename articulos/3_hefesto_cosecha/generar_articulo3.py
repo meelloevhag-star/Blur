@@ -684,13 +684,15 @@ def escribir(D: Datos, doc: Doc, figs: dict):
           f"que las sumas cuadren y se anota si la tesis no cuadra. Si falta el ancho inicial, el sellado queda en "
           f"milímetros y no se convierte en porcentaje de cierre.")
     doc.h2("C. Calificación de fuentes: tier, grado y rango")
-    doc.p("Cada documento recibe tres etiquetas independientes (Tabla II). El *tier* mide la completitud para Hefesto "
+    doc.p("Como no existe un estándar para calificar fuentes heterogéneas (tesis, artículos, informes y datasets) "
+          "con fines de entrenamiento, se propone una categorización interna: cada documento recibe tres etiquetas "
+          "independientes (Tabla II). El *tier* mide la completitud para Hefesto "
           "(mezcla, fisura, edad y resultado medido). El *grado* es una nomenclatura interna del tipo de documento y "
           "sale solo de lo que declara la fuente (dc.type, formato o tipo de OpenAlex): un título como “según la norma "
           "ISO” no convierte una tesis en norma. El *rango* combina ambos. Con metadatos el tier es provisional y "
           "nunca pasa de T2; T1 y T0 solo se fijan leyendo el documento completo, y SS+ exige además prototipo o "
           "estructura real en servicio. Cada confirmación queda justificada por escrito.")
-    doc.tabla("Nomenclatura de calidad de las fuentes", [
+    doc.tabla("Nomenclatura interna de calidad de Hefesto (propuesta)", [
         ["Rango", "Regla (tier × grado)"],
         ["SS+", "T0 y aplicado en prototipo o estructura en servicio"],
         ["SS", "T0, o T1 de grado alto (ORG, DATA, DOC, ART-I)"],
@@ -700,9 +702,10 @@ def escribir(D: Datos, doc: Doc, figs: dict):
         ["C", "T3 (toca el tema sin centrarse) o revisión"],
         ["D", "T4 (periférico) o trabajo genérico sin ensayos propios"]],
         [0.7, 4.3], alin=["center", "left"],
-        nota="T0: completo, tangible, trazable, cuali- y cuantitativo, con respaldo de organizaciones. ORG: norma u "
-             "organismo; DATA: dataset con DOI; DOC: doctorado; ART-I: revista con revisión por pares; TES: tesis de "
-             "nivel no declarado.")
+        nota="Categorización interna propuesta en este trabajo; no es un estándar externo. T0: completo, tangible, "
+             "trazable, cuali- y cuantitativo, con respaldo de organizaciones. ORG: norma u organismo; DATA: dataset "
+             "con DOI; DOC: doctorado; ART-I: revista con revisión por pares; TES: tesis de nivel no declarado. "
+             "Elaboración propia.")
     doc.h2("D. Datos de entrenamiento")
     doc.p(f"El motor usa siete entradas: ancho inicial de fisura w₀, edad, nivel de protección (0 sin bacterias, 1 "
           f"directa, 2 portador, 3 encapsulación), ambiente marino, lactato de calcio, curado previo y agente "
