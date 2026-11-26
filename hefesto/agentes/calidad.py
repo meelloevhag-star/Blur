@@ -23,6 +23,7 @@ Confiabilidad de cada fuente: tres etiquetas independientes.
    BAC    bachiller o trabajo de investigación de pregrado
    ART-G  artículo sin revista identificable o genérico
    REV    revisión de literatura (útil para orientar, no aporta datos propios)
+   TES    tesis de nivel no declarado (OpenAlex "dissertation"): se precisa al leer el documento
    ?      no declarado
 
 3. RANGO (SS+ … D) · confiabilidad combinada
@@ -41,15 +42,19 @@ import re
 
 ALTO = {"ORG", "DATA", "DOC", "ART-I"}
 MEDIO = {"MAG", "CONF", "INF", "LIB"}
-BAJO = {"LIC", "BAC", "ART-G"}
+BAJO = {"LIC", "BAC", "ART-G", "TES"}
+# Emisores que son organizaciones o laboratorios: sus informes, manuales y normas son grado ORG.
+ORGANIZACIONES = {"SENCICO", "OSTI"}
 RANGOS = ["SS+", "SS", "S", "A", "B", "C", "D"]
 
 
-def grado(tipo_doc: str, titulo: str = "", revista: str = "") -> str:
+def grado(tipo_doc: str, titulo: str = "", revista: str = "", fuente: str = "") -> str:
     """El grado sale SOLO del tipo que declara la fuente: un título como "según la norma ISO" o
     "plan maestro" no convierte una tesis en norma ni en maestría. Del título solo se toma si es revisión."""
     t = (tipo_doc or "").lower()
-    if re.search(r"\b(standard|norma|reglamento|guideline)\b", t):
+    if re.search(r"\b(standard|norma|reglamento|guideline)\b|laboratorio nacional|national laborator", t):
+        return "ORG"
+    if fuente in ORGANIZACIONES and re.search(r"report|informe|book|libro|manual|norma|gu[ií]a", t):
         return "ORG"
     if re.search(r"revisi[oó]n (te[oó]rica|literaria|sistem|documental|bibliogr)|\breview\b|state of the art|"
                  r"estado del arte", (titulo or "").lower()):
@@ -70,6 +75,8 @@ def grado(tipo_doc: str, titulo: str = "", revista: str = "") -> str:
         return "INF"
     if re.search(r"book|libro|cap[ií]tulo", t):
         return "LIB"
+    if re.search(r"\bdissertation\b", t):
+        return "TES"
     if re.search(r"trabajo de investigaci[oó]n|bachiller", t):
         return "BAC"
     if re.search(r"bachelorthesis|tesis|t[ií]tulo profesional|licenciatur|undergraduate", t):
@@ -81,12 +88,13 @@ def grado(tipo_doc: str, titulo: str = "", revista: str = "") -> str:
 
 def aplicado_en_campo(texto: str) -> bool:
     return bool(re.search(r"prototipo|piloto|en servicio|estructura real|aplicad[oa] en (obra|campo)|"
-                          r"field (trial|application)|in[- ]situ|full[- ]scale|real structure|pilot", texto.lower()))
+                          r"field (trial|application|test)|in[- ]situ|full[- ]scale|real[- ]scale|real structure|pilot|"
+                          r"натурн|в реальных условиях|опытн\w* участ|现场|工程应用|实际工程", texto.lower()))
 
 
 def respaldo_org(texto: str) -> bool:
     return bool(re.search(r"\b(astm|iso|aci|rilem|fib|ntp|nt build|en 206|en 12390)\b|laboratorio acreditado|"
-                          r"inacal|sencico|doi\.org|zenodo|dryad", texto.lower()))
+                          r"inacal|sencico|doi\.org|zenodo|dryad|гост|gb/t|gb 50", texto.lower()))
 
 
 def tier_provisional(familia: str, con_datos: str, titulo: str, resumen: str) -> int:
@@ -119,8 +127,8 @@ def rango(tier: int, grado_: str, aplicado: bool, con_datos: str) -> str:
 
 
 def calificar(tipo_doc: str, familia: str, con_datos: str, titulo: str, resumen: str, revista: str = "",
-              tier_confirmado: str = "") -> dict:
-    g = grado(tipo_doc, titulo, revista=revista)
+              tier_confirmado: str = "", fuente: str = "") -> dict:
+    g = grado(tipo_doc, titulo, revista=revista, fuente=fuente)
     texto = f"{titulo} {resumen}"
     confirmado = str(tier_confirmado).isdigit()
     t = int(tier_confirmado) if confirmado else tier_provisional(familia, con_datos, titulo, resumen)

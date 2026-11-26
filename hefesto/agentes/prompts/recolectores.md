@@ -50,7 +50,18 @@ Los metadatos de una tesis salen de `?verb=GetRecord&metadataPrefix=oai_dc&ident
      - repositorios directos que se recorren **completos**: DSpace 7 (PUCP, UNI, UPC, USAT) y DSpace 6 (UCV, UNPRG, UNS, ULADECH);
      - **ALICIA** (CONCYTEC, unas 167 instituciones) para las que no tienen acceso directo.
    - **Sudamérica (agregado):** LA Referencia y BDTD (Brasil).
-   - **Global (aprendizaje y comparación):** OpenAlex. El ámbito sale del país de los autores.
+   - **Global (aprendizaje y comparación):** el ámbito sale del país de los autores.
+     - **OpenAlex:** artículos de revistas indexadas en Scopus y WoS, tesis de posgrado e informes técnicos, con consultas en inglés, español y chino.
+     - **OSTI.gov:** laboratorios nacionales de EE. UU.
+     - **HAL:** tesis doctorales e informes de Francia.
+     - **Zenodo:** informes de proyectos y entregables.
+     - **CyberLeninka:** revistas rusas.
+
+     Las tesis chinas de CNKI y Wanfang son de pago; China entra por OpenAlex, que reúne sus artículos en inglés y en revistas chinas. eLIBRARY.ru y OATD no se fuerzan.
+   - **SENCICO** (Perú): sus informes y normas son grado ORG.
+   - **Meta de calidad: 10 fuentes SS+.**
+     - Los candidatos son los documentos aplicados en campo o en prototipo, sobre autorreparación o cloruros y con datos propios. `descargar` los pone primero.
+     - El agente lee cada uno completo y lo confirma como T0 solo si es trazable, cuantitativo y tiene respaldo de normas u organizaciones.
    - **Cobertura:** por cada consulta se cosecha **≥ 90 %** de lo que el repositorio reporta (`datos/literatura/cobertura_cosecha.csv`). Si queda por debajo, se marca el motivo y se reintenta.
    - **Familias:**
      - `autorreparable` (incluye *autocicatrizante*, autosellante y *self-healing*);
