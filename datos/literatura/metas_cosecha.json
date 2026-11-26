@@ -1,6 +1,6 @@
 {
- "catalogo_total": 8172,
- "literatura_util": 1330,
+ "catalogo_total": 15667,
+ "literatura_util": 2671,
  "metas": {
   "minimo": 1000,
   "optimo": 3000,
@@ -8,54 +8,54 @@
  },
  "nivel_alcanzado": "mínimo",
  "por_ambito": {
-  "peru": 1330,
+  "peru": 2671,
   "sudamerica": 0,
   "global": 0
  },
  "por_familia": {
-  "autorreparable": 65,
-  "cloruros": 96,
-  "inspeccion_dano": 892,
-  "durable_convencional": 277
+  "autorreparable": 71,
+  "cloruros": 133,
+  "inspeccion_dano": 1310,
+  "durable_convencional": 1157
  },
  "por_rango": {
   "SS+": 0,
   "SS": 0,
   "S": 3,
-  "A": 3,
-  "B": 613,
-  "C": 708,
-  "D": 6845
+  "A": 4,
+  "B": 877,
+  "C": 1783,
+  "D": 13000
  },
  "por_tier": {
   "T0": 0,
   "T1": 1,
-  "T2": 618,
-  "T3": 711,
-  "T4": 6842
+  "T2": 883,
+  "T3": 1787,
+  "T4": 12996
  },
  "por_grado": {
-  "?": 2159,
-  "ART-G": 11,
+  "?": 1983,
+  "ART-G": 17,
   "ART-I": 56,
   "BAC": 243,
   "CONF": 4,
-  "DOC": 2,
-  "INF": 2023,
-  "LIB": 128,
-  "LIC": 3148,
-  "MAG": 328,
-  "REV": 70
+  "DOC": 76,
+  "INF": 2026,
+  "LIB": 133,
+  "LIC": 9977,
+  "MAG": 1023,
+  "REV": 129
  },
  "peru_por_rango": {
   "SS+": 0,
   "SS": 0,
   "S": 3,
-  "A": 3,
-  "B": 613,
-  "C": 708,
-  "D": 6845
+  "A": 4,
+  "B": 877,
+  "C": 1783,
+  "D": 13000
  },
- "peru_util_con_bacterias": 61,
- "peru_util_cloruros": 107
+ "peru_util_con_bacterias": 66,
+ "peru_util_cloruros": 149
 }

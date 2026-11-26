@@ -63,3 +63,67 @@ USAT,peru,concreto AND corrosión,34,34,100.0,ok
 USAT,peru,concreto AND patologías,101,101,100.0,ok
 USAT,peru,concreto AND carbonatación,5,5,100.0,ok
 USAT,peru,concreto AND fisuras,57,57,100.0,ok
+UCV,peru,concreto AND autorreparable,61,122,200.0,ok
+UCV,peru,concreto AND autoreparable,16,32,200.0,ok
+UCV,peru,concreto AND autocicatrizante,2,4,200.0,ok
+UCV,peru,concreto AND autocicatrización,1,2,200.0,ok
+UCV,peru,concreto AND autosellante,5,10,200.0,ok
+UCV,peru,concreto AND autocurativo,19,38,200.0,ok
+UCV,peru,concreto AND bacterias,2425,2600,107.2,ok
+UCV,peru,concreto AND Bacillus,180,200,111.1,ok
+UCV,peru,bioconcreto,56,112,200.0,ok
+UCV,peru,concreto AND cloruros,3686,3800,103.1,ok
+UCV,peru,"concreto AND ""ion cloruro""",327,400,122.3,ok
+UCV,peru,"concreto AND ""agua de mar""",587,600,102.2,ok
+UCV,peru,concreto AND corrosión,3324,3400,102.3,ok
+UCV,peru,concreto AND patologías,5647,5800,102.7,ok
+UCV,peru,concreto AND carbonatación,622,800,128.6,ok
+UCV,peru,concreto AND fisuras,5551,5600,100.9,ok
+UNPRG,peru,concreto AND autorreparable,2,4,200.0,ok
+UNPRG,peru,concreto AND autoreparable,0,0,,sin resultados
+UNPRG,peru,concreto AND autocicatrizante,0,0,,sin resultados
+UNPRG,peru,concreto AND autocicatrización,0,0,,sin resultados
+UNPRG,peru,concreto AND autosellante,0,0,,sin resultados
+UNPRG,peru,concreto AND autocurativo,1,2,200.0,ok
+UNPRG,peru,concreto AND bacterias,258,400,155.0,ok
+UNPRG,peru,concreto AND Bacillus,26,52,200.0,ok
+UNPRG,peru,bioconcreto,0,0,,sin resultados
+UNPRG,peru,concreto AND cloruros,202,400,198.0,ok
+UNPRG,peru,"concreto AND ""ion cloruro""",12,24,200.0,ok
+UNPRG,peru,"concreto AND ""agua de mar""",53,106,200.0,ok
+UNPRG,peru,concreto AND corrosión,171,200,117.0,ok
+UNPRG,peru,concreto AND patologías,305,400,131.1,ok
+UNPRG,peru,concreto AND carbonatación,5,10,200.0,ok
+UNPRG,peru,concreto AND fisuras,164,200,122.0,ok
+UNS,peru,concreto AND autorreparable,2,4,200.0,ok
+UNS,peru,concreto AND autoreparable,0,0,,sin resultados
+UNS,peru,concreto AND autocicatrizante,0,0,,sin resultados
+UNS,peru,concreto AND autocicatrización,0,0,,sin resultados
+UNS,peru,concreto AND autosellante,0,0,,sin resultados
+UNS,peru,concreto AND autocurativo,0,0,,sin resultados
+UNS,peru,concreto AND bacterias,141,200,141.8,ok
+UNS,peru,concreto AND Bacillus,14,28,200.0,ok
+UNS,peru,bioconcreto,1,2,200.0,ok
+UNS,peru,concreto AND cloruros,164,200,122.0,ok
+UNS,peru,"concreto AND ""ion cloruro""",24,48,200.0,ok
+UNS,peru,"concreto AND ""agua de mar""",68,136,200.0,ok
+UNS,peru,concreto AND corrosión,184,198,107.6,ok
+UNS,peru,concreto AND patologías,112,200,178.6,ok
+UNS,peru,concreto AND carbonatación,24,48,200.0,ok
+UNS,peru,concreto AND fisuras,145,198,136.6,ok
+ULADECH,peru,concreto AND autorreparable,0,0,,sin resultados
+ULADECH,peru,concreto AND autoreparable,0,0,,sin resultados
+ULADECH,peru,concreto AND autocicatrizante,0,0,,sin resultados
+ULADECH,peru,concreto AND autocicatrización,0,0,,sin resultados
+ULADECH,peru,concreto AND autosellante,0,0,,sin resultados
+ULADECH,peru,concreto AND autocurativo,0,0,,sin resultados
+ULADECH,peru,concreto AND bacterias,2,4,200.0,ok
+ULADECH,peru,concreto AND Bacillus,0,0,,sin resultados
+ULADECH,peru,bioconcreto,0,0,,sin resultados
+ULADECH,peru,concreto AND cloruros,2,4,200.0,ok
+ULADECH,peru,"concreto AND ""ion cloruro""",0,0,,sin resultados
+ULADECH,peru,"concreto AND ""agua de mar""",0,0,,sin resultados
+ULADECH,peru,concreto AND corrosión,61,122,200.0,ok
+ULADECH,peru,concreto AND patologías,667,800,119.9,ok
+ULADECH,peru,concreto AND carbonatación,2,4,200.0,ok
+ULADECH,peru,concreto AND fisuras,192,200,104.2,ok
