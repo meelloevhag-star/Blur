@@ -26,12 +26,28 @@ Cuatro agentes programados recorren fuentes públicas y llevan datos al **curado
 - **Scopus:** usa la API de Elsevier (`api.elsevier.com`) solo si la sesión tiene la credencial guardada; nunca pidas la clave por chat. Sin credencial, usa OpenAlex (`is_oa:true`), Europe PMC y Crossref.
 - **Extrae** de tablas: mezcla (a/c, cemento, adiciones), bacteria (especie, dosis con unidades), protección, precursor, curado, ancho, edad, cierre %, α y su propiedad, norma y protocolo.
 
-## 2. REPOSITORIOS UNIVERSITARIOS (RENATI, ALICIA, DSpace)
-- **Recorre:** RENATI (SUNEDU), ALICIA (CONCYTEC) y los repositorios DSpace o OAI-PMH de UNI, PUCP, UDEP, UNP, UPC, UNMSM, UNSA, UNT y otras, por ejemplo con el endpoint OAI-PMH `/oai/request?verb=ListRecords&metadataPrefix=oai_dc` o con búsqueda web.
-- **Términos:** "concreto autorreparable", "bacterias", "Bacillus", "cierre de fisuras", "patologías del concreto", "corrosión por cloruros", "Paita", "Piura", "Talara" y "Callao".
-- **Extrae:**
-  - ensayos de laboratorio de tesis (cierre a 7, 28, 56 y 90 días);
-  - inspecciones de estructuras reales: tipo de daño, ancho, profundidad de cloruros o carbonatación y edad, con `id_grupo` = estructura.
+## 2. REPOSITORIOS UNIVERSITARIOS (UCV, UPC, RENATI, ALICIA, DSpace)
+
+### Repositorios prioritarios (comprobados el 26-11-2026: públicos y con OAI-PMH)
+| Universidad | Búsqueda | OAI-PMH | Qué tiene |
+|---|---|---|---|
+| **UCV** (César Vallejo) | `https://repositorio.ucv.edu.pe/discover?query=<términos>` | `https://repositorio.ucv.edu.pe/oai/request` | 62 tesis de concreto autorreparable (Piura, Tumbes, Trujillo, Lima) y muchas inspecciones de daño en la costa norte |
+| **UPC** | API DSpace 7: `https://repositorioacademico.upc.edu.pe/server/api/discover/search/objects?query=<términos>&dsoType=ITEM` | `https://repositorioacademico.upc.edu.pe/server/oai/request` | Diseño de concretos durables: 233 tesis sobre cloruros y durabilidad, 403 sobre ambiente marino y 5 de autorreparable |
+
+Los metadatos de una tesis salen de `?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:<host>:<handle>`. El PDF se descarga solo si la tesis es `openAccess` y el enlace dice `isAllowed=y`. Va a `datos/literatura/raw/`, que no se sube.
+
+### Tres familias de datos (campo `mezcla_familia`)
+1. **`autorreparable`:** ensayos con bacteria o agente, con cierre a 7, 28, 56 y 90 días, resistencia y permeabilidad.
+2. **`durable_convencional`:** concretos diseñados para ambientes con cloruros o marinos que **no** se autorreparan. Por ejemplo, microsílice, ceniza, metacaolín o baja permeabilidad (muchos de la UPC).
+   - Se registran la mezcla, la adición y su %, y los resultados de durabilidad: `resultado_fc_mpa`, `resultado_d_rcm_1e12_m2_s`, `resultado_penetracion_cloruros_mm`, `resultado_carga_pasante_coulomb`, `resultado_absorcion_pct` y `resultado_resistividad_kohm_cm`.
+   - Son **bases** que ya funcionan en ese ambiente: Hefesto evalúa qué ganaría cada una si se le añade autorreparación.
+3. **Inspecciones de daño** en estructuras reales: `dano_tipo`, `dano_elemento`, `dano_nivel_corrosion` y `dano_n_elementos` (para tablas de conteo), la edad de la estructura y la zona. Sirven para contrastar el modelo de vida útil con la realidad.
+   - **Hecho:** Morán Córdova, F. E. (2023, UCV), *Evaluación del impacto de la corrosión en estructuras de concreto armado construidas en las playas del norte peruano*, `hdl.handle.net/20.500.12692/151797`. Tiene 64 estructuras en La Esmeralda, Colán. La **Tabla 7** ya está transcrita en `datos/entrantes/repositorios_2026-11-26.csv`. **Pendiente:** las Tablas 1–4 (por elemento), la 9 (con protección) y lo que reporte de distancia al mar.
+
+### Otras fuentes
+- RENATI (SUNEDU), ALICIA (CONCYTEC) y los repositorios DSpace de UNI, PUCP, UDEP, UNP, UNMSM, UNSA, UNT y otras.
+- **Términos:** "concreto autorreparable", "bacterias", "Bacillus", "cierre de fisuras", "patologías del concreto", "corrosión", "cloruros", "ambiente marino", "durabilidad", "microsílice", "Paita", "Colán", "Piura", "Talara", "Tumbes" y "Callao".
+- **Reglas:** nunca se convierten rangos a valores exactos (por ejemplo, la antigüedad "entre 2018 y 2020" queda como etiqueta, no como 4 años). Se copian los números tal cual de la tabla y se comprueba que las sumas cuadren; si la tesis no cuadra, se anota.
 
 ## 3. DATASETS (Zenodo, Figshare, Mendeley Data, Dryad)
 - **Busca:** datasets crudos con réplicas de cierre de fisura o de cloruros. Son lo más valioso, porque traen probetas individuales.
