@@ -176,7 +176,9 @@ class EvolucionNEAT:
         self.historia: list[float] = []
         self.estado = None
 
-    def ejecutar(self, Xn: np.ndarray, y: np.ndarray, estado=None):
+    def ejecutar(self, Xn: np.ndarray, y: np.ndarray, estado=None, pesos: np.ndarray | None = None):
+        """pesos: peso de cada fila en el error (None = todas iguales). Sirve para que cada fuente cuente lo
+        mismo aunque traiga pocas filas."""
         random.seed(self.semilla)
         np.random.seed(self.semilla)
         if estado is None:
@@ -192,7 +194,7 @@ class EvolucionNEAT:
             mejor = math.inf
             for _gid, g in genomas:
                 red = RedMatricial(g, cfg)
-                mse = float(np.mean((red(Xn) - y) ** 2))
+                mse = float(np.average((red(Xn) - y) ** 2, weights=pesos))
                 mejor = min(mejor, mse)
                 g.fitness = -mse - lam * (red.n_ocultos + 0.15 * red.n_conexiones)
             self.historia.append(math.sqrt(mejor))
@@ -211,13 +213,13 @@ class NEATConjunto(Modelo):
         self.redes: list[RedMatricial] = []
         self._estados = []
 
-    def ajustar(self, X, y, grupos=None, continuar: bool = False):
+    def ajustar(self, X, y, grupos=None, continuar: bool = False, pesos=None):
         Xn = normalizar7(np.asarray(X, float))
         nuevas, estados = [], []
         for k in range(self.K):
             ev = EvolucionNEAT(self.cfg, SEMILLA + k)
             prev = self._estados[k] if continuar and self._estados else None
-            nuevas.append(ev.ejecutar(Xn, np.asarray(y, float), prev))
+            nuevas.append(ev.ejecutar(Xn, np.asarray(y, float), prev, pesos))
             estados.append(ev.estado)
         self.redes, self._estados = nuevas, estados
         return self
@@ -314,8 +316,8 @@ class HibridoH3(Modelo):
         self.nombre = f"H3 ({self.base.nombre} + RF)"
         self.k, self.rf, self.n_local = k_contraccion, None, 0
 
-    def ajustar(self, X, y, grupos=None):
-        self.base.ajustar(X, y)
+    def ajustar(self, X, y, grupos=None, pesos=None):
+        self.base.ajustar(X, y, pesos=pesos)
         self.rf, self.n_local = None, 0
         return self
 

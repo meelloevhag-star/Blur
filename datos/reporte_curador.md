@@ -2,6 +2,7 @@
 
 | Archivo | Aceptadas | Rechazadas | Motivo más frecuente |
 |---|---|---|---|
+| datasets_zenodo_2026-11-27.csv | 95 | 0 | — |
 | literatura.csv | 179 | 0 | — |
 | replicas.csv | 2166 | 1 | duplicado |
 | repositorios_2026-11-26.csv | 100 | 0 | — |

@@ -52,15 +52,24 @@ class DatosCosecha:
         self.fuentes = sorted(set(fuente))
 
 
+def pesos_por_fuente(fuente: np.ndarray, modo: str) -> np.ndarray | None:
+    """'filas': todas iguales (None); 'fuente': cada fuente pesa lo mismo (1/n); 'raiz': término medio (1/√n)."""
+    if modo == "filas":
+        return None
+    _, inv, n = np.unique(fuente, return_inverse=True, return_counts=True)
+    w = 1.0 / (n[inv] if modo == "fuente" else np.sqrt(n[inv]))
+    return w / w.mean()
+
+
 def _ajustar_predecir(args):
-    X_tr, y_tr, X_te, semilla = args
+    X_tr, y_tr, X_te, semilla, pesos = args
     np.random.seed(semilla)
-    return HibridoH3().ajustar(X_tr, y_tr).predecir(X_te)
+    return HibridoH3().ajustar(X_tr, y_tr, pesos=pesos).predecir(X_te)
 
 
 class EvaluacionCosecha:
-    def __init__(self, workers: int = 4, semillas: int = 1):
-        self.d, self.workers, self.semillas = DatosCosecha(), workers, semillas
+    def __init__(self, workers: int = 4, semillas: int = 1, pesos: str = "filas"):
+        self.d, self.workers, self.semillas, self.modo_pesos = DatosCosecha(), workers, semillas, pesos
 
     def tareas(self):
         d = self.d
@@ -69,8 +78,9 @@ class EvaluacionCosecha:
             te = d.fuente == s
             base = rep & ~te                       # "actual": solo réplicas (sin la fuente evaluada)
             for k in range(self.semillas):
-                yield (s, "actual", k), (d.X[base], d.y[base], d.X[te], 1000 + k)
-                yield (s, "cosecha", k), (d.X[~te], d.y[~te], d.X[te], 1000 + k)
+                yield (s, "actual", k), (d.X[base], d.y[base], d.X[te], 1000 + k, None)
+                yield (s, "cosecha", k), (d.X[~te], d.y[~te], d.X[te], 1000 + k,
+                                          pesos_por_fuente(d.fuente[~te], self.modo_pesos))
 
     def correr(self) -> dict:
         claves, args = zip(*self.tareas())
@@ -99,14 +109,16 @@ class EvaluacionCosecha:
         resumen = {
             "protocolo": "fuente nueva (leave-one-source-out); MAE en puntos de % de cierre",
             "filas_totales": int(len(d.y)), "fuentes": len(d.fuentes), "semillas": self.semillas,
+            "pesos": self.modo_pesos,
             "fuentes_nuevas": ponderado([f for f in filas if f["fuente"] not in REPLICAS]),
             "peru": ponderado([f for f in filas if f["ambito"] == "peru"]),
             "replicas_entre_laboratorios": ponderado([f for f in filas if f["fuente"] in REPLICAS]),
             "todas": ponderado(filas),
             "por_fuente": sorted(filas, key=lambda f: -f["n"]),
         }
-        SALIDA.parent.mkdir(parents=True, exist_ok=True)
-        SALIDA.write_text(json.dumps(resumen, ensure_ascii=False, indent=1), encoding="utf-8")
+        salida = SALIDA if self.modo_pesos == "filas" else SALIDA.with_name(f"evaluacion_cosecha_{self.modo_pesos}.json")
+        salida.parent.mkdir(parents=True, exist_ok=True)
+        salida.write_text(json.dumps(resumen, ensure_ascii=False, indent=1), encoding="utf-8")
         return resumen
 
 
@@ -114,8 +126,10 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--semillas", type=int, default=1)
+    ap.add_argument("--pesos", choices=["filas", "fuente", "raiz"], default="filas",
+                    help="cómo pesa cada fila en el entrenamiento del motor de la cosecha")
     a = ap.parse_args(argv)
-    r = EvaluacionCosecha(a.workers, a.semillas).correr()
+    r = EvaluacionCosecha(a.workers, a.semillas, a.pesos).correr()
     print(json.dumps({k: v for k, v in r.items() if k != "por_fuente"}, ensure_ascii=False, indent=1))
     return 0
 
