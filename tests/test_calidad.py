@@ -6,6 +6,7 @@ def test_grado_sale_del_tipo_declarado_no_del_titulo():
     assert grado("", "Plan maestro de agua potable") == "?"
     assert grado("info:eu-repo/semantics/doctoralThesis") == "DOC"
     assert grado("masterThesis") == "MAG"
+    assert grado("info:eu-repo/semantics/report; Título Profesional; Ingeniero Civil") == "LIC"
     assert grado("article", revista="Construction and Building Materials") == "ART-I"
     assert grado("article") == "ART-G"
     assert grado("article", "A review of bacterial self-healing concrete") == "REV"

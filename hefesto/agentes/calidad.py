@@ -64,6 +64,8 @@ def grado(tipo_doc: str, titulo: str = "", revista: str = "") -> str:
         return "REV"
     if re.search(r"conference|congres|proceedings|ponencia|conferencia", t):
         return "CONF"
+    if re.search(r"t[ií]tulo profesional|suficiencia profesional", t):   # informe para el título (UNI, UPC)
+        return "LIC"
     if re.search(r"report|informe", t):
         return "INF"
     if re.search(r"book|libro|cap[ií]tulo", t):
