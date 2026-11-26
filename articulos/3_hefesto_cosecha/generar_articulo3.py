@@ -476,7 +476,9 @@ def escribir(D: Datos, doc: Doc, figs: dict):
         f"de cierre y pasó a distinguir la protección bacteriana ({f1(ops['sin bacterias'])} % sin bacterias frente "
         f"a {f1(ops['encapsulación'])} % encapsulada, a 90 días en ambiente marino). Con la fisura de diseño de "
         f"0,3 mm, 25 años se cumplen con certeza en {v25['cumple']} de {n_cl} zonas con cloruros y 40 años en "
-        f"{v40['cumple']}; el cierre mediano requerido para 25 años es {f1(c25['mediana'])} %."))
+        f"{v40['cumple']}; el cierre mediano requerido para 25 años es {f1(c25['mediana'])} %. A nivel de "
+        f"ingeniería, el motor convierte la autorreparación de un supuesto en una especificación verificable: el "
+        f"cierre mínimo por zona, si la protección lo alcanza y en qué zonas no basta."))
     doc.claves("Palabras claves", "concreto autorreparable bacteriano, neuroevolución, NEAT, agentes de IA, cosecha "
                                   "de literatura, calidad de fuentes, cloruros, vida útil, costa peruana")
     doc.resumen("Abstract", (
@@ -523,6 +525,10 @@ def escribir(D: Datos, doc: Doc, figs: dict):
           "Las aplicaciones a escala real existen, pero son pocas: el ensayo de la autopista A465 en Gales [19], [20], "
           "una pasarela con vigas bacterianas en Lituania [21] y demostradores en los Países Bajos [30].")
     doc.h2("C. Propuesta y aporte")
+    doc.p("El problema de ingeniería que se resuelve es concreto: dada una zona de la costa, ¿qué cierre de fisura "
+          "necesita un concreto para cumplir 25 o 40 años, y lo alcanza la protección bacteriana elegida? El núcleo "
+          "es un motor de neuroevolución NEAT que predice ese cierre en laboratorios que no vio; lo alimentan agentes "
+          "de IA y lo traduce a años un modelo de cloruros.")
     doc.p("Hefesto aporta: (1) agentes de IA que cosechan por canales abiertos con una meta de cobertura medible "
           "(≥ 90 % de lo que reporta cada consulta) y una regla de sesgo (el Perú es la fuente principal, Sudamérica "
           "el agregado y lo global la base de aprendizaje y comparación); (2) una nomenclatura de calidad de tres "
@@ -794,7 +800,35 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     doc.figura(figs["vida"], "(a) Cierre predicho a 90 días en ambiente marino según la protección, motores v003 y "
                              "v004. (b) Veredicto de 25 y 40 años en las 268 zonas con cloruros. Elaboración propia.",
                0.55)
-    doc.h2("F. Limitaciones")
+    doc.h2("F. Qué resuelve a nivel de ingeniería")
+    mej20, mej40 = h3["mejora"]["20"], h3["mejora"]["40"]
+    doc.p(f"Para el ingeniero que diseña en la costa, el motor convierte una suposición en una especificación "
+          f"verificable (Tabla X). Antes, la autorreparación entraba al cálculo como un porcentaje supuesto y la vida "
+          f"útil salía como un número sin incertidumbre, que podía llegar a 150 años. Con Hefesto, primero se obtiene "
+          f"el cierre mínimo que la fisura de diseño debe alcanzar para cumplir 25 o 40 años en la zona; luego el motor "
+          f"dice si la protección elegida llega a ese cierre, con su error medido en un laboratorio no visto; y el "
+          f"veredicto (cumple, incierto, no cumple) queda acotado al horizonte de la norma. Eso permite tres "
+          f"decisiones concretas: especificar al proveedor o al laboratorio el cierre que debe demostrar, saber en qué "
+          f"zonas la autorreparación no basta y hay que actuar sobre la fisura o el recubrimiento, y planificar "
+          f"cuántos ensayos locales hacen falta para confiar en la predicción ({f1(mej20)} pp con 20 grupos de "
+          f"probetas, {f1(mej40)} pp con 40).")
+    R = D.regimen
+    doc.tabla("Problemas de diseño que resuelve el motor", [
+        ["Pregunta del diseñador", "Antes", "Con Hefesto"],
+        ["¿Cuánto debe cerrar la fisura de 0,3 mm para 25 años?", "Supuesto",
+         f"{f1(R['atmosferico_marino']['req25'], 0)} % atmosférico; {f1(R['niebla_salina']['req25'], 0)} % niebla; "
+         f"{f1(R['salpicadura']['req25'], 0)} % salpicadura"],
+        ["¿Lo logra la protección elegida?", "Dato de un ensayo",
+         f"{f1(ops['sin bacterias'])}–{f1(ops['encapsulación'])} % (marino, 90 d), error {f1(tod['MAE_cosecha'])} pp"],
+        ["¿Cumple la vida útil de diseño?", "Un número, hasta 150 años",
+         "Cumple / incierto / no cumple con ±20 pp; tope 40 años"],
+        ["¿Dónde no basta la autorreparación?", "No se sabía",
+         f"{R['niebla_salina']['n'] + R['salpicadura']['n']} zonas (niebla y salpicadura)"],
+        ["¿Cuántos ensayos locales hacer?", "Sin criterio", f"20 grupos → {f1(mej20)} pp; 40 → {f1(mej40)} pp"],
+        ["¿Qué fuente de datos creer?", "Sin criterio", "Rango SS+…D por fuente"]],
+        [1.9, 1.0, 2.1], alin=["left", "left", "left"],
+        nota="Cifras de las Tablas V–IX y de la Fig. 3. Cierre requerido: mediana por régimen con la mezcla de norma.")
+    doc.h2("G. Limitaciones")
     doc.p("La pendiente de fisura proviene de un laboratorio y dos anchos; Cs y el depósito de cloruros por niebla "
           "son supuestos sin medición local, y las fuentes SS+ de perfiles de cloruros son las indicadas para "
           "reemplazarlos. La validación peruana se apoya en una sola tesis (18 filas), y quedan 128 tablas por "
@@ -804,6 +838,11 @@ def escribir(D: Datos, doc: Doc, figs: dict):
 
     # ------------------------------------------------------------------ IV
     doc.h1("IV. CONCLUSIONES")
+    doc.p("A nivel de ingeniería, el motor resuelve el paso que faltaba entre el ensayo de laboratorio y la "
+          "vida útil de diseño: para una zona dada entrega el cierre de fisura que exige la norma, predice si la "
+          "protección bacteriana lo alcanza con un error medido en laboratorios no vistos y emite un veredicto "
+          "acotado al horizonte normativo. Con ello el concreto autorreparable deja de ser un supuesto del cálculo y "
+          "pasa a ser una especificación que se puede pedir y verificar.")
     doc.p(f"Los agentes de IA de Hefesto reunieron {n0(m['literatura_util'])} documentos útiles con cobertura ≥ 90 % "
           f"en las {D.n_consultas} consultas, separando el Perú (principal), Sudamérica (agregado) y lo global "
           f"(aprendizaje), y calificaron cada fuente con tier, grado y rango; {m['ss_plus']['confirmados']} fuentes "
