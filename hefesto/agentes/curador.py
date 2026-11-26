@@ -61,8 +61,14 @@ def curar_archivo(ruta: Path, vistos: set) -> tuple[list[dict], list[dict]]:
         for i, fila in enumerate(csv.DictReader(fh), 2):
             reg, errores = validar_fila(fila)
             if reg is not None:
-                clave = tuple(reg.get(k) for k in ("fuente", "id_grupo", "resultado_edad_dias", "dano_ancho_fisura_mm",
-                                                   "resultado_cierre_pct", "resultado_alpha", "mezcla_nivel_proteccion"))
+                clave = tuple(reg.get(k) for k in (
+                    "fuente", "id_grupo", "resultado_edad_dias", "dano_ancho_fisura_mm", "resultado_cierre_pct",
+                    "resultado_alpha", "mezcla_nivel_proteccion",
+                    # durabilidad de concretos convencionales e inspecciones (tesis UCV/UPC, etc.)
+                    "mezcla_adicion_tipo", "mezcla_adicion_pct", "resultado_fc_mpa", "resultado_d_rcm_1e12_m2_s",
+                    "resultado_penetracion_cloruros_mm", "resultado_carga_pasante_coulomb", "dano_tipo",
+                    "dano_elemento", "dano_nivel_corrosion", "dano_n_elementos", "procedencia_ubicacion",
+                    "procedencia_notas"))
                 if clave in vistos:
                     reg, errores = None, ["duplicado"]
                 else:
