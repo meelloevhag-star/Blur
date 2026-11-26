@@ -455,10 +455,10 @@ def escribir(D: Datos, doc: Doc, figs: dict):
     n_cl = 268
 
     # ------------------------------------------------------------------ cabecera
-    doc.titulo("Hefesto: neuroevolución NEAT alimentada por agentes de IA que cosechan y califican la literatura "
-               "para predecir qué concreto autorreparable alcanza la vida útil normativa en la costa peruana")
-    doc.titulo_en("Hefesto: NEAT neuroevolution fed by AI agents that harvest and grade the literature to predict "
-                  "which self-healing concrete reaches the code service life on the Peruvian coast")
+    doc.titulo("Hefesto: motor de neuroevolución NEAT para predecir el cierre de fisuras del concreto "
+               "autorreparable bacteriano y su vida útil frente a cloruros en la costa peruana")
+    doc.titulo_en("Hefesto: a NEAT neuroevolution engine to predict crack closure of bacterial self-healing concrete "
+                  "and its chloride service life on the Peruvian coast")
     doc.resumen("Resumen", (
         f"La pregunta “¿durará este concreto los años que pide la norma?” se responde hoy con modelos calibrados en "
         f"uno o dos laboratorios y con supuestos sobre la autorreparación. Hefesto propone un sistema de tres capas: "
