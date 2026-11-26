@@ -1,6 +1,6 @@
 """
-Artículo 2 (IEEE, español): reparación necesaria para 25–40 años de vida útil del concreto
-autorreparable bacteriano en la costa peruana.
+Artículo de Hefesto (IEEE, español): neuroevolución y agentes de IA para predecir qué concreto
+autorreparable alcanza la vida útil de la norma en un lugar dado.
 
 Usa la plantilla del artículo 1 (formato IEEE a dos columnas y tabla de autores) y reconstruye el
 cuerpo. TODAS las cifras se leen de resultados/*.json; ninguna se escribe a mano.
@@ -8,7 +8,7 @@ cuerpo. TODAS las cifras se leen de resultados/*.json; ninguna se escribe a mano
 Uso:
     python -m articulos.2_hefesto.generar_articulo2
 Salida:
-    articulo/ieee/BioCrete-Vida_IEEE_ES.docx (+ figuras PNG en articulo/ieee/)
+    articulos/2_hefesto/ieee/Hefesto_IEEE_ES.docx (+ figuras PNG en articulo/ieee/)
 """
 
 import copy
@@ -29,7 +29,7 @@ from hefesto.durabilidad import vida_util as vu
 
 RAIZ = Path(__file__).resolve().parents[2]
 PLANTILLA = RAIZ / "articulos" / "2_hefesto" / "plantilla" / "plantilla_ieee_es.docx"
-SALIDA = RAIZ / "articulos" / "2_hefesto" / "ieee" / "BioCrete-Vida_IEEE_ES.docx"
+SALIDA = RAIZ / "articulos" / "2_hefesto" / "ieee" / "Hefesto_IEEE_ES.docx"
 RES = RAIZ / "resultados"
 ANCHO_COL = 4780
 
@@ -38,7 +38,7 @@ def cargar() -> dict:
     j = lambda n: json.loads((RES / n).read_text(encoding="utf-8"))
     vz = j("vida_zonas.json")
     return {"hib": j("hibrido.json"), "diag": j("meta20_diagnostico.json"), "vz": vz, "res": vz["resumen"],
-            "sens": j("sensibilidad_vida.json"),
+            "sens": j("sensibilidad_vida.json"), "banco": j("banco_motores.json"),
             "reg": json.loads((RAIZ / "modelos" / "registro.json").read_text(encoding="utf-8"))[-1]}
 
 
@@ -48,7 +48,7 @@ def f1(x, d=1):
 
 # ---------------------------------------------------------------------------- contenido
 def contenido(D: dict) -> dict:
-    r, hib, diag = D["res"], D["hib"], D["diag"]
+    r, hib, diag, banco = D["res"], D["hib"], D["diag"], D["banco"]
     h3 = lambda lab, n: hib[lab]["modelos"]["H3 contraído"][str(n)]["MAE_pp_medio"]
     c25, c40, v25 = r["cierre_requerido_25_pct"], r["cierre_requerido_40_pct"], r["veredicto_25"]
     ncl = r["zonas"] - r["fuera_de_alcance_carbonatacion"]
@@ -58,127 +58,133 @@ def contenido(D: dict) -> dict:
     con_tope = vu.t_inicio_determinista(15.8e-12, 0.65, 1.5, congelar=True)
     base_fib = vu.t_inicio_determinista(15.8e-12, 0.30, 1.5, congelar=False)
     aj, fis = vu.ajuste_d28(), vu.pendiente_fisura()
+    cand = {c["nombre"]: c for c in banco["candidatos"]}
+    gan = cand[banco["eleccion"]["ganador"]]
+    lab = lambda n: cand[n]["precision"]["laboratorio"]["media_MAE_pp"]
+    grp = lambda n: cand[n]["precision"]["grupos"]["MAE_pp"]
+    rf, mlp = "Random Forest", "MLP 32x16"
     resumen = (
-        f"Un agente de diseño que recomendaba concreto autorreparable por zona costera devolvía 150 años de vida útil "
-        f"en 342 de 384 zonas. Mostramos que esa cifra salía de un tope arbitrario, de la reparación contada dos veces y "
-        f"del envejecimiento de la difusión sin límite. Proponemos un flujo que separa dos preguntas. Un motor NEAT "
-        f"híbrido predice el cierre de fisura a 3–480 días; su error entre laboratorios es de {f1(h3('Cappellesso2024', 0))}–"
-        f"{f1(h3('Mousa2022', 0))} puntos sin calibrar y baja a {f1(h3('Cappellesso2024', 5))}–{f1(h3('Mousa2022', 5))} "
-        f"con 5 grupos locales. Un modelo de inicio de la corrosión (fib B34, difusión congelada a los 25 años, "
-        f"probabilidad del 10 %) calcula el cierre mínimo necesario para 25 y 40 años. En las {ncl} zonas costeras "
-        f"expuestas a cloruros, 25 años son alcanzables con mezclas de norma y un cierre mediano de {f1(c25['mediana'], 0)} % "
-        f"(p10–p90: {f1(c25['p10'], 0)}–{f1(c25['p90'], 0)} %); 40 años, solo en {c40['n']} zonas. El cierre que hoy "
-        f"predice el motor ({f1(neat, 0)} % ± 20) alcanza el objetivo de 25 años con seguridad en {v25.get('cumple', 0)} zonas.")
+        f"¿Puede la neuroevolución, alimentada por agentes que cosechan datos de concreto autocurativo, predecir qué "
+        f"concreto alcanza la vida útil de la norma en un lugar dado? Hefesto combina agentes de IA que recolectan datos, "
+        f"un motor NEAT y un modelo de inicio de la corrosión por cloruros. Comparamos 13 motores con {banco['n_filas']} "
+        f"réplicas de dos laboratorios. Los modelos más flexibles aciertan más dentro de un laboratorio "
+        f"({f1(grp(rf))} puntos de cierre con Random Forest), pero fallan al predecir otro ({f1(lab(rf))}). El ganador, "
+        f"cinco redes NEAT con corrección local, comete {f1(lab(gan['nombre']))} puntos entre laboratorios y "
+        f"{f1(gan['mejora']['10'])} con 10 probetas locales. Corregimos un cálculo previo que daba 150 años en 342 de "
+        f"384 zonas. En las {ncl} zonas con cloruros, 25 años exigen un cierre mediano de {f1(c25['mediana'], 0)} % y 40 "
+        f"años solo son alcanzables en {c40['n']} zonas.")
     abstract = (
-        f"A design agent recommending self-healing concrete for coastal zones returned 150-year service lives in 342 "
-        f"of 384 zones. We show that the figure came from an arbitrary cap, double-counted healing and unbounded "
-        f"diffusion ageing. A hybrid NEAT engine predicts crack closure at 3–480 days with a cross-laboratory error of "
-        f"{h3('Cappellesso2024', 0):.1f}–{h3('Mousa2022', 0):.1f} points, and a corrected corrosion-initiation model "
-        f"(fib B34, ageing frozen at 25 years, 10 % probability) yields the minimum closure needed for 25 and 40 years. "
-        f"In the {ncl} chloride-exposed zones, 25 years is reachable with code-compliant mixes and a median required "
-        f"closure of {c25['mediana']:.0f} %; 40 years only in {c40['n']} zones.")
+        f"Can neuroevolution, fed by agents that harvest self-healing concrete data, predict which concrete reaches the "
+        f"code service life at a given site? Hefesto combines data-collecting AI agents, a NEAT engine and a chloride "
+        f"corrosion-initiation model. Across 13 engines and {banco['n_filas']} replicates from two laboratories, flexible "
+        f"models were most accurate within a laboratory but failed across laboratories ({lab(rf):.1f} points for Random "
+        f"Forest). The selected engine, five NEAT networks with local correction, achieved {lab(gan['nombre']):.1f} points "
+        f"across laboratories. In {ncl} chloride-exposed zones, 25 years required a median crack closure of "
+        f"{c25['mediana']:.0f} %; 40 years was reachable in {c40['n']} zones only.")
+    filas_banco = [[n, f1(grp(n)), f1(lab(n)), f1(cand[n]["mejora"]["10"]),
+                    str(sum(v for k, v in cand[n]["simplicidad"].items() if isinstance(v, int) and k != "redes"))]
+                   for n in ("NEAT ×5 (motor actual)", "H3 (NEAT ×5 + RF)", "NEAT ×5 capa oculta", "NEAT capa oculta",
+                             "NEAT ×5 evolución larga", "MLP 16", mlp, rf, "XGBoost", "Ridge") if n in cand]
     S = [("h1", "I. INTRODUCCIÓN"),
-         ("p", "El concreto autorreparable bacteriano (CAB) se propone para estructuras costeras porque sella fisuras por "
-               "donde entran los cloruros. Para recomendarlo por zona hacen falta dos respuestas distintas: cuánto cierra "
-               "una fisura en semanas o meses, y cuántos años tarda la corrosión en empezar. Mezclarlas lleva a errores."),
-         ("p", "Un agente de diseño previo (el Atlas) combinaba ambas y entregaba 150 años en 342 de 384 zonas de la "
-               "costa peruana. Ninguna norma pide esa cifra: EN 1990 fija 50 años para edificios y 100 para puentes y "
-               "obras civiles mayores, y BS 6349-1 fija 50 años para obras marítimas [1]–[3]."),
-         ("p", "Las contribuciones son tres: (i) el diagnóstico de por qué aparecían los 150 años; (ii) un flujo de agentes "
-               "y un motor NEAT híbrido que solo predice dentro del rango medido; (iii) el cierre mínimo de fisura "
-               "necesario para 25 y 40 años en cada zona, contrastado con lo que el motor predice hoy."),
+         ("p", "El concreto autorreparable bacteriano promete estructuras que no dependen de mantenimiento continuo. Para "
+               "elegirlo en un lugar concreto hay que responder dos cosas: cuánto cierra una fisura y si eso basta para "
+               "alcanzar la vida útil que pide la norma con los cloruros de ese lugar. Los modelos publicados predicen el "
+               "cierre con precisión alta, pero los validan mezclando datos del mismo laboratorio [15]–[17]."),
+         ("p", "Este trabajo pregunta si la neuroevolución (NEAT) [8], alimentada por agentes de IA que cosechan datos "
+               "de concreto autocurativo, puede predecir qué concreto alcanza la vida útil de la norma en un lugar dado, y "
+               "reducir la incertidumbre de esa predicción. Las contribuciones son: (i) un banco que compara 13 motores "
+               "por precisión, efectividad, capacidad de mejora, velocidad y simplicidad; (ii) un sistema de agentes que "
+               "recolecta y cura datos sin imputar valores; (iii) un modelo de durabilidad corregido que traduce el cierre "
+               "en el cierre necesario para 25 y 40 años, sin los 150 años de un cálculo previo."),
          ("h1", "II. METODOLOGÍA"),
          ("h2", "A. Datos"),
-         ("p", f"El motor usa {D['reg']['n_filas']} réplicas de cierre de fisura de dos laboratorios (Mousa 2022 y "
-               f"Cappellesso 2024) [4], [5], con 7 entradas: ancho inicial, edad, nivel de protección bacteriana, ambiente "
-               f"marino, lactato de calcio, curado previo y agente cristalino. La difusión de cloruros a 28 días proviene "
-               f"de {aj['n']} ensayos RCM [6]. El efecto de la fisura se estima con la penetración de cloruros en probetas "
-               f"de referencia fisuradas (0,1 y 0,3 mm) y sin fisurar en agua de mar [5]. Las 384 zonas costeras se "
-               f"describen con ERA5 2024 [7]."),
-         ("h2", "B. Agentes recolectores y curación"),
-         ("p", "Tres agentes programados buscan cada semana datos de zona (clima, niebla, cloruros), de daño (patologías por "
-               "uso) y de materiales (dosificaciones y cierre). Todo pasa por un esquema único y un curador que rechaza filas "
-               "sin procedencia, fuera de rango o duplicadas. Un orquestador reentrena el motor, registra cada versión "
-               "con la huella de sus datos y publica qué combinaciones carecen de datos, para que los agentes las busquen "
-               "primero. Los agentes nunca imputan valores y entregan sus datos por pull request sin merge."),
-         ("h2", "C. Motor NEAT híbrido"),
-         ("p", "La base son K = 5 redes NEAT [8] con penalización de complejidad, promediadas para estabilizarlas. Sin datos "
-               "del laboratorio destino, el motor usa esa base; con n grupos locales, un bosque aleatorio corrige el residuo "
-               "con peso n/(n + 10) (H3) y la predicción conforme por grupos da intervalos del 80 y 90 % [9]. El motor no "
-               "predice fuera de las edades medidas (3–480 días): devuelve un valor nulo con su motivo."),
-         ("h2", "D. Inicio de la corrosión corregido"),
-         ("p", f"Se usa la solución de Fick de la fib B34 [10]: C(x, t) = Cs·[1 − erf(x / 2√(D_app·t))], con "
-               f"D_app = k_e·D28·f²·(t0/min(t, 25))^α. D28 sale de un ajuste log-lineal en la relación agua/ligante y "
-               f"las adiciones (R² = {f1(aj['r2_log'], 2)} en escala logarítmica); su dispersión residual entra en la "
-               f"simulación. El envejecimiento α es 0,30 para cemento Portland y 0,45 para puzolánico (supuesto), y la "
-               f"difusión se congela a los 25 años como en Life-365 [11]. Cs sigue DuraCrete [12] según el régimen "
-               f"(atmosférico, niebla salina o salpicadura). La fisura multiplica la penetración por f = 1 + s·w_res, "
-               f"con s = {f1(fis['s_por_mm'], 2)} mm⁻¹ y w_res = w0·(1 − cierre): la reparación se cuenta una sola vez. "
-               f"El resultado es el tiempo en que la probabilidad de inicio llega al 10 % (simulación de Monte Carlo, "
-               f"4000 muestras). Nunca se informa un valor mayor que el horizonte pedido; en el régimen seco gobierna la "
-               f"carbonatación y el modelo no da cifra."),
-         ("h2", "E. Diseño por zona"),
-         ("p", "Para cada zona se calcula la exposición (niebla, depósito de cloruros [13] y régimen) y se evalúan mezclas que "
-               "cumplen E.060, ACI 318 y EN 206 [3], [14]: cemento I o IP, a/b desde el máximo de norma hasta 0,35 y "
-               "recubrimiento mínimo o +15 mm, con una fisura de diseño de 0,3 mm. Se elige la mezcla más sencilla que "
-               "alcanza 25 años y se obtiene el cierre mínimo para 25 y 40 años. El veredicto compara ese mínimo con el "
-               "cierre que predice el motor a 90 días: «cumple» si se alcanza incluso restando 20 puntos, «incierto» si "
-               "solo lo alcanza la predicción central."),
+         ("p", f"El motor usa {banco['n_filas']} réplicas de cierre de fisura de {banco['n_probetas']} probetas o fisuras de "
+               f"dos laboratorios (Mousa 2022 y Cappellesso 2024) [4], [5], con 7 entradas: ancho inicial, edad, nivel "
+               f"de protección bacteriana, ambiente marino, lactato de calcio, curado previo y agente cristalino. La "
+               f"difusión de cloruros a 28 días proviene de {aj['n']} ensayos RCM [6] y el efecto de la fisura, de la "
+               f"penetración en probetas fisuradas y sin fisurar en agua de mar [5]. Las 384 zonas costeras se describen "
+               f"con ERA5 [7]."),
+         ("h2", "B. Agentes de IA"),
+         ("p", "Cuatro agentes programados recorren literatura (Scopus, OpenAlex, Europe PMC), repositorios universitarios "
+               "(RENATI, ALICIA, DSpace), datasets abiertos (Zenodo, Dryad) y datos de zona (estaciones, depósito de "
+               "cloruros). Un curador valida cada fila contra un esquema único y rechaza las que no tienen procedencia o "
+               "están fuera de rango; un orquestador reentrena el motor y publica qué combinaciones carecen de datos, "
+               "para que los agentes las busquen primero. Ningún agente imputa valores."),
+         ("h2", "C. Banco de motores"),
+         ("p", "Se compararon 13 candidatos con una interfaz común: variantes NEAT (una red, cinco redes, evolución larga, "
+               "capa oculta inicial, poca parsimonia), un híbrido H3 (cinco redes NEAT más una corrección local con peso "
+               "n/(n + 10)), perceptrones multicapa entrenados por retropropagación, Random Forest, XGBoost, una mezcla "
+               "XGBoost + NEAT y Ridge. Cada red NEAT se compila a matrices de pesos por capa, lo que da el mismo "
+               "resultado que neat-python y entrena 52 veces más rápido. La precisión se mide por filas, por probeta "
+               "(GroupKFold) y entre laboratorios; la capacidad de mejora, con 0 a 40 probetas locales. Se elige el menor "
+               "error entre laboratorios (empate si el intervalo bootstrap de la diferencia incluye cero), luego la mejor "
+               "capacidad de mejora, la menor complejidad y la mayor velocidad."),
+         ("h2", "D. Inicio de la corrosión"),
+         ("p", f"Se usa la solución de Fick de la fib B34 [10] con D_app = k_e·D28·f²·(t0/min(t, 25))^α. D28 sale de un "
+               f"ajuste log-lineal sobre los ensayos RCM (R² = {f1(aj['r2_log'], 2)} en escala logarítmica); α es 0,30 para "
+               f"cemento Portland y 0,45 para puzolánico (supuesto); la difusión se congela a los 25 años [11]; Cs sigue "
+               f"DuraCrete [12]. La fisura multiplica la penetración por f = 1 + s·w0·(1 − cierre), con "
+               f"s = {f1(fis['s_por_mm'], 2)} mm⁻¹: la reparación se cuenta una sola vez. Se informa el tiempo en que la "
+               f"probabilidad de inicio llega al 10 % y nunca un valor mayor que el horizonte pedido."),
+         ("h2", "E. Diseño por lugar"),
+         ("p", "Para cada zona se calcula la exposición (niebla, depósito de cloruros [13] y régimen) y se evalúan mezclas "
+               "que cumplen E.060, ACI 318 y EN 206 [3], [14]. Se elige la más sencilla que alcanza 25 años y se obtiene "
+               "el cierre mínimo para 25 y 40 años. El veredicto compara ese mínimo con el cierre que predice el motor a "
+               "90 días, restando su error de 20 puntos."),
          ("h1", "III. RESULTADOS"),
-         ("h2", "A. Precisión del motor de cierre"),
-         ("p", f"El piso de ruido de los propios datos es de {f1(piso['piso_inferior_pp'])}–{f1(piso['piso_superior_pp'])} "
-               f"puntos. Entre laboratorios, el motor sin calibrar comete {f1(h3('Cappellesso2024', 0))} y "
-               f"{f1(h3('Mousa2022', 0))} puntos, y baja de 20 con 5 grupos locales (Tabla I). Recalcular todo con los "
-               f"mismos datos y semillas reprodujo exactamente las cifras de la versión anterior."),
-         ("tabla", {"titulo": "TABLA I. Error absoluto medio (puntos de cierre) del híbrido H3 según los grupos locales",
-                    "cab": ["Destino", "0", "5", "10", "20", "40"],
-                    "filas": [[lab[:-4] + " " + lab[-4:]] + [f1(h3(lab, n)) for n in (0, 5, 10, 20, 40)]
-                              for lab in ("Cappellesso2024", "Mousa2022")],
-                    "prop": [2.2, 1, 1, 1, 1, 1], "nota": "Fuente: resultados/hibrido.json."}),
-         ("h2", "B. Qué aprendieron las redes"),
-         ("p", f"Las cinco redes conservan la edad y tres conservan el curado previo. El ancho, la protección bacteriana, el "
-               f"ambiente marino, el lactato y el agente cristalino quedaron sin conexión: no se sostienen entre los dos "
-               f"laboratorios. Por eso el motor predice {f1(neat)} % a 90 días para cualquier opción bacteriana."),
-         ("h2", "C. Por qué aparecían 150 años"),
-         ("p", f"Cuatro causas se suman (Tabla II). La más fuerte es el envejecimiento sin tope: con α = 0,65 el tiempo medio "
-               f"pasa de {f1(sin_tope, 0)} años a {f1(con_tope, 0)} al congelar la difusión a los 25 años (con α = 0,30 la "
-               f"fórmula reproduce los {f1(base_fib)} años de la fib). Como el resultado ya no se recorta a 150 sino que "
-               f"se informa contra el horizonte, ningún valor de las 384 zonas supera los 40 años."),
-         ("tabla", {"titulo": "TABLA II. Causas de los 150 años en el cálculo previo y corrección",
+         ("h2", "A. Qué motor generaliza"),
+         ("p", f"La Tabla I resume el banco. Dentro de un laboratorio, los modelos flexibles son los más precisos "
+               f"({f1(grp(rf))} puntos con Random Forest frente a {f1(grp(gan['nombre']))} del NEAT), pero al predecir otro "
+               f"laboratorio su error sube a {f1(lab(rf))}. Las variantes NEAT más grandes empeoran igual: usan el "
+               f"ambiente marino y la protección, que en estos datos coinciden con el laboratorio. El ganador es "
+               f"{gan['nombre']}: {f1(lab(gan['nombre']))} puntos entre laboratorios (piso de ruido "
+               f"{f1(piso['piso_inferior_pp'])}–{f1(piso['piso_superior_pp'])}) y {f1(gan['mejora']['10'])} con 10 probetas "
+               f"locales. Promediando 5 conjuntos de semillas, su error entre laboratorios es de {f1(h3('Cappellesso2024', 0))} y "
+               f"{f1(h3('Mousa2022', 0))} puntos según la dirección. Entrena en {f1(gan['velocidad']['entrenar_s'])} s y usa {gan['simplicidad'].get('conexiones', 0)} "
+               f"conexiones en total."),
+         ("tabla", {"titulo": "TABLA I. Banco de motores: error absoluto medio (puntos de cierre)",
+                    "cab": ["Motor", "Probeta", "Otro lab", "+10 loc.", "Tamaño"], "filas": filas_banco,
+                    "prop": [2.4, 1.05, 1.05, 1.05, 1.15], "nota": "Tamaño: conexiones, parámetros u hojas. Fuente: resultados/banco_motores.json."}),
+         ("h2", "B. Qué aprendió el motor"),
+         ("p", f"Las redes del ganador conservan la edad, el curado previo y el ancho de fisura. Por eso predice "
+               f"{f1(neat)} % de cierre a 90 días para cualquier opción bacteriana: con estos datos, distinguir bacterias "
+               f"exigiría ensayos que las varíen dentro de un mismo laboratorio. Con 5 probetas locales el error baja a "
+               f"{f1(h3('Cappellesso2024', 5))}–{f1(h3('Mousa2022', 5))} puntos."),
+         ("h2", "C. Por qué un cálculo previo daba 150 años"),
+         ("p", f"Un agente de diseño anterior devolvía 150 años en 342 de 384 zonas por cuatro causas (Tabla II). Con "
+               f"α = 0,65, el tiempo medio pasa de {f1(sin_tope, 0)} años a {f1(con_tope, 0)} al congelar la difusión a "
+               f"los 25 años; con α = 0,30 la fórmula reproduce los {f1(base_fib)} años de la fib."),
+         ("tabla", {"titulo": "TABLA II. Causas de los 150 años y corrección",
                     "cab": ["Causa", "Efecto", "Corrección"],
                     "filas": [["Tope VIDA_MAX = 150", "satura en 342/384 zonas", "se informa «cumple 40»"],
                               ["Régimen seco: Cs < Ccrit", "150 automático (116 zonas)", "fuera de alcance"],
                               ["Cierre + agente, al cuadrado", "reparación contada dos veces", "una sola reducción"],
                               ["α sin tope (IP, HS)", f"{f1(sin_tope, 0)} años con α = 0,65", "D congelada a 25 años"]],
-                    "prop": [2, 2, 1.8], "nota": "Fuente: revisión del código del Atlas y hefesto/durabilidad/vida_util.py."}),
-         ("h2", "D. Reparación necesaria por zona"),
-         ("p", f"De las 384 zonas, {r['fuera_de_alcance_carbonatacion']} son secas y quedan fuera de alcance. En las "
-               f"{ncl} restantes, una fisura de 0,3 mm sin reparar inicia la corrosión en pocos años. Con la mezcla "
-               f"adecuada, todas alcanzan 25 años si la fisura se cierra al menos un {f1(c25['mediana'], 0)} % (mediana; "
-               f"p10–p90: {f1(c25['p10'], 0)}–{f1(c25['p90'], 0)} %). Cuarenta años solo son alcanzables en {c40['n']} "
-               f"zonas, con {f1(c40['p10'], 0)}–{f1(c40['p90'], 0)} % de cierre (Fig. 1). Frente al {f1(neat, 0)} % ± 20 "
-               f"que predice el motor, a 25 años cumplen {v25.get('cumple', 0)} zonas, {v25.get('incierto', 0)} quedan "
-               f"inciertas y {v25.get('no cumple', 0)} no cumplen."),
+                    "prop": [2, 2, 1.8], "nota": "Fuente: hefesto/durabilidad/vida_util.py."}),
+         ("h2", "D. Reparación necesaria por lugar"),
+         ("p", f"De las 384 zonas, {r['fuera_de_alcance_carbonatacion']} son secas. En las {ncl} restantes, todas alcanzan "
+               f"25 años con la mezcla adecuada si la fisura se cierra al menos un {f1(c25['mediana'], 0)} % (p10–p90: "
+               f"{f1(c25['p10'], 0)}–{f1(c25['p90'], 0)} %); 40 años solo en {c40['n']} zonas (Fig. 1). Con el {f1(neat, 0)} % "
+               f"± 20 que predice el motor, cumplen {v25.get('cumple', 0)} zonas, {v25.get('incierto', 0)} quedan inciertas "
+               f"y {v25.get('no cumple', 0)} no cumplen."),
          ("fig", {"archivo": "fig1_cierre_requerido.png",
                   "pie": "Fig. 1. Cierre mínimo de una fisura de 0,3 mm para 25 años (izquierda) y 40 años (derecha) en las "
                          "zonas costeras del Perú. Gris: zonas secas, fuera de alcance."}),
          ("h2", "E. Sensibilidad"),
          ("p", "La Tabla III muestra que el resultado depende sobre todo del efecto de la fisura y del criterio de "
-               "probabilidad. Con un efecto lineal de la fisura, las zonas atmosféricas ya no necesitan reparación para 25 "
-               "años; en niebla salina siguen necesitando un 70–80 %. Diseñar con la vida media (50 %) en lugar del 10 % "
-               "elimina la necesidad de reparar, lo que muestra por qué ese criterio no debe usarse para diseño."),
+               "probabilidad; por eso se informa un rango y no una cifra única."),
          ("tabla_sens", None),
          ("h1", "IV. DISCUSIÓN Y LIMITACIONES"),
-         ("p", "El parámetro de fisura proviene de un solo laboratorio y dos anchos, Cs y el depósito de cloruros por niebla "
-               "son supuestos sin medición local, y α para el cemento puzolánico no tiene valor fib. Por eso las cifras "
-               "son un rango y no una garantía. El motor NEAT no distingue aún entre opciones bacterianas: hacen falta "
-               "ensayos que varíen protección, lactato y ambiente dentro de un mismo laboratorio, que es lo que los "
-               "agentes buscan primero. Los recolectores no aportaron datos todavía porque su acceso al repositorio falló."),
+         ("p", "La respuesta a la pregunta es parcial. La neuroevolución con poca complejidad generaliza entre laboratorios "
+               "mejor que los modelos flexibles y reduce la incertidumbre del cierre a unos 19 puntos, y menos con ensayos "
+               "locales. Pero hoy no distingue tipos de bacteria ni condiciones del lugar, porque esas variables coinciden "
+               "con el laboratorio de origen. El parámetro de fisura proviene de un solo laboratorio, y Cs y el depósito "
+               "de cloruros por niebla son supuestos sin medición local. Los agentes priorizan justamente esos datos."),
          ("h1", "V. CONCLUSIONES"),
-         ("p", f"Separar el cierre de fisura (días) de la vida útil (años) y acotar cada uno a su rango elimina los 150 años. "
-               f"En la costa peruana con cloruros, 25 años de vida útil son alcanzables con mezclas de norma y un cierre de "
-               f"fisura mediano del {f1(c25['mediana'], 0)} %; 40 años solo en {c40['n']} de {ncl} zonas. Las mediciones "
-               f"con vela húmeda y los ensayos locales de cierre son los datos que más reducirían la incertidumbre."),
+         ("p", f"Hefesto separa el cierre de fisura (días) de la vida útil (años) y acota cada uno a su rango. Entre 13 "
+               f"motores, cinco redes NEAT con corrección local fueron las que mejor predijeron otro laboratorio. En la "
+               f"costa peruana con cloruros, 25 años son alcanzables con mezclas de norma y un cierre mediano del "
+               f"{f1(c25['mediana'], 0)} %; 40 años solo en {c40['n']} de {ncl} zonas."),
          ("h1", "REFERENCIAS")]
     refs = [
         "[1] CEN, «EN 1990: Eurocode – Basis of structural design», Bruselas, 2002.",
@@ -195,15 +201,18 @@ def contenido(D: dict) -> dict:
         "[12] DuraCrete, «Statistical quantification of the variables in the limit state functions», BE95-1347/R9, 2000.",
         "[13] G. R. Meira et al., «Measurements and modelling of marine salt transportation and deposition in a tropical region in Brazil», Atmos. Environ., vol. 40, pp. 5596–5607, 2006.",
         "[14] ACI, «ACI 318-19: Building code requirements for structural concrete», 2019; CEN, «EN 206: Concrete – Specification, performance, production and conformity», 2013+A2:2021.",
+        "[15] «Self-healing performance assessment of bacterial-based concrete using machine learning approaches», Materials, 2022. [En línea]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9267731/",
+        "[16] «Modeling self-healing of concrete using hybrid genetic algorithm–artificial neural network», Materials, 2017. [En línea]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5459209/",
+        "[17] «Prediction of healing performance of autogenous healing concrete using machine learning», Materials, 2021. [En línea]: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8348520/",
     ]
     S += [("ref", t) for t in refs]
-    return {"titulo": "Reparación necesaria para 25–40 años de vida útil del concreto autorreparable bacteriano en la "
-                      "costa peruana: motor NEAT híbrido, agentes recolectores y un modelo de durabilidad corregido",
-            "titulo_en": "Healing required for 25–40-year service life of bacterial self-healing concrete on the Peruvian "
-                         "coast: hybrid NEAT engine, data-collecting agents and a corrected durability model",
+    return {"titulo": "Hefesto: neuroevolución y agentes de IA para predecir qué concreto autorreparable alcanza la vida "
+                      "útil de la norma en un lugar dado",
+            "titulo_en": "Hefesto: neuroevolution and AI agents to predict which self-healing concrete reaches the code "
+                         "service life at a given site",
             "resumen": resumen, "abstract": abstract,
-            "clave": "concreto autorreparable bacteriano; NEAT; vida útil; cloruros; sistemas multiagente; costa peruana",
-            "keywords": "bacterial self-healing concrete; NEAT; service life; chlorides; multi-agent systems; Peruvian coast",
+            "clave": "concreto autorreparable bacteriano; NEAT; neuroevolución; agentes de IA; vida útil; cloruros",
+            "keywords": "bacterial self-healing concrete; NEAT; neuroevolution; AI agents; service life; chlorides",
             "cuerpo": S}
 
 

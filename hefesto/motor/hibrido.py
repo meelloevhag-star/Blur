@@ -32,7 +32,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
 from hefesto.motor.datos import cargar_replicas7, normalizar7
-from hefesto.motor.neat_base import evolucionar, ruta_config
+from hefesto.motor.modelos import ConfigNEAT, EvolucionNEAT
 
 RAIZ = Path(__file__).resolve().parents[2]
 RUTA_RES = RAIZ / "resultados"
@@ -49,8 +49,8 @@ def _rf(semilla=SEMILLA):
 def _neat_en_A(args):
     """Entrena NEAT directo en A y devuelve sus predicciones para todas las filas."""
     Xn, y, A, gens, semilla = args
-    _, red, _, _ = evolucionar(Xn[A], y[A], gens, semilla, lam=LAMBDA, ruta_cfg=ruta_config(7))
-    return np.array([red.activate(x)[0] for x in Xn])
+    red = EvolucionNEAT(ConfigNEAT(generaciones=gens, lam=LAMBDA), semilla).ejecutar(Xn[A], y[A])
+    return red(Xn)
 
 
 def conforme_residual(Xn, y, g, cal, base, alfas=(0.2, 0.1)) -> dict:

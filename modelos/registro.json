@@ -6,7 +6,8 @@
     "n_filas": 2166,
     "K_redes": 5,
     "generaciones": 50,
-    "archivo": "motor_v001.pkl"
+    "archivo": "motor_v001.pkl",
+    "retirado": "motor anterior a Hefesto (neat-python fila por fila); el archivo sigue en el historial de Blur-con-esteroides"
   },
   {
     "version": 2,
@@ -15,6 +16,17 @@
     "n_filas": 2166,
     "K_redes": 5,
     "generaciones": 50,
-    "archivo": "motor_v002.pkl"
+    "archivo": "motor_v002.pkl",
+    "retirado": "motor anterior a Hefesto (neat-python fila por fila); el archivo sigue en el historial de Blur-con-esteroides"
+  },
+  {
+    "version": 3,
+    "fecha": "2026-11-26T07:44:03+00:00",
+    "huella_datos": "fd29d7f2ca6ba8cf",
+    "n_filas": 2166,
+    "K_redes": 5,
+    "generaciones": 50,
+    "archivo": "motor_v003.pkl",
+    "motor": "H3 Hefesto (5 redes NEAT matriciales + corrección local), ganador del banco"
   }
 ]

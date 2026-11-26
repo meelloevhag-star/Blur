@@ -1,10 +1,14 @@
 """
-Motor del núcleo BioCrete: la única puerta que usan los agentes.
+Motor único de Hefesto: el ganador del banco de comparación (resultados/banco_motores.json).
 
-    motor = MotorBioCrete().ajustar(X, y)          # K redes NEAT (base global estable)
+H3 = promedio de K = 5 redes NEAT (hefesto.motor.modelos, RedMatricial) + corrección local con
+peso n/(n + 10) + márgenes conformes. Ganó por menor error entre laboratorios (19,3 pp, empatado
+con el NEAT ×5 sin corrección) y por aprender más rápido con ensayos locales (18,7 pp con 10).
+
+    motor = Motor().ajustar(X, y)                  # K redes NEAT (base global estable)
     motor.calibrar(X_loc, y_loc, g_loc)             # corrección H3 + márgenes conformes con ensayos locales
     motor.predecir(X_nuevo)                         # cierre %, intervalos 80/90 %, modo y avisos de dominio
-    motor.guardar(ruta) / MotorBioCrete.cargar(ruta)
+    motor.guardar(ruta) / Motor.cargar(ruta)
 
 X usa las 7 entradas de hefesto.motor.datos.VARS_R en unidades físicas (sin normalizar).
 Horizonte: solo hay predicción entre las edades medidas (3–480 días). Fuera de ese rango
@@ -16,30 +20,23 @@ con 20–40 grupos ≈ 13–17 pp; cobertura conforme 76–94 %.
 
 import hashlib
 import pickle
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 
 from hefesto.motor.datos import VARS_R, normalizar7
-from hefesto.motor.neat_base import evolucionar, ruta_config
+from hefesto.motor.modelos import ConfigNEAT, NEATConjunto
 
 SEMILLA = 2026
 ERROR_SIN_CALIBRAR_PP = 20.0  # validación entre laboratorios (INFORME_META20 / hibrido.json)
-
-
-def _entrenar_red(args):
-    Xn, y, gens, semilla, lam = args
-    _, red, _, _ = evolucionar(Xn, y, gens, semilla, lam=lam, ruta_cfg=ruta_config(7))
-    return red
 
 
 def _rf(semilla=SEMILLA):
     return RandomForestRegressor(n_estimators=300, min_samples_leaf=3, random_state=semilla, n_jobs=1)
 
 
-class MotorBioCrete:
+class Motor:
     def __init__(self, K=5, generaciones=50, lam=8e-4, k_contraccion=10, workers=4):
         self.K, self.generaciones, self.lam = K, generaciones, lam
         self.k_contraccion, self.workers = k_contraccion, workers
@@ -50,9 +47,9 @@ class MotorBioCrete:
     def ajustar(self, X, y):
         X = np.asarray(X, float)
         Xn = normalizar7(X)
-        tareas = [(Xn, np.asarray(y, float), self.generaciones, SEMILLA + k, self.lam) for k in range(self.K)]
-        with ProcessPoolExecutor(max_workers=self.workers) as ex:
-            self.redes = list(ex.map(_entrenar_red, tareas))
+        self._neat = NEATConjunto("NEAT ×5", self.K, ConfigNEAT(generaciones=self.generaciones, lam=self.lam))
+        self._neat.ajustar(X, np.asarray(y, float))
+        self.redes = self._neat.redes
         self._X_dominio = X
         self.dominio = self._calcular_dominio(X)
         self.huella = hashlib.sha256(np.c_[X, y].tobytes()).hexdigest()[:16]
@@ -68,12 +65,12 @@ class MotorBioCrete:
                 "combinaciones": sorted({(int(m), int(p), int(l)) for m, p, l in X[:, [3, 2, 4]]})}
 
     def _base(self, Xn):
-        return np.mean([[red.activate(x)[0] for x in Xn] for red in self.redes], axis=0)
+        return np.mean([red(Xn) for red in self.redes], axis=0)
 
     def desacuerdo(self, X):
         """Desviación típica entre las K redes (pp). Útil para priorizar, no como margen de error."""
         Xn = normalizar7(np.asarray(X, float))
-        return np.std([[red.activate(x)[0] for x in Xn] for red in self.redes], axis=0) * 100
+        return np.std([red(Xn) for red in self.redes], axis=0) * 100
 
     # ------------------------------------------------------------------ calibración local (H3 + conforme)
     def _peso(self, n):
@@ -157,6 +154,13 @@ class MotorBioCrete:
         return ruta
 
     @staticmethod
-    def cargar(ruta: Path) -> "MotorBioCrete":
+    def cargar(ruta: Path) -> "Motor":
         with open(ruta, "rb") as fh:
             return pickle.load(fh)
+
+    def matrices(self) -> list[list[dict]]:
+        """Matrices de pesos por capa de cada red (para inspeccionar qué aprendió)."""
+        return [r.matrices() for r in self.redes]
+
+
+MotorBioCrete = Motor  # nombre anterior, usado por agentes y pruebas

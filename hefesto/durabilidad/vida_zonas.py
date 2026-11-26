@@ -31,9 +31,9 @@ from pathlib import Path
 import numpy as np
 
 from hefesto.durabilidad import exposicion as ex
-from hefesto.motor.motor import MotorBioCrete
+from hefesto.durabilidad.diseno import Exposicion, Mezcla, ModeloCloruros, veredicto as _veredicto
+from hefesto.motor.motor import Motor
 from hefesto.durabilidad.normas import reglas
-from hefesto.durabilidad.vida_util import cierre_requerido, vida_util
 
 RAIZ = Path(__file__).resolve().parents[2]
 ZONAS = RAIZ / "datos" / "durabilidad" / "zonas"
@@ -42,10 +42,10 @@ OBJETIVOS = (25, 40)
 NOMBRES_PROT = {0: "sin bacterias", 1: "directa/comercial", 2: "portador", 3: "encapsulación"}
 
 
-def ultimo_motor() -> tuple[MotorBioCrete, str]:
+def ultimo_motor() -> tuple[Motor, str]:
     reg = json.loads((RAIZ / "modelos" / "registro.json").read_text(encoding="utf-8"))
     archivo = reg[-1]["archivo"]
-    return MotorBioCrete.cargar(RAIZ / "modelos" / archivo), archivo
+    return Motor.cargar(RAIZ / "modelos" / archivo), archivo
 
 
 def mezclas(regimen: str) -> list[dict]:
@@ -57,45 +57,39 @@ def mezclas(regimen: str) -> list[dict]:
 
 
 def evaluar_zona(z: dict, amb: dict) -> dict:
-    niebla = ex.indice_niebla(amb)
-    dep = ex.deposicion_cloruros(z["dist_mar_km"], amb, niebla)
-    reg = ex.regimen(z["franja"], dep, niebla)
+    lugar = Exposicion.desde_clima(z["dist_mar_km"], z["franja"], amb)
     base = {"id": z["id"], "departamento": z["departamento"], "lat": z["lat"], "lon": z["lon"],
-            "dist_mar_km": z["dist_mar_km"], "regimen": reg, "clase": reglas(reg)["clase"],
-            "indice_niebla": niebla, "deposicion_mg_m2_d": dep, "clase_iso9223": ex.clase_iso9223(dep),
-            "t_media_c": amb["t_media_c"]}
-    if reg == "seco":
+            "dist_mar_km": z["dist_mar_km"], "regimen": lugar.regimen, "clase": lugar.norma["clase"],
+            "norma": lugar.norma, "indice_niebla": lugar.indice_niebla,
+            "deposicion_mg_m2_d": lugar.deposicion_mg_m2_d, "clase_iso9223": ex.clase_iso9223(lugar.deposicion_mg_m2_d),
+            "t_media_c": lugar.t_media_c}
+    if not lugar.con_cloruros:
         return base | {"estado": "fuera_de_alcance", "nota": "sin cloruros: gobierna la carbonatación"}
+    modelo = ModeloCloruros(horizonte_anios=max(OBJETIVOS))
     cands = []
-    for mz in mezclas(reg):
-        kw = dict(deposicion=dep, t_media_c=amb["t_media_c"], recubrimiento_mm=mz["recubrimiento_mm"])
-        sano = vida_util(mz["a_b"], mz["cemento"], reg, w0_mm=0.0, **kw)
-        fis = vida_util(mz["a_b"], mz["cemento"], reg, w0_mm=W0, **kw)
-        req = {o: cierre_requerido(mz["a_b"], mz["cemento"], reg, o, w0_mm=W0, **kw) for o in OBJETIVOS}
-        cands.append(mz | {"sin_fisura": sano["reporte"], "fisura_sin_reparar": fis["reporte"],
-                           "anios_fisura_sin_reparar": fis["anios"], "req": req,
-                           "_t_sano": float("inf") if sano["estado"] == "cumple" else (sano["anios"] or 0.0)})
+    for mz in (Mezcla(**m) for m in mezclas(lugar.regimen)):
+        sano = modelo.vida(lugar, mz, 0.0)
+        fis = modelo.vida(lugar, mz, W0)
+        req = {o: modelo.cierre_requerido(lugar, mz, o, W0) for o in OBJETIVOS}
+        cands.append({"mezcla": mz, "sin_fisura": sano["reporte"], "fisura_sin_reparar": fis["reporte"],
+                      "anios_fisura_sin_reparar": fis["anios"], "req": req,
+                      "_t_sano": float("inf") if sano["estado"] == "cumple" else (sano["anios"] or 0.0)})
 
     alcanzan = [c for c in cands if c["req"][25]["estado"] in ("sin_reparacion_basta", "requiere_reparacion")]
     if alcanzan:   # la más sencilla que llega a 25 años: menor recubrimiento, menor cierre, mayor a/b
-        elegida = min(alcanzan, key=lambda c: (c["recubrimiento_mm"], c["req"][25]["cierre_min"], -c["a_b"]))
+        elegida = min(alcanzan, key=lambda c: (c["mezcla"].recubrimiento_mm, c["req"][25]["cierre_min"], -c["mezcla"].a_b))
     else:          # ninguna llega: se informa la más durable para mostrar cuánto falta
-        elegida = max(cands, key=lambda c: (c["_t_sano"], -c["recubrimiento_mm"]))
-    return base | {"estado": "evaluada", "mezcla": {k: elegida[k] for k in ("cemento", "a_b", "recubrimiento_mm")},
+        elegida = max(cands, key=lambda c: (c["_t_sano"], -c["mezcla"].recubrimiento_mm))
+    return base | {"estado": "evaluada", "mezcla": dict(elegida["mezcla"].__dict__),
                    "sin_fisura": elegida["sin_fisura"], "fisura_sin_reparar": elegida["fisura_sin_reparar"],
                    "requerido": {str(o): elegida["req"][o] for o in OBJETIVOS}, "n_mezclas_evaluadas": len(cands)}
 
 
 def veredicto(req: dict, pred_pct: float) -> str:
-    if req["estado"] == "sin_reparacion_basta":
-        return "cumple sin reparación"
-    if req["estado"] != "requiere_reparacion":
-        return "no alcanzable con esta mezcla"
-    r = 100 * req["cierre_min"]
-    return "cumple" if pred_pct - ERROR_PP >= r else "incierto" if pred_pct >= r else "no cumple"
+    return _veredicto(req, pred_pct, ERROR_PP)
 
 
-def mejor_opcion(motor: MotorBioCrete, marino: int) -> dict:
+def mejor_opcion(motor: Motor, marino: int) -> dict:
     filas = [[W0, EDAD, p, marino, l, 0, 0] for p, l in itertools.product(range(4), (0, 1))]
     preds = motor.predecir(np.array(filas, float))
     ops = [{"proteccion": NOMBRES_PROT[f[2]], "lactato_calcio": bool(f[4]), "cierre_pct": p["cierre_pct"],
@@ -125,7 +119,7 @@ def main(argv=None) -> int:
         r["neat"] = {"motor": archivo, "edad_dias": EDAD, "w0_mm": W0, **op["mejor"], "error_pp": ERROR_PP}
         r["veredicto"] = {o: veredicto(r["requerido"][str(o)], op["mejor"]["cierre_pct"]) for o in OBJETIVOS}
     ev = [r for r in res if r["estado"] == "evaluada"]
-    resumen = {"zonas": len(res), "fuera_de_alcance_carbonatacion": len(res) - len(ev),
+    resumen = {"motor": archivo, "zonas": len(res), "fuera_de_alcance_carbonatacion": len(res) - len(ev),
                "regimenes": dict(Counter(r["regimen"] for r in res)),
                "fisura_sin_reparar": dict(Counter(r["fisura_sin_reparar"] for r in ev).most_common(8)),
                "veredicto_25": dict(Counter(r["veredicto"][25] for r in ev)),

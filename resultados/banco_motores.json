@@ -1,0 +1,2186 @@
+{
+ "n_filas": 2167,
+ "n_probetas": 310,
+ "laboratorios": [
+  "Cappellesso2024",
+  "Mousa2022"
+ ],
+ "rapido": false,
+ "piso_ruido_pp": {
+  "n_registros": 2159,
+  "n_condiciones": 208,
+  "piso_superior_pp": 10.32,
+  "piso_inferior_pp": 9.1
+ },
+ "eleccion": {
+  "ganador": "H3 (NEAT ×5 + RF)",
+  "mejor_precision": "NEAT ×5 (motor actual)",
+  "empatados_en_precision": [
+   "NEAT ×5 (motor actual)",
+   "H3 (NEAT ×5 + RF)"
+  ],
+  "regla": "1) MAE entre laboratorios (empate si el IC 95 % bootstrap de la diferencia incluye 0); 2) MAE con 10 probetas locales; 3) complejidad; 4) tiempo de entrenamiento"
+ },
+ "matriz_prediccion_ganador": [
+  {
+   "condicion": "Mousa2022|w0=0.04|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 4.2,
+   "predicho_pct": 82.9
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.26|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 2,
+   "real_pct": 11.3,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.27|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 2,
+   "real_pct": 13.6,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.17|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 7,
+   "real_pct": 13.9,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.07|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 2,
+   "real_pct": 14.9,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.18|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 4,
+   "real_pct": 17.7,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.16|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 4,
+   "real_pct": 20.9,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.06|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 26.7,
+   "predicho_pct": 82.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.20|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 3,
+   "real_pct": 23.4,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.15|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 24.1,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.33|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 24.6,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.05|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 9.2,
+   "predicho_pct": 61.7
+  },
+  {
+   "condicion": "Mousa2022|w0=0.39|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 76.3,
+   "predicho_pct": 27.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.41|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 75.5,
+   "predicho_pct": 26.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.19|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 2,
+   "real_pct": 18.7,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.27|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 83.5,
+   "predicho_pct": 39.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.11|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 31.5,
+   "predicho_pct": 75.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.18|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 33.1,
+   "predicho_pct": 76.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.19|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 34.9,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.96|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 59.3,
+   "predicho_pct": 17.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.07|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 40.1,
+   "predicho_pct": 81.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.17|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 2,
+   "real_pct": 23.1,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.23|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 6,
+   "real_pct": 40.5,
+   "predicho_pct": 81.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.22|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 10,
+   "real_pct": 44.1,
+   "predicho_pct": 84.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.14|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 35.3,
+   "predicho_pct": 73.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.22|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 36.9,
+   "predicho_pct": 74.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.20|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 4,
+   "real_pct": 26.9,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.09|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 43.7,
+   "predicho_pct": 81.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.29|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 24,
+   "real_pct": 46.9,
+   "predicho_pct": 84.1
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.30|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 8,
+   "real_pct": 43.2,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.30|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 27,
+   "real_pct": 48.5,
+   "predicho_pct": 84.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.08|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 2,
+   "real_pct": 100.0,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.29|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 2,
+   "real_pct": 29.2,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.16|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 43.8,
+   "predicho_pct": 77.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.29|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 95.0,
+   "predicho_pct": 61.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.26|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 28.0,
+   "predicho_pct": 61.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.20|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 43.0,
+   "predicho_pct": 75.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.21|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 3,
+   "real_pct": 52.6,
+   "predicho_pct": 85.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.08|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 24,
+   "real_pct": 53.0,
+   "predicho_pct": 85.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.09|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 26.1,
+   "predicho_pct": 57.9
+  },
+  {
+   "condicion": "Mousa2022|w0=0.08|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 27.7,
+   "predicho_pct": 59.1
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.32|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 10,
+   "real_pct": 53.0,
+   "predicho_pct": 84.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.10|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 20,
+   "real_pct": 26.4,
+   "predicho_pct": 56.9
+  },
+  {
+   "condicion": "Mousa2022|w0=0.23|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 32.5,
+   "predicho_pct": 62.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.24|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 43.6,
+   "predicho_pct": 73.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.11|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 2,
+   "real_pct": 94.4,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.19|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 46.9,
+   "predicho_pct": 76.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.22|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 11.1,
+   "predicho_pct": 39.9
+  },
+  {
+   "condicion": "Mousa2022|w0=0.32|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 60.6,
+   "predicho_pct": 31.9
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.09|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 93.0,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.34|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 38.3,
+   "predicho_pct": 66.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.28|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 4,
+   "real_pct": 36.4,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.82|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 46.6,
+   "predicho_pct": 18.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.24|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 10,
+   "real_pct": 56.4,
+   "predicho_pct": 84.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.17|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 43.7,
+   "predicho_pct": 71.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.17|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 51.2,
+   "predicho_pct": 77.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.67|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 40.3,
+   "predicho_pct": 14.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.11|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 30.1,
+   "predicho_pct": 55.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.14|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 27.2,
+   "predicho_pct": 52.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.17|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 35.9,
+   "predicho_pct": 60.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.25|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 7,
+   "real_pct": 59.9,
+   "predicho_pct": 84.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.10|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 10,
+   "real_pct": 95.0,
+   "predicho_pct": 70.9
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.28|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 10,
+   "real_pct": 60.7,
+   "predicho_pct": 84.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.14|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 55.2,
+   "predicho_pct": 78.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.27|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 10,
+   "real_pct": 53.9,
+   "predicho_pct": 77.1
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.33|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 2,
+   "real_pct": 54.5,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.18|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 47.8,
+   "predicho_pct": 70.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.36|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 100.0,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.37|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 100.0,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.05|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 2,
+   "real_pct": 54.9,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.36|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 42.9,
+   "predicho_pct": 65.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.39|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 53.0,
+   "predicho_pct": 30.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.07|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 20,
+   "real_pct": 38.0,
+   "predicho_pct": 59.9
+  },
+  {
+   "condicion": "Mousa2022|w0=0.44|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 6.5,
+   "predicho_pct": 28.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.12|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 33.5,
+   "predicho_pct": 54.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.07|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 3,
+   "real_pct": 56.3,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.26|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 51.1,
+   "predicho_pct": 72.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.30|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 73.5,
+   "predicho_pct": 52.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.52|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 41.2,
+   "predicho_pct": 20.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.23|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 14,
+   "real_pct": 57.7,
+   "predicho_pct": 78.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.18|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 1,
+   "real_pct": 57.3,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.40|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 64.9,
+   "predicho_pct": 45.1
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.28|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 5,
+   "real_pct": 71.2,
+   "predicho_pct": 91.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.11|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 26,
+   "real_pct": 96.0,
+   "predicho_pct": 76.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.22|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 14,
+   "real_pct": 58.8,
+   "predicho_pct": 78.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.22|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 63.7,
+   "predicho_pct": 44.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.09|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 28,
+   "real_pct": 94.9,
+   "predicho_pct": 75.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.22|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 48.7,
+   "predicho_pct": 67.7
+  },
+  {
+   "condicion": "Mousa2022|w0=0.23|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 57.4,
+   "predicho_pct": 38.9
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.13|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 98.6,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.40|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 45.4,
+   "predicho_pct": 27.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.20|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 41.5,
+   "predicho_pct": 59.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.35|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 47.6,
+   "predicho_pct": 29.9
+  },
+  {
+   "condicion": "Mousa2022|w0=0.13|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 20,
+   "real_pct": 36.1,
+   "predicho_pct": 53.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.33|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 4,
+   "real_pct": 62.7,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.34|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 60.3,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.12|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 24,
+   "real_pct": 96.8,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.29|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 16,
+   "real_pct": 54.8,
+   "predicho_pct": 38.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.17|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 59.7,
+   "predicho_pct": 43.7
+  },
+  {
+   "condicion": "Mousa2022|w0=0.38|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 44.1,
+   "predicho_pct": 28.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.31|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 14,
+   "real_pct": 57.7,
+   "predicho_pct": 73.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.26|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 12,
+   "real_pct": 64.6,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.32|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 52.8,
+   "predicho_pct": 68.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.19|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 31.9,
+   "predicho_pct": 47.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.38|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 37.3,
+   "predicho_pct": 52.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.55|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 52.1,
+   "predicho_pct": 36.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.29|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 65.0,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.29|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 2,
+   "real_pct": 49.7,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.31|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 51.2,
+   "predicho_pct": 36.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.24|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 4,
+   "real_pct": 65.4,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.28|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 45.5,
+   "predicho_pct": 60.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.22|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 4,
+   "real_pct": 62.9,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.10|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 22,
+   "real_pct": 87.6,
+   "predicho_pct": 73.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.35|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 69.8,
+   "predicho_pct": 55.3
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.32|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 19,
+   "real_pct": 71.9,
+   "predicho_pct": 85.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.32|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 24,
+   "real_pct": 64.0,
+   "predicho_pct": 77.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.07|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 14,
+   "real_pct": 91.3,
+   "predicho_pct": 78.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.32|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 48.7,
+   "predicho_pct": 35.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.08|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 42,
+   "real_pct": 91.1,
+   "predicho_pct": 78.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.10|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 56,
+   "real_pct": 74.4,
+   "predicho_pct": 87.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.44|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 33.7,
+   "predicho_pct": 46.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.20|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 58.6,
+   "predicho_pct": 46.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.30|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 6,
+   "real_pct": 52.6,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.34|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 6,
+   "real_pct": 52.6,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.48|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 34.4,
+   "predicho_pct": 22.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.15|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 2,
+   "real_pct": 89.3,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.09|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 30,
+   "real_pct": 73.2,
+   "predicho_pct": 85.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.38|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 42.7,
+   "predicho_pct": 31.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.34|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 45.4,
+   "predicho_pct": 33.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.12|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 1,
+   "real_pct": 89.1,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.25|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 1,
+   "real_pct": 40.6,
+   "predicho_pct": 51.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.38|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 88.5,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.38|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 53.0,
+   "predicho_pct": 63.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.32|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 24,
+   "real_pct": 69.8,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.51|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 35.1,
+   "predicho_pct": 24.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.08|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 26,
+   "real_pct": 89.3,
+   "predicho_pct": 79.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.33|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 24,
+   "real_pct": 67.7,
+   "predicho_pct": 77.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.21|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 65.2,
+   "predicho_pct": 75.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.19|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 52.1,
+   "predicho_pct": 42.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.30|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 50.6,
+   "predicho_pct": 60.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.25|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 51.1,
+   "predicho_pct": 41.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.19|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 4,
+   "real_pct": 87.0,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.05|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 78.3,
+   "predicho_pct": 68.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.11|prot=0|marino=1|lact=0|curado=1|crist=0",
+   "n": 30,
+   "real_pct": 81.5,
+   "predicho_pct": 91.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.21|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 20,
+   "real_pct": 54.6,
+   "predicho_pct": 45.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.51|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 43.3,
+   "predicho_pct": 52.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.47|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 32.5,
+   "predicho_pct": 23.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.46|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 17.9,
+   "predicho_pct": 27.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.10|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 35,
+   "real_pct": 97.4,
+   "predicho_pct": 88.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.24|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 57.0,
+   "predicho_pct": 65.7
+  },
+  {
+   "condicion": "Mousa2022|w0=0.24|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 47.2,
+   "predicho_pct": 38.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.31|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 60.8,
+   "predicho_pct": 69.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.06|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 76.7,
+   "predicho_pct": 68.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.19|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 88.4,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.20|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 49.3,
+   "predicho_pct": 41.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.28|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 45.9,
+   "predicho_pct": 54.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.30|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 45.2,
+   "predicho_pct": 37.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.26|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 44.3,
+   "predicho_pct": 36.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.21|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 59.9,
+   "predicho_pct": 67.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.28|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 46.3,
+   "predicho_pct": 38.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.06|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 85.2,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.39|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 55.3,
+   "predicho_pct": 62.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.09|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 39,
+   "real_pct": 95.9,
+   "predicho_pct": 88.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.55|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 16.2,
+   "predicho_pct": 23.6
+  },
+  {
+   "condicion": "Mousa2022|w0=0.48|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 50.3,
+   "predicho_pct": 43.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.26|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 6,
+   "real_pct": 74.2,
+   "predicho_pct": 81.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.32|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 65.5,
+   "predicho_pct": 72.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.07|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 26,
+   "real_pct": 91.2,
+   "predicho_pct": 84.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.06|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 11,
+   "real_pct": 83.9,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.18|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 36.6,
+   "predicho_pct": 43.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.27|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 29.9,
+   "predicho_pct": 36.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.23|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 51.0,
+   "predicho_pct": 57.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.24|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 63.0,
+   "predicho_pct": 56.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.27|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 10,
+   "real_pct": 85.0,
+   "predicho_pct": 91.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.28|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 18,
+   "real_pct": 92.2,
+   "predicho_pct": 86.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.30|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 74.4,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.03|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 74.5,
+   "predicho_pct": 69.1
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.08|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 36,
+   "real_pct": 90.3,
+   "predicho_pct": 85.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.27|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 16,
+   "real_pct": 76.5,
+   "predicho_pct": 81.7
+  },
+  {
+   "condicion": "Mousa2022|w0=0.08|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 72.9,
+   "predicho_pct": 67.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.66|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 15.6,
+   "predicho_pct": 20.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.26|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 2,
+   "real_pct": 69.6,
+   "predicho_pct": 64.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.09|prot=0|marino=1|lact=0|curado=0|crist=1",
+   "n": 26,
+   "real_pct": 81.3,
+   "predicho_pct": 76.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.29|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 32,
+   "real_pct": 85.5,
+   "predicho_pct": 90.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.10|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 84.7,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.28|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 25,
+   "real_pct": 74.6,
+   "predicho_pct": 79.1
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.27|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 68.2,
+   "predicho_pct": 72.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.41|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 33.9,
+   "predicho_pct": 29.7
+  },
+  {
+   "condicion": "Mousa2022|w0=0.41|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 46.1,
+   "predicho_pct": 50.3
+  },
+  {
+   "condicion": "Mousa2022|w0=0.26|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 16,
+   "real_pct": 44.5,
+   "predicho_pct": 40.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.31|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 18,
+   "real_pct": 83.4,
+   "predicho_pct": 87.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.37|prot=3|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 60.9,
+   "predicho_pct": 64.9
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.21|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 16,
+   "real_pct": 92.8,
+   "predicho_pct": 88.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.58|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 26.4,
+   "predicho_pct": 22.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.10|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 73,
+   "real_pct": 84.7,
+   "predicho_pct": 88.6
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.20|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 8,
+   "real_pct": 86.9,
+   "predicho_pct": 83.1
+  },
+  {
+   "condicion": "Mousa2022|w0=0.49|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 29.3,
+   "predicho_pct": 25.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.26|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 7,
+   "real_pct": 75.1,
+   "predicho_pct": 71.7
+  },
+  {
+   "condicion": "Mousa2022|w0=0.27|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 66.6,
+   "predicho_pct": 63.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.22|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 12,
+   "real_pct": 83.5,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.14|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 16,
+   "real_pct": 69.0,
+   "predicho_pct": 65.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.42|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 32.2,
+   "predicho_pct": 29.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.42|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 46.4,
+   "predicho_pct": 43.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.25|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 2,
+   "real_pct": 74.4,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.31|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 6,
+   "real_pct": 72.1,
+   "predicho_pct": 75.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.12|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 63.4,
+   "predicho_pct": 66.3
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.05|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 4,
+   "real_pct": 80.3,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.08|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 17,
+   "real_pct": 78.6,
+   "predicho_pct": 81.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.04|prot=3|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 71.8,
+   "predicho_pct": 69.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.30|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 17,
+   "real_pct": 84.1,
+   "predicho_pct": 86.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.17|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 16,
+   "real_pct": 52.0,
+   "predicho_pct": 49.3
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.35|prot=1|marino=1|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 77.6,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.39|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 49.7,
+   "predicho_pct": 52.3
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.21|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 75.0,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.16|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 48.0,
+   "predicho_pct": 50.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.41|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 46.0,
+   "predicho_pct": 44.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.21|prot=0|marino=1|lact=0|curado=0|crist=0",
+   "n": 8,
+   "real_pct": 78.4,
+   "predicho_pct": 80.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.11|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 14,
+   "real_pct": 88.7,
+   "predicho_pct": 87.1
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.16|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 34,
+   "real_pct": 90.4,
+   "predicho_pct": 88.8
+  },
+  {
+   "condicion": "Mousa2022|w0=0.47|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 28.3,
+   "predicho_pct": 26.7
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.24|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 20,
+   "real_pct": 89.6,
+   "predicho_pct": 91.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.43|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 27.1,
+   "predicho_pct": 28.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.09|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 55,
+   "real_pct": 87.7,
+   "predicho_pct": 86.5
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.24|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 4,
+   "real_pct": 76.3,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.11|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 20,
+   "real_pct": 89.8,
+   "predicho_pct": 88.8
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.13|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 2,
+   "real_pct": 78.4,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.18|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 16,
+   "real_pct": 47.1,
+   "predicho_pct": 48.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.34|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 57.9,
+   "predicho_pct": 57.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.25|prot=2|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 64.4,
+   "predicho_pct": 65.2
+  },
+  {
+   "condicion": "Mousa2022|w0=0.50|prot=0|marino=0|lact=0|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 25.9,
+   "predicho_pct": 25.2
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.17|prot=0|marino=1|lact=0|curado=1|crist=1",
+   "n": 27,
+   "real_pct": 88.1,
+   "predicho_pct": 87.5
+  },
+  {
+   "condicion": "Mousa2022|w0=0.22|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 57.6,
+   "predicho_pct": 58.0
+  },
+  {
+   "condicion": "Cappellesso2024|w0=0.12|prot=1|marino=1|lact=0|curado=1|crist=0",
+   "n": 1,
+   "real_pct": 77.1,
+   "predicho_pct": 77.4
+  },
+  {
+   "condicion": "Mousa2022|w0=0.32|prot=2|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 51.1,
+   "predicho_pct": 51.0
+  },
+  {
+   "condicion": "Mousa2022|w0=0.43|prot=0|marino=0|lact=1|curado=0|crist=0",
+   "n": 4,
+   "real_pct": 25.4,
+   "predicho_pct": 25.4
+  }
+ ],
+ "candidatos": [
+  {
+   "nombre": "NEAT 1 red (clásico)",
+   "familia": "neuroevolución",
+   "precision": {
+    "filas": {
+     "MAE_pp": 17.95,
+     "R2": 0.399
+    },
+    "grupos": {
+     "MAE_pp": 17.45,
+     "R2": 0.422
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 19.69,
+      "R2": -0.279
+     },
+     "Mousa2022": {
+      "MAE_pp": 23.93,
+      "R2": -0.505
+     },
+     "media_MAE_pp": 21.81
+    }
+   },
+   "mejora": {
+    "0": 21.97,
+    "5": 21.06,
+    "10": 19.95,
+    "20": 19.1,
+    "40": 19.49
+   },
+   "velocidad": {
+    "entrenar_s": 0.26,
+    "predecir_1000_ms": 0.19,
+    "banco_total_s": 11.1
+   },
+   "simplicidad": {
+    "redes": 1,
+    "ocultos": 0,
+    "conexiones": 3,
+    "variables_usadas": [
+     "Ancho fisura w0 (mm)",
+     "Edad (d)",
+     "Curado previo"
+    ]
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.56,
+    "Edad (d)": 10.79,
+    "Protección bio (0-3)": 0.0,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 0.0,
+    "Curado previo": 0.18,
+    "Agente cristalino": 0.0
+   },
+   "dif_vs_mejor_IC95_pp": [
+    1.13,
+    3.57
+   ]
+  },
+  {
+   "nombre": "NEAT ×5 (motor actual)",
+   "familia": "neuroevolución",
+   "precision": {
+    "filas": {
+     "MAE_pp": 17.47,
+     "R2": 0.431
+    },
+    "grupos": {
+     "MAE_pp": 17.57,
+     "R2": 0.424
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 17.72,
+      "R2": 0.179
+     },
+     "Mousa2022": {
+      "MAE_pp": 20.9,
+      "R2": -0.322
+     },
+     "media_MAE_pp": 19.31
+    }
+   },
+   "mejora": {
+    "0": 19.43,
+    "5": 19.77,
+    "10": 19.17,
+    "20": 18.51,
+    "40": 18.65
+   },
+   "velocidad": {
+    "entrenar_s": 1.12,
+    "predecir_1000_ms": 0.2,
+    "banco_total_s": 51.8
+   },
+   "simplicidad": {
+    "redes": 5,
+    "ocultos": 0,
+    "conexiones": 11,
+    "variables_usadas": [
+     "Ancho fisura w0 (mm)",
+     "Edad (d)",
+     "Curado previo"
+    ]
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.13,
+    "Edad (d)": 14.54,
+    "Protección bio (0-3)": 0.0,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 0.0,
+    "Curado previo": 1.36,
+    "Agente cristalino": 0.0
+   },
+   "dif_vs_mejor_IC95_pp": [
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "nombre": "NEAT ×5 evolución larga",
+   "familia": "neuroevolución",
+   "precision": {
+    "filas": {
+     "MAE_pp": 17.01,
+     "R2": 0.449
+    },
+    "grupos": {
+     "MAE_pp": 17.61,
+     "R2": 0.413
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 19.43,
+      "R2": -0.242
+     },
+     "Mousa2022": {
+      "MAE_pp": 24.32,
+      "R2": -0.684
+     },
+     "media_MAE_pp": 21.88
+    }
+   },
+   "mejora": {
+    "0": 22.01,
+    "5": 20.51,
+    "10": 19.55,
+    "20": 19.14,
+    "40": 18.98
+   },
+   "velocidad": {
+    "entrenar_s": 12.86,
+    "predecir_1000_ms": 0.27,
+    "banco_total_s": 529.9
+   },
+   "simplicidad": {
+    "redes": 5,
+    "ocultos": 0,
+    "conexiones": 10,
+    "variables_usadas": [
+     "Ancho fisura w0 (mm)",
+     "Edad (d)",
+     "Curado previo"
+    ]
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.12,
+    "Edad (d)": 15.91,
+    "Protección bio (0-3)": 0.0,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 0.0,
+    "Curado previo": 2.04,
+    "Agente cristalino": 0.0
+   },
+   "dif_vs_mejor_IC95_pp": [
+    1.38,
+    3.2
+   ]
+  },
+  {
+   "nombre": "NEAT capa oculta",
+   "familia": "neuroevolución",
+   "precision": {
+    "filas": {
+     "MAE_pp": 16.8,
+     "R2": 0.46
+    },
+    "grupos": {
+     "MAE_pp": 17.78,
+     "R2": 0.402
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 19.5,
+      "R2": -0.254
+     },
+     "Mousa2022": {
+      "MAE_pp": 28.8,
+      "R2": -1.312
+     },
+     "media_MAE_pp": 24.15
+    }
+   },
+   "mejora": {
+    "0": 24.0,
+    "5": 21.82,
+    "10": 19.5,
+    "20": 18.9,
+    "40": 18.02
+   },
+   "velocidad": {
+    "entrenar_s": 5.08,
+    "predecir_1000_ms": 0.18,
+    "banco_total_s": 205.2
+   },
+   "simplicidad": {
+    "redes": 1,
+    "ocultos": 0,
+    "conexiones": 2,
+    "variables_usadas": [
+     "Ancho fisura w0 (mm)",
+     "Edad (d)"
+    ]
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.67,
+    "Edad (d)": 9.8,
+    "Protección bio (0-3)": 0.0,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 0.0,
+    "Curado previo": 0.0,
+    "Agente cristalino": 0.0
+   },
+   "dif_vs_mejor_IC95_pp": [
+    2.74,
+    5.15
+   ]
+  },
+  {
+   "nombre": "NEAT ×5 capa oculta",
+   "familia": "neuroevolución",
+   "precision": {
+    "filas": {
+     "MAE_pp": 16.62,
+     "R2": 0.48
+    },
+    "grupos": {
+     "MAE_pp": 17.27,
+     "R2": 0.441
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 19.61,
+      "R2": -0.274
+     },
+     "Mousa2022": {
+      "MAE_pp": 24.66,
+      "R2": -0.807
+     },
+     "media_MAE_pp": 22.13
+    }
+   },
+   "mejora": {
+    "0": 22.16,
+    "5": 19.88,
+    "10": 19.52,
+    "20": 18.66,
+    "40": 18.05
+   },
+   "velocidad": {
+    "entrenar_s": 30.0,
+    "predecir_1000_ms": 0.32,
+    "banco_total_s": 978.8
+   },
+   "simplicidad": {
+    "redes": 5,
+    "ocultos": 1,
+    "conexiones": 12,
+    "variables_usadas": [
+     "Ancho fisura w0 (mm)",
+     "Edad (d)",
+     "Protección bio (0-3)",
+     "Ambiente marino",
+     "Curado previo"
+    ]
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.25,
+    "Edad (d)": 13.19,
+    "Protección bio (0-3)": 0.1,
+    "Ambiente marino": 0.01,
+    "Lactato de calcio": 0.0,
+    "Curado previo": 0.89,
+    "Agente cristalino": 0.0
+   },
+   "dif_vs_mejor_IC95_pp": [
+    1.52,
+    3.55
+   ]
+  },
+  {
+   "nombre": "NEAT poca parsimonia",
+   "familia": "neuroevolución",
+   "precision": {
+    "filas": {
+     "MAE_pp": 17.32,
+     "R2": 0.432
+    },
+    "grupos": {
+     "MAE_pp": 17.03,
+     "R2": 0.436
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 19.47,
+      "R2": -0.248
+     },
+     "Mousa2022": {
+      "MAE_pp": 21.35,
+      "R2": -0.336
+     },
+     "media_MAE_pp": 20.41
+    }
+   },
+   "mejora": {
+    "0": 20.47,
+    "5": 19.47,
+    "10": 19.91,
+    "20": 19.64,
+    "40": 18.87
+   },
+   "velocidad": {
+    "entrenar_s": 2.74,
+    "predecir_1000_ms": 0.18,
+    "banco_total_s": 137.0
+   },
+   "simplicidad": {
+    "redes": 1,
+    "ocultos": 0,
+    "conexiones": 2,
+    "variables_usadas": [
+     "Edad (d)",
+     "Curado previo"
+    ]
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.0,
+    "Edad (d)": 18.42,
+    "Protección bio (0-3)": 0.0,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 0.0,
+    "Curado previo": 3.43,
+    "Agente cristalino": 0.0
+   },
+   "dif_vs_mejor_IC95_pp": [
+    0.32,
+    2.34
+   ]
+  },
+  {
+   "nombre": "H3 (NEAT ×5 + RF)",
+   "familia": "híbrido",
+   "precision": {
+    "filas": {
+     "MAE_pp": 17.47,
+     "R2": 0.431
+    },
+    "grupos": {
+     "MAE_pp": 17.57,
+     "R2": 0.424
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 17.72,
+      "R2": 0.179
+     },
+     "Mousa2022": {
+      "MAE_pp": 20.9,
+      "R2": -0.322
+     },
+     "media_MAE_pp": 19.31
+    }
+   },
+   "mejora": {
+    "0": 19.43,
+    "5": 19.92,
+    "10": 18.66,
+    "20": 16.12,
+    "40": 14.74
+   },
+   "velocidad": {
+    "entrenar_s": 1.26,
+    "predecir_1000_ms": 0.23,
+    "banco_total_s": 22.9
+   },
+   "simplicidad": {
+    "redes": 5,
+    "ocultos": 0,
+    "conexiones": 11,
+    "hojas_correccion": 0,
+    "variables_usadas": [
+     "Ancho fisura w0 (mm)",
+     "Edad (d)",
+     "Curado previo"
+    ]
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.13,
+    "Edad (d)": 14.54,
+    "Protección bio (0-3)": 0.0,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 0.0,
+    "Curado previo": 1.36,
+    "Agente cristalino": 0.0
+   },
+   "dif_vs_mejor_IC95_pp": [
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "nombre": "MLP 16",
+   "familia": "red neuronal (gradiente)",
+   "precision": {
+    "filas": {
+     "MAE_pp": 15.37,
+     "R2": 0.552
+    },
+    "grupos": {
+     "MAE_pp": 16.96,
+     "R2": 0.48
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 19.17,
+      "R2": -0.198
+     },
+     "Mousa2022": {
+      "MAE_pp": 26.36,
+      "R2": -0.905
+     },
+     "media_MAE_pp": 22.77
+    }
+   },
+   "mejora": {
+    "0": 22.9,
+    "5": 25.39,
+    "10": 23.55,
+    "20": 20.88,
+    "40": 19.39
+   },
+   "velocidad": {
+    "entrenar_s": 1.09,
+    "predecir_1000_ms": 0.22,
+    "banco_total_s": 20.3
+   },
+   "simplicidad": {
+    "parametros": 145,
+    "variables_usadas": null
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 2.67,
+    "Edad (d)": 16.95,
+    "Protección bio (0-3)": 2.11,
+    "Ambiente marino": 1.64,
+    "Lactato de calcio": 0.52,
+    "Curado previo": 5.42,
+    "Agente cristalino": 2.32
+   },
+   "dif_vs_mejor_IC95_pp": [
+    1.85,
+    3.89
+   ]
+  },
+  {
+   "nombre": "MLP 32x16",
+   "familia": "red neuronal (gradiente)",
+   "precision": {
+    "filas": {
+     "MAE_pp": 15.18,
+     "R2": 0.566
+    },
+    "grupos": {
+     "MAE_pp": 15.73,
+     "R2": 0.536
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 20.39,
+      "R2": -0.409
+     },
+     "Mousa2022": {
+      "MAE_pp": 38.34,
+      "R2": -2.732
+     },
+     "media_MAE_pp": 29.37
+    }
+   },
+   "mejora": {
+    "0": 29.65,
+    "5": 26.65,
+    "10": 22.41,
+    "20": 20.56,
+    "40": 17.78
+   },
+   "velocidad": {
+    "entrenar_s": 1.33,
+    "predecir_1000_ms": 0.65,
+    "banco_total_s": 21.8
+   },
+   "simplicidad": {
+    "parametros": 801,
+    "variables_usadas": null
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 3.73,
+    "Edad (d)": 23.57,
+    "Protección bio (0-3)": 2.6,
+    "Ambiente marino": 8.16,
+    "Lactato de calcio": 1.14,
+    "Curado previo": 7.35,
+    "Agente cristalino": 3.75
+   },
+   "dif_vs_mejor_IC95_pp": [
+    6.06,
+    9.83
+   ]
+  },
+  {
+   "nombre": "Random Forest",
+   "familia": "árboles",
+   "precision": {
+    "filas": {
+     "MAE_pp": 11.31,
+     "R2": 0.714
+    },
+    "grupos": {
+     "MAE_pp": 12.76,
+     "R2": 0.654
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 38.06,
+      "R2": -1.608
+     },
+     "Mousa2022": {
+      "MAE_pp": 25.38,
+      "R2": -1.053
+     },
+     "media_MAE_pp": 31.72
+    }
+   },
+   "mejora": {
+    "0": 32.22,
+    "5": 21.44,
+    "10": 19.65,
+    "20": 15.7,
+    "40": 14.25
+   },
+   "velocidad": {
+    "entrenar_s": 0.7,
+    "predecir_1000_ms": 23.55,
+    "banco_total_s": 20.8
+   },
+   "simplicidad": {
+    "hojas": 104067,
+    "variables_usadas": null
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 8.6,
+    "Edad (d)": 19.28,
+    "Protección bio (0-3)": 3.63,
+    "Ambiente marino": 0.67,
+    "Lactato de calcio": 1.05,
+    "Curado previo": 4.38,
+    "Agente cristalino": 3.5
+   },
+   "dif_vs_mejor_IC95_pp": [
+    11.7,
+    17.96
+   ]
+  },
+  {
+   "nombre": "XGBoost",
+   "familia": "árboles",
+   "precision": {
+    "filas": {
+     "MAE_pp": 10.95,
+     "R2": 0.74
+    },
+    "grupos": {
+     "MAE_pp": 12.77,
+     "R2": 0.661
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 37.53,
+      "R2": -1.585
+     },
+     "Mousa2022": {
+      "MAE_pp": 26.18,
+      "R2": -1.192
+     },
+     "media_MAE_pp": 31.86
+    }
+   },
+   "mejora": {
+    "0": 32.14,
+    "5": 23.46,
+    "10": 20.75,
+    "20": 16.47,
+    "40": 15.15
+   },
+   "velocidad": {
+    "entrenar_s": 0.12,
+    "predecir_1000_ms": 3.11,
+    "banco_total_s": 3.8
+   },
+   "simplicidad": {
+    "arboles": 300,
+    "variables_usadas": null
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 6.74,
+    "Edad (d)": 20.52,
+    "Protección bio (0-3)": 2.51,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 1.02,
+    "Curado previo": 3.01,
+    "Agente cristalino": 3.44
+   },
+   "dif_vs_mejor_IC95_pp": [
+    11.84,
+    17.63
+   ]
+  },
+  {
+   "nombre": "XGBoost + NEAT",
+   "familia": "mixto",
+   "precision": {
+    "filas": {
+     "MAE_pp": 13.71,
+     "R2": 0.646
+    },
+    "grupos": {
+     "MAE_pp": 14.29,
+     "R2": 0.61
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 24.99,
+      "R2": -0.186
+     },
+     "Mousa2022": {
+      "MAE_pp": 20.51,
+      "R2": -0.27
+     },
+     "media_MAE_pp": 22.75
+    }
+   },
+   "mejora": {
+    "0": 22.89,
+    "5": 20.63,
+    "10": 18.91,
+    "20": 16.58,
+    "40": 16.13
+   },
+   "velocidad": {
+    "entrenar_s": 0.36,
+    "predecir_1000_ms": 5.49,
+    "banco_total_s": 14.0
+   },
+   "simplicidad": {
+    "redes": 1,
+    "ocultos": 0,
+    "conexiones": 3,
+    "arboles": 300,
+    "variables_usadas": null
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 3.51,
+    "Edad (d)": 15.97,
+    "Protección bio (0-3)": 1.13,
+    "Ambiente marino": 0.0,
+    "Lactato de calcio": 0.48,
+    "Curado previo": 1.44,
+    "Agente cristalino": 1.46
+   },
+   "dif_vs_mejor_IC95_pp": [
+    3.36,
+    5.78
+   ]
+  },
+  {
+   "nombre": "Ridge",
+   "familia": "lineal",
+   "precision": {
+    "filas": {
+     "MAE_pp": 18.08,
+     "R2": 0.417
+    },
+    "grupos": {
+     "MAE_pp": 18.31,
+     "R2": 0.403
+    },
+    "laboratorio": {
+     "Cappellesso2024": {
+      "MAE_pp": 18.97,
+      "R2": 0.198
+     },
+     "Mousa2022": {
+      "MAE_pp": 27.47,
+      "R2": -1.302
+     },
+     "media_MAE_pp": 23.22
+    }
+   },
+   "mejora": {
+    "0": 23.34,
+    "5": 25.18,
+    "10": 21.72,
+    "20": 20.8,
+    "40": 19.64
+   },
+   "velocidad": {
+    "entrenar_s": 0.0,
+    "predecir_1000_ms": 0.15,
+    "banco_total_s": 0.1
+   },
+   "simplicidad": {
+    "parametros": 8,
+    "variables_usadas": null
+   },
+   "importancia_pp": {
+    "Ancho fisura w0 (mm)": 0.85,
+    "Edad (d)": 5.16,
+    "Protección bio (0-3)": 0.5,
+    "Ambiente marino": 2.57,
+    "Lactato de calcio": 0.03,
+    "Curado previo": -0.09,
+    "Agente cristalino": 0.4
+   },
+   "dif_vs_mejor_IC95_pp": [
+    2.15,
+    4.05
+   ]
+  }
+ ]
+}

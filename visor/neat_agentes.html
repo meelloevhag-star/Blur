@@ -1,4 +1,4 @@
-<title>BioCrete NEAT y agentes</title>
+<title>Hefesto · NEAT y agentes</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -60,6 +60,7 @@ th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;font-
 th{font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
 th.n,td.n{font-family:var(--mono);text-align:right}
 td.good{color:var(--calc);font-weight:600}
+tr.ganador td{color:var(--calc);font-weight:600}
 .findings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 @media (max-width:720px){.findings{grid-template-columns:1fr}}
 .finding{display:grid;gap:6px;padding-top:12px;border-top:2px solid var(--ink);align-content:start}
@@ -72,9 +73,9 @@ code{font-family:var(--mono);font-size:.88em}
 
 <div class="wrap">
 <header style="display:grid;gap:12px">
-  <div class="eyebrow">Blur-con-esteroides · motor v2 · 26-11-2026</div>
+  <div class="eyebrow">Hefesto · motor v3 (ganador del banco) · 26-11-2026</div>
   <h1>Las redes NEAT y los agentes que las alimentan</h1>
-  <p>Tres agentes buscan datos cada semana, el curador los filtra y el orquestador reentrena 5 redes NEAT. Abajo están las 5 redes tal como quedaron en <code>modelos/motor_v002.pkl</code> (idénticas a v1: mismos datos y semillas), con sus pesos reales, y un calculador que reproduce su predicción.</p>
+  <p>Tres agentes buscan datos cada semana, el curador los filtra y el orquestador reentrena 5 redes NEAT. Abajo están las 5 redes tal como quedaron en <code>modelos/motor_v003.pkl</code> (ganador del banco de motores), con sus pesos reales, y un calculador que reproduce su predicción.</p>
   <div class="meta"><span>Filas aceptadas <b>2 378</b></span><span>Usadas por el motor <b>2 166</b></span><span>Redes <b>5</b></span><span>Generaciones <b>50</b></span><span>Penalización λ <b>8·10⁻⁴</b></span><span>Huella <b>fd29d7f2ca6ba8cf</b></span></div>
 </header>
 
@@ -171,7 +172,7 @@ code{font-family:var(--mono);font-size:.88em}
   <div class="findings">
     <div class="finding"><div class="num">268 de 268</div><h3>zonas con cloruros llegan a 25 años</h3><p>Siempre con la mezcla adecuada. El cierre requerido tiene una mediana de 86 % (p10 30 %, p90 98 %).</p></div>
     <div class="finding"><div class="num">87 de 268</div><h3>zonas pueden llegar a 40 años</h3><p>Con un cierre de 60–76 %. En el resto, ni cerrando la fisura del todo se llega con mezclas de norma.</p></div>
-    <div class="finding"><div class="num">78 %</div><h3>cierre que predice NEAT a 90 días</h3><p>Es igual para todas las opciones, porque las redes solo usan la edad y el curado. Con ±20 pp: a 25 años, 87 zonas cumplen, 9 quedan inciertas y 172 no cumplen.</p></div>
+    <div class="finding"><div class="num">77 %</div><h3>cierre que predice NEAT a 90 días</h3><p>Es igual para todas las opciones, porque las redes solo usan la edad, el curado y el ancho. Con ±20 pp: a 25 años, 87 zonas cumplen, 2 quedan inciertas y 179 no cumplen.</p></div>
   </div>
   <div class="tabs" id="tabsObj" role="group" aria-label="Objetivo de vida útil">
     <button aria-pressed="true" data-o="25">25 años</button><button aria-pressed="false" data-o="40">40 años</button>
@@ -191,12 +192,21 @@ code{font-family:var(--mono);font-size:.88em}
 </section>
 
 <section>
+  <div class="eyebrow">Banco de motores · un solo motor</div>
+  <h2>Por qué este motor y no otro</h2>
+  <p>Se compararon 13 modelos con los mismos datos y las mismas particiones. Los más flexibles aciertan más dentro de un laboratorio, pero fallan al predecir otro: las variables que usan coinciden con el laboratorio. Gana el que mejor generaliza y mejor aprende con ensayos locales. Fuente: <code>resultados/banco_motores.json</code>.</p>
+  <div class="panel scroll"><table>
+    <thead><tr><th>Modelo</th><th class="n">Mismo lab (pp)</th><th class="n">Otro lab (pp)</th><th class="n">+10 probetas (pp)</th><th class="n">Entrenar (s)</th><th class="n">Tamaño</th></tr></thead>
+    <tbody><tr><td>NEAT ×5 (motor actual)</td><td class="n">17,6</td><td class="n">19,3</td><td class="n">19,2</td><td class="n">1,12</td><td class="n">11</td></tr><tr class="ganador"><td>H3 (NEAT ×5 + RF)</td><td class="n">17,6</td><td class="n">19,3</td><td class="n">18,7</td><td class="n">1,26</td><td class="n">11</td></tr><tr><td>NEAT poca parsimonia</td><td class="n">17,0</td><td class="n">20,4</td><td class="n">19,9</td><td class="n">2,74</td><td class="n">2</td></tr><tr><td>NEAT 1 red (clásico)</td><td class="n">17,4</td><td class="n">21,8</td><td class="n">19,9</td><td class="n">0,26</td><td class="n">3</td></tr><tr><td>NEAT ×5 evolución larga</td><td class="n">17,6</td><td class="n">21,9</td><td class="n">19,6</td><td class="n">12,86</td><td class="n">10</td></tr><tr><td>NEAT ×5 capa oculta</td><td class="n">17,3</td><td class="n">22,1</td><td class="n">19,5</td><td class="n">30,00</td><td class="n">13</td></tr><tr><td>XGBoost + NEAT</td><td class="n">14,3</td><td class="n">22,8</td><td class="n">18,9</td><td class="n">0,36</td><td class="n">303</td></tr><tr><td>MLP 16</td><td class="n">17,0</td><td class="n">22,8</td><td class="n">23,6</td><td class="n">1,09</td><td class="n">145</td></tr><tr><td>Ridge</td><td class="n">18,3</td><td class="n">23,2</td><td class="n">21,7</td><td class="n">0,00</td><td class="n">8</td></tr><tr><td>NEAT capa oculta</td><td class="n">17,8</td><td class="n">24,1</td><td class="n">19,5</td><td class="n">5,08</td><td class="n">2</td></tr><tr><td>MLP 32x16</td><td class="n">15,7</td><td class="n">29,4</td><td class="n">22,4</td><td class="n">1,33</td><td class="n">801</td></tr><tr><td>Random Forest</td><td class="n">12,8</td><td class="n">31,7</td><td class="n">19,6</td><td class="n">0,70</td><td class="n">104067</td></tr><tr><td>XGBoost</td><td class="n">12,8</td><td class="n">31,9</td><td class="n">20,8</td><td class="n">0,12</td><td class="n">300</td></tr></tbody></table></div>
+</section>
+
+<section>
   <div class="eyebrow">Lectura</div>
   <h2>Lo que dicen estas redes</h2>
   <div class="findings">
     <div class="finding"><div class="num">5 de 5</div><h3>usan la edad</h3><p>Es la única variable que todas conservan: el cierre sube con el tiempo en cualquier laboratorio.</p></div>
-    <div class="finding"><div class="num">3 de 5</div><h3>usan el curado previo</h3><p>Su efecto neto baja el cierre: fisurar una probeta ya madura deja menos margen de reparación.</p></div>
-    <div class="finding"><div class="num">5 entradas</div><h3>podadas en todas</h3><p>Ancho, protección, marino, lactato y cristalino no se sostienen entre Mousa y Cappellesso. Para que cuenten hacen falta ensayos que los varíen dentro de un mismo laboratorio.</p></div>
+    <div class="finding"><div class="num">4 de 5</div><h3>usan el curado previo</h3><p>Su efecto neto baja el cierre: fisurar una probeta ya madura deja menos margen de reparación.</p></div>
+    <div class="finding"><div class="num">4 entradas</div><h3>podadas en todas</h3><p>Protección, marino, lactato y cristalino no se sostienen entre Mousa y Cappellesso; el ancho solo lo usa una red. Para que cuenten hacen falta ensayos que los varíen dentro de un mismo laboratorio.</p></div>
   </div>
 </section>
 
@@ -234,10 +244,10 @@ code{font-family:var(--mono);font-size:.88em}
 </div>
 
 <script>
-const REDES=[[{"id":164,"b":-0.18293,"in":[[-6,2.76653]]},{"id":0,"b":-0.00807,"in":[[-2,2.44432],[164,-0.3875]]}],[{"id":0,"b":-0.07469,"in":[[-2,1.30429]]}],[{"id":0,"b":-0.09914,"in":[[-2,2.89747],[-6,-0.35727]]}],[{"id":0,"b":-0.06605,"in":[[-2,1.2591]]}],[{"id":0,"b":-0.05547,"in":[[-2,1.58232],[-6,-0.07233]]}]];
+const REDES=[[{"id":0,"b":-0.02652,"in":[[-2,1.13638],[-1,-0.16786]]}],[{"id":66,"b":-0.52994,"in":[[-6,1.39509]]},{"id":0,"b":-0.07038,"in":[[-2,2.15614],[66,-0.29576]]}],[{"id":0,"b":-0.09914,"in":[[-2,2.89747],[-6,-0.35727]]}],[{"id":0,"b":-0.06605,"in":[[-2,1.26023]]}],[{"id":0,"b":-0.05547,"in":[[-2,1.58232],[-6,-0.07233]]}]];
 const ENTRADAS=["Ancho fisura w0","Edad","Protección bio","Ambiente marino","Lactato de calcio","Curado previo","Agente cristalino"];
 const MAX=[1,480,3,1,1,1,1];
-const COMB=["0,0,0","0,0,1","0,2,0","0,2,1","0,3,0","0,3,1","1,0,0","1,1,0"];
+const COMB=["0,0,0", "0,0,1", "0,2,0", "0,2,1", "0,3,0", "0,3,1", "1,0,0", "1,1,0"];
 const sig=z=>1/(1+Math.exp(-Math.max(-60,Math.min(60,5*z))));
 function activar(red,x){const v={};x.forEach((xi,i)=>v[-(i+1)]=xi);for(const n of red){let s=0;for(const[i,w]of n.in)s+=v[i]*w;v[n.id]=sig(n.b+s)}return v}
 const NS="http://www.w3.org/2000/svg";
@@ -265,7 +275,7 @@ function dibujar(k){
   svg.append(el('text',{x:810,y:390,'text-anchor':'end','font-size':11.5,class:'mono',style:'fill:var(--muted)'},`red ${k+1}: ${nodos} nodo${nodos>1?'s':''} (${nodos-1} oculto${nodos-1===1?'':'s'}), ${conex} conexion${conex>1?'es':''}`));
   const o=red.find(n=>n.id===0);
   const nom=i=>i<0?(i===-2?'edad/480':ENTRADAS[-i-1].toLowerCase()):'h'+i;
-  document.getElementById('formula').textContent='cierre = σ(5·( '+o.b.toFixed(3)+' '+o.in.map(([i,w])=>(w<0?'− ':'+ ')+Math.abs(w).toFixed(3)+'·'+nom(i)).join(' ')+' ))'+(ocultas.length?'      h164 = σ(5·( −0.183 + 2.767·curado previo ))':'');
+  document.getElementById('formula').textContent='cierre = σ(5·( '+o.b.toFixed(3)+' '+o.in.map(([i,w])=>(w<0?'− ':'+ ')+Math.abs(w).toFixed(3)+'·'+nom(i)).join(' ')+' ))'+ocultas.map(n=>'      h'+n.id+' = σ(5·( '+n.b.toFixed(3)+' '+n.in.map(([i,w])=>(w<0?'− ':'+ ')+Math.abs(w).toFixed(3)+'·'+nom(i)).join(' ')+' ))').join('');
 }
 function mini(){const g=document.getElementById('mini');g.replaceChildren();
   REDES.forEach((red,k)=>{const x=660+k*55,y=84;g.append(el('rect',{x,y,width:47,height:84,rx:4,fill:'var(--faint)'}));
@@ -578,7 +588,7 @@ function detalle(z){const v=obj===25?z[5]:z[6];document.getElementById('zNom').t
   if(z[4]==='seco')filas.push(['Resultado','fuera de alcance: gobierna la carbonatación']);
   else{filas.push(['Mezcla',z[7]],['Sin fisura',z[9]],['Fisura 0,3 mm sin reparar',z[8]],
     ['Cierre requerido · '+obj+' años',v===null?'no alcanzable con mezclas de norma':(v<=1?'no hace falta':v.toFixed(0)+' %')],
-    ['NEAT a 90 días','78 % ± 20 pp'])}
+    ['NEAT a 90 días','77 % ± 20 pp'])}
   document.getElementById('zDet').replaceChildren(...filas.map(([a,b])=>{const d=document.createElement('div');
     d.style.cssText='display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px';d.innerHTML='<span style="color:var(--muted)"></span><b style="font-weight:500"></b>';
     d.children[0].textContent=a;d.children[1].textContent=b;return d}))}
