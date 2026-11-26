@@ -368,6 +368,15 @@
       "minimum": 0,
       "maximum": 20,
       "description": "ancho de fisura sellado que reporta la fuente; sin el ancho inicial no se convierte a % de cierre"
+    },
+    "procedencia_ambito": {
+      "type": "string",
+      "enum": [
+        "peru",
+        "sudamerica",
+        "global"
+      ],
+      "description": "peru = fuente principal (prioridad al entrenar y validar); sudamerica = agregado; global = aprendizaje y comparación"
     }
   },
   "additionalProperties": false

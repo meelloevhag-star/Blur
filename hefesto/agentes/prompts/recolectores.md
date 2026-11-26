@@ -45,7 +45,22 @@ Los metadatos de una tesis salen de `?verb=GetRecord&metadataPrefix=oai_dc&ident
    - **Hecho:** Morán Córdova, F. E. (2023, UCV), *Evaluación del impacto de la corrosión en estructuras de concreto armado construidas en las playas del norte peruano*, `hdl.handle.net/20.500.12692/151797`. Tiene 64 estructuras en La Esmeralda, Colán. Ya están transcritas las **Tablas 1–4, 7 y 9** (`datos/entrantes/repositorios_2026-11-26*.csv`). Las Tablas 1–4 sumadas difieren en ±1 de la Tabla 7 en dos rangos de antigüedad; el error está en la tesis. **Pendiente:** lo que reporte de distancia al mar.
 
 ### Cómo trabajar: tres etapas (`python -m hefesto.agentes.repositorios <etapa>`)
-1. **`cosechar`:** recorre **ALICIA (CONCYTEC)**, el agregador nacional de unas 167 instituciones (UCV, ULADECH, PUCP, UPN, USS, UPC, URP, UNI, UDEP, ULIMA, UNP, USAT…), más la **UCV directa**, que encuentra más que ALICIA en esa universidad. Clasifica cada tesis (`familia`, `bacterias`, `zona`, `con_datos`) en `datos/literatura/catalogo_repositorios.csv`. La primera cosecha, del 26-11-2026, trajo 1 937 tesis: 55 autorreparables (51 con bacterias, sobre todo *B. subtilis*), 689 inspecciones de daño y 163 de concretos durables.
+1. **`cosechar`** (`--fuentes peru,sudamerica,global`). Cada estudio lleva un **`ambito`**:
+   - **Perú (principal):**
+     - repositorios directos que se recorren **completos**: DSpace 7 (PUCP, UNI, UPC, USAT) y DSpace 6 (UCV, UNPRG, UNS, ULADECH);
+     - **ALICIA** (CONCYTEC, unas 167 instituciones) para las que no tienen acceso directo.
+   - **Sudamérica (agregado):** LA Referencia y BDTD (Brasil).
+   - **Global (aprendizaje y comparación):** OpenAlex. El ámbito sale del país de los autores.
+   - **Cobertura:** por cada consulta se cosecha **≥ 90 %** de lo que el repositorio reporta (`datos/literatura/cobertura_cosecha.csv`). Si queda por debajo, se marca el motivo y se reintenta.
+   - **Familias:**
+     - `autorreparable` (incluye *autocicatrizante*, autosellante y *self-healing*);
+     - `cloruros` (estudios de cómo los cloruros afectan al concreto);
+     - `inspeccion_dano`;
+     - `durable_convencional`.
+
+     Además se registra `tema_cloruros`, `bacterias`, `zona` y `con_datos`.
+   - **Metas de literatura útil:** mínimo **1 000**, óptimo **3 000**, ideal **5 000**, en total y por ámbito (`datos/literatura/metas_cosecha.json`).
+   - **Regla de sesgo:** Perú manda. Al descargar, extraer y validar va primero. Lo global sirve para aprender y comparar, pero un modelo no puede ganar solo por acertar con datos de otros países. Cada fila que entre al esquema lleva `procedencia_ambito`.
 2. **`descargar`:** baja los PDF de acceso abierto de las tesis útiles, primero la costa norte y las autorreparables, a `datos/literatura/raw/repositorios/`, que no se sube.
 3. **`preparar`:** ubica en cada PDF las tablas con datos y arma `datos/literatura/cola_extraccion.csv` (tesis, tabla, página, estado).
 
