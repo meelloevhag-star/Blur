@@ -127,12 +127,13 @@ def rango(tier: int, grado_: str, aplicado: bool, con_datos: str) -> str:
 
 
 def calificar(tipo_doc: str, familia: str, con_datos: str, titulo: str, resumen: str, revista: str = "",
-              tier_confirmado: str = "", fuente: str = "") -> dict:
-    g = grado(tipo_doc, titulo, revista=revista, fuente=fuente)
+              tier_confirmado: str = "", fuente: str = "", campo_confirmado: str = "",
+              grado_confirmado: str = "") -> dict:
+    g = grado_confirmado or grado(tipo_doc, titulo, revista=revista, fuente=fuente)
     texto = f"{titulo} {resumen}"
     confirmado = str(tier_confirmado).isdigit()
     t = int(tier_confirmado) if confirmado else tier_provisional(familia, con_datos, titulo, resumen)
-    ap = aplicado_en_campo(texto)
+    ap = campo_confirmado == "si" if campo_confirmado in ("si", "no") else aplicado_en_campo(texto)
     motivo = [f"tier {'confirmado' if confirmado else 'provisional'} T{t}", f"grado {g}"]
     if ap:
         motivo.append("aplicado en campo o prototipo")

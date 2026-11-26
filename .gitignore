@@ -6,3 +6,4 @@ __pycache__/
 datos/literatura/raw/
 datos/entrantes/
 hefesto/motor/config_neat_*.txt
+datos/literatura/parciales/

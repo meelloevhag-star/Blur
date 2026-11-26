@@ -46,3 +46,12 @@ def test_nuevas_fuentes_y_ss_plus():
     ru = Tesis("Y", "h2", "u2", "Самовосстанавливающийся бетон с бактериями", resumen="результаты испытаний").clasificar()
     zh = Tesis("Z", "h3", "u3", "微生物自修复混凝土 氯离子 扩散", resumen="试验结果").clasificar()
     assert ru.familia == "autorreparable" and zh.familia == "autorreparable" and zh.tema_cloruros == "si"
+
+
+def test_campo_y_grado_confirmados_mandan():
+    c = calificar("dissertation", "cloruros", "probable", "Chloride ingress in harbor structures", "measured profiles",
+                  tier_confirmado="0", campo_confirmado="si", grado_confirmado="DOC")
+    assert c["grado"] == "DOC" and c["tier"] == 0 and c["rango"] == "SS+"
+    c = calificar("article", "autorreparable", "probable", "Self-healing concrete full-scale application", "tested",
+                  revista="X", tier_confirmado="0", campo_confirmado="no")
+    assert c["rango"] == "SS"

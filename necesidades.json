@@ -1,25 +1,25 @@
 {
   "version_motor": {
-    "version": 3,
-    "fecha": "2026-11-26T07:44:03+00:00",
+    "version": 4,
+    "fecha": "2026-11-26T16:14:49+00:00",
     "huella_datos": "fd29d7f2ca6ba8cf",
     "n_filas": 2166,
     "K_redes": 5,
     "generaciones": 50,
-    "archivo": "motor_v003.pkl"
+    "archivo": "motor_v004.pkl"
   },
   "datos": {
-    "filas_aceptadas": 2378,
+    "filas_aceptadas": 2992,
     "filas_usadas": 2166,
     "campos_que_faltan": {
-      "mezcla_curado_previo": 212,
-      "mezcla_agente_cristalino": 212,
-      "resultado_cierre_pct": 28,
-      "dano_ancho_fisura_mm": 2,
-      "resultado_edad_dias": 2,
-      "mezcla_nivel_proteccion": 2,
-      "zona_ambiente_marino": 2,
-      "mezcla_lactato_calcio": 2
+      "mezcla_curado_previo": 826,
+      "mezcla_agente_cristalino": 826,
+      "resultado_cierre_pct": 622,
+      "mezcla_lactato_calcio": 600,
+      "dano_ancho_fisura_mm": 588,
+      "resultado_edad_dias": 582,
+      "mezcla_nivel_proteccion": 582,
+      "zona_ambiente_marino": 26
     }
   },
   "necesidades": [

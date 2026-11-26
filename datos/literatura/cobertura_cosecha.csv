@@ -127,3 +127,192 @@ ULADECH,peru,concreto AND corrosión,61,122,200.0,ok
 ULADECH,peru,concreto AND patologías,667,800,119.9,ok
 ULADECH,peru,concreto AND carbonatación,2,4,200.0,ok
 ULADECH,peru,concreto AND fisuras,192,200,104.2,ok
+ALICIA,peru,concreto autorreparable,9,9,100.0,ok
+ALICIA,peru,concreto autocicatrizante,0,0,,sin resultados
+ALICIA,peru,autocicatrizante,0,0,,sin resultados
+ALICIA,peru,concreto autocurativo,1,1,100.0,ok
+ALICIA,peru,bacterias concreto,62,62,100.0,ok
+ALICIA,peru,Bacillus concreto,48,48,100.0,ok
+ALICIA,peru,bioconcreto,11,11,100.0,ok
+ALICIA,peru,corrosión concreto armado,75,75,100.0,ok
+ALICIA,peru,patologías concreto,858,858,100.0,ok
+ALICIA,peru,fisuras concreto,542,542,100.0,ok
+ALICIA,peru,deterioro concreto,284,284,100.0,ok
+ALICIA,peru,cloruros concreto,137,137,100.0,ok
+ALICIA,peru,ion cloruro concreto,29,29,100.0,ok
+ALICIA,peru,penetración de cloruros,38,38,100.0,ok
+ALICIA,peru,agua de mar concreto,50,50,100.0,ok
+ALICIA,peru,carbonatación concreto,53,53,100.0,ok
+ALICIA,peru,concreto ambiente marino,40,40,100.0,ok
+ALICIA,peru,concreto durabilidad,670,670,100.0,ok
+BDTD,sudamerica,concreto autocicatrizante,16,16,100.0,ok
+BDTD,sudamerica,autocicatrização concreto,36,36,100.0,ok
+BDTD,sudamerica,bactérias concreto,58,58,100.0,ok
+BDTD,sudamerica,cloretos concreto,336,336,100.0,ok
+BDTD,sudamerica,corrosão concreto armado,268,268,100.0,ok
+BDTD,sudamerica,durabilidade concreto ambiente marinho,29,29,100.0,ok
+CyberLeninka,global,самовосстанавливающийся бетон,80,80,100.0,ok
+CyberLeninka,global,самозалечивание бетона,97,97,100.0,ok
+CyberLeninka,global,бактерии бетон,1000,1000,100.0,ok
+CyberLeninka,global,биобетон,58,58,100.0,ok
+CyberLeninka,global,хлориды бетон,1000,1000,100.0,ok
+CyberLeninka,global,коррозия арматуры хлориды,445,445,100.0,ok
+CyberLeninka,global,морская вода бетон,1000,1000,100.0,ok
+CyberLeninka,global,трещины бетона,1000,1000,100.0,ok
+HAL,global,bacterial self-healing concrete,5,5,100.0,ok
+HAL,global,self-healing concrete crack closure,6,6,100.0,ok
+HAL,global,microbially induced calcite precipitation concrete,4,4,100.0,ok
+HAL,global,chloride ingress cracked concrete,3,3,100.0,ok
+HAL,global,chloride diffusion concrete marine,30,30,100.0,ok
+HAL,global,concrete corrosion marine environment chloride,40,40,100.0,ok
+HAL,global,autogenous healing concrete,10,10,100.0,ok
+HAL,global,self-healing concrete field application,0,0,,sin resultados
+HAL,global,self-healing concrete full-scale,0,0,,sin resultados
+HAL,global,bacteria-based self-healing concrete in situ,0,0,,sin resultados
+HAL,global,self-healing concrete pilot structure,0,0,,sin resultados
+HAL,global,self-healing concrete real structure monitoring,0,0,,sin resultados
+HAL,global,béton autocicatrisant,1,1,100.0,ok
+HAL,global,béton chlorures corrosion,92,92,100.0,ok
+HAL,global,béton bactéries,26,26,100.0,ok
+LA Referencia,sudamerica,concreto autorreparable,3,3,100.0,ok
+LA Referencia,sudamerica,concreto autocicatrizante,13,13,100.0,ok
+LA Referencia,sudamerica,autocicatrizante,18,18,100.0,ok
+LA Referencia,sudamerica,concreto autocurativo,2,2,100.0,ok
+LA Referencia,sudamerica,bacterias concreto,284,284,100.0,ok
+LA Referencia,sudamerica,Bacillus concreto,38,38,100.0,ok
+LA Referencia,sudamerica,bioconcreto,16,16,100.0,ok
+LA Referencia,sudamerica,corrosión concreto armado,294,294,100.0,ok
+LA Referencia,sudamerica,patologías concreto,1045,1045,100.0,ok
+LA Referencia,sudamerica,fisuras concreto,93,93,100.0,ok
+LA Referencia,sudamerica,deterioro concreto,437,437,100.0,ok
+LA Referencia,sudamerica,cloruros concreto,155,155,100.0,ok
+LA Referencia,sudamerica,ion cloruro concreto,53,53,100.0,ok
+LA Referencia,sudamerica,penetración de cloruros,83,83,100.0,ok
+LA Referencia,sudamerica,agua de mar concreto,166,166,100.0,ok
+LA Referencia,sudamerica,carbonatación concreto,80,80,100.0,ok
+LA Referencia,sudamerica,concreto ambiente marino,101,101,100.0,ok
+LA Referencia,sudamerica,concreto durabilidad,1455,1455,100.0,ok
+LA Referencia,sudamerica,concreto autocicatrizante,13,13,100.0,ok
+LA Referencia,sudamerica,autocicatrização concreto,36,36,100.0,ok
+LA Referencia,sudamerica,bactérias concreto,284,284,100.0,ok
+LA Referencia,sudamerica,cloretos concreto,434,434,100.0,ok
+LA Referencia,sudamerica,corrosão concreto armado,367,367,100.0,ok
+LA Referencia,sudamerica,durabilidade concreto ambiente marinho,24,24,100.0,ok
+OSTI,global,bacterial self-healing concrete,191,191,100.0,ok
+OSTI,global,self-healing concrete crack closure,561,561,100.0,ok
+OSTI,global,microbially induced calcite precipitation concrete,1079,1079,100.0,ok
+OSTI,global,chloride ingress cracked concrete,1651,1651,100.0,ok
+OSTI,global,chloride diffusion concrete marine,4463,4463,100.0,ok
+OSTI,global,concrete corrosion marine environment chloride,4539,4539,100.0,ok
+OSTI,global,autogenous healing concrete,256,256,100.0,ok
+OSTI,global,self-healing concrete field application,1081,1081,100.0,ok
+OSTI,global,self-healing concrete full-scale,564,564,100.0,ok
+OSTI,global,bacteria-based self-healing concrete in situ,0,0,,sin resultados
+OSTI,global,self-healing concrete pilot structure,633,633,100.0,ok
+OSTI,global,self-healing concrete real structure monitoring,744,744,100.0,ok
+OpenAlex,global,bacterial self-healing concrete,1124,1124,100.0,ok
+OpenAlex,global,self-healing concrete crack closure,337,337,100.0,ok
+OpenAlex,global,microbially induced calcite precipitation concrete,451,451,100.0,ok
+OpenAlex,global,chloride ingress cracked concrete,197,197,100.0,ok
+OpenAlex,global,chloride diffusion concrete marine,1053,1053,100.0,ok
+OpenAlex,global,concrete corrosion marine environment chloride,1735,1735,100.0,ok
+OpenAlex,global,autogenous healing concrete,564,564,100.0,ok
+OpenAlex,global,self-healing concrete field application,268,268,100.0,ok
+OpenAlex,global,self-healing concrete full-scale,77,77,100.0,ok
+OpenAlex,global,bacteria-based self-healing concrete in situ,21,21,100.0,ok
+OpenAlex,global,self-healing concrete pilot structure,8,8,100.0,ok
+OpenAlex,global,self-healing concrete real structure monitoring,35,35,100.0,ok
+OpenAlex,global,concreto AND autorreparable,13,13,100.0,ok
+OpenAlex,global,concreto AND autoreparable,0,0,,sin resultados
+OpenAlex,global,concreto AND autocicatrizante,32,32,100.0,ok
+OpenAlex,global,concreto AND autocicatrización,1,1,100.0,ok
+OpenAlex,global,concreto AND autosellante,0,0,,sin resultados
+OpenAlex,global,concreto AND autocurativo,4,4,100.0,ok
+OpenAlex,global,concreto AND bacterias,382,382,100.0,ok
+OpenAlex,global,concreto AND Bacillus,76,76,100.0,ok
+OpenAlex,global,bioconcreto,57,57,100.0,ok
+OpenAlex,global,自修复混凝土,79,79,100.0,ok
+OpenAlex,global,微生物 自愈合 混凝土,1,1,100.0,ok
+OpenAlex,global,混凝土 氯离子 扩散,15,15,100.0,ok
+OpenAlex,global,海洋环境 混凝土 腐蚀,8,8,100.0,ok
+OpenAlex,global,裂缝 混凝土 氯离子,7,7,100.0,ok
+OpenAlex (dissertation),global,bacterial self-healing concrete,26,26,100.0,ok
+OpenAlex (dissertation),global,self-healing concrete crack closure,13,13,100.0,ok
+OpenAlex (dissertation),global,microbially induced calcite precipitation concrete,10,10,100.0,ok
+OpenAlex (dissertation),global,chloride ingress cracked concrete,25,25,100.0,ok
+OpenAlex (dissertation),global,chloride diffusion concrete marine,50,50,100.0,ok
+OpenAlex (dissertation),global,concrete corrosion marine environment chloride,97,97,100.0,ok
+OpenAlex (dissertation),global,autogenous healing concrete,31,31,100.0,ok
+OpenAlex (dissertation),global,self-healing concrete field application,6,6,100.0,ok
+OpenAlex (dissertation),global,self-healing concrete full-scale,6,6,100.0,ok
+OpenAlex (dissertation),global,bacteria-based self-healing concrete in situ,1,1,100.0,ok
+OpenAlex (dissertation),global,self-healing concrete pilot structure,1,1,100.0,ok
+OpenAlex (dissertation),global,self-healing concrete real structure monitoring,2,2,100.0,ok
+OpenAlex (dissertation),global,concreto AND autorreparable,6,6,100.0,ok
+OpenAlex (dissertation),global,concreto AND autoreparable,0,0,,sin resultados
+OpenAlex (dissertation),global,concreto AND autocicatrizante,8,8,100.0,ok
+OpenAlex (dissertation),global,concreto AND autocicatrización,0,0,,sin resultados
+OpenAlex (dissertation),global,concreto AND autosellante,0,0,,sin resultados
+OpenAlex (dissertation),global,concreto AND autocurativo,2,2,100.0,ok
+OpenAlex (dissertation),global,concreto AND bacterias,227,227,100.0,ok
+OpenAlex (dissertation),global,concreto AND Bacillus,35,35,100.0,ok
+OpenAlex (dissertation),global,bioconcreto,14,14,100.0,ok
+OpenAlex (dissertation),global,自修复混凝土,1,1,100.0,ok
+OpenAlex (dissertation),global,微生物 自愈合 混凝土,0,0,,sin resultados
+OpenAlex (dissertation),global,混凝土 氯离子 扩散,0,0,,sin resultados
+OpenAlex (dissertation),global,海洋环境 混凝土 腐蚀,0,0,,sin resultados
+OpenAlex (dissertation),global,裂缝 混凝土 氯离子,0,0,,sin resultados
+OpenAlex (report),global,bacterial self-healing concrete,2,2,100.0,ok
+OpenAlex (report),global,self-healing concrete crack closure,0,0,,sin resultados
+OpenAlex (report),global,microbially induced calcite precipitation concrete,4,4,100.0,ok
+OpenAlex (report),global,chloride ingress cracked concrete,4,4,100.0,ok
+OpenAlex (report),global,chloride diffusion concrete marine,5,5,100.0,ok
+OpenAlex (report),global,concrete corrosion marine environment chloride,6,6,100.0,ok
+OpenAlex (report),global,autogenous healing concrete,3,3,100.0,ok
+OpenAlex (report),global,self-healing concrete field application,0,0,,sin resultados
+OpenAlex (report),global,self-healing concrete full-scale,0,0,,sin resultados
+OpenAlex (report),global,bacteria-based self-healing concrete in situ,0,0,,sin resultados
+OpenAlex (report),global,self-healing concrete pilot structure,0,0,,sin resultados
+OpenAlex (report),global,self-healing concrete real structure monitoring,0,0,,sin resultados
+OpenAlex (report),global,concreto AND autorreparable,0,0,,sin resultados
+OpenAlex (report),global,concreto AND autoreparable,0,0,,sin resultados
+OpenAlex (report),global,concreto AND autocicatrizante,0,0,,sin resultados
+OpenAlex (report),global,concreto AND autocicatrización,0,0,,sin resultados
+OpenAlex (report),global,concreto AND autosellante,0,0,,sin resultados
+OpenAlex (report),global,concreto AND autocurativo,0,0,,sin resultados
+OpenAlex (report),global,concreto AND bacterias,0,0,,sin resultados
+OpenAlex (report),global,concreto AND Bacillus,0,0,,sin resultados
+OpenAlex (report),global,bioconcreto,0,0,,sin resultados
+OpenAlex (report),global,自修复混凝土,0,0,,sin resultados
+OpenAlex (report),global,微生物 自愈合 混凝土,0,0,,sin resultados
+OpenAlex (report),global,混凝土 氯离子 扩散,0,0,,sin resultados
+OpenAlex (report),global,海洋环境 混凝土 腐蚀,0,0,,sin resultados
+OpenAlex (report),global,裂缝 混凝土 氯离子,0,0,,sin resultados
+SENCICO,peru,concreto AND autorreparable,0,0,,sin resultados
+SENCICO,peru,concreto AND autoreparable,0,0,,sin resultados
+SENCICO,peru,concreto AND autocicatrizante,0,0,,sin resultados
+SENCICO,peru,concreto AND autocicatrización,0,0,,sin resultados
+SENCICO,peru,concreto AND autosellante,0,0,,sin resultados
+SENCICO,peru,concreto AND autocurativo,0,0,,sin resultados
+SENCICO,peru,concreto AND bacterias,0,0,,sin resultados
+SENCICO,peru,concreto AND Bacillus,0,0,,sin resultados
+SENCICO,peru,bioconcreto,0,0,,sin resultados
+SENCICO,peru,concreto AND cloruros,0,0,,sin resultados
+SENCICO,peru,"concreto AND ""ion cloruro""",0,0,,sin resultados
+SENCICO,peru,"concreto AND ""agua de mar""",0,0,,sin resultados
+SENCICO,peru,concreto AND corrosión,0,0,,sin resultados
+SENCICO,peru,concreto AND patologías,0,0,,sin resultados
+SENCICO,peru,concreto AND carbonatación,0,0,,sin resultados
+SENCICO,peru,concreto AND fisuras,0,0,,sin resultados
+Zenodo,global,bacterial self-healing concrete,76,76,100.0,ok
+Zenodo,global,self-healing concrete crack closure,19,19,100.0,ok
+Zenodo,global,microbially induced calcite precipitation concrete,16,16,100.0,ok
+Zenodo,global,chloride ingress cracked concrete,3,3,100.0,ok
+Zenodo,global,chloride diffusion concrete marine,7,7,100.0,ok
+Zenodo,global,concrete corrosion marine environment chloride,21,21,100.0,ok
+Zenodo,global,autogenous healing concrete,36,36,100.0,ok
+Zenodo,global,self-healing concrete field application,21,21,100.0,ok
+Zenodo,global,self-healing concrete full-scale,9,9,100.0,ok
+Zenodo,global,bacteria-based self-healing concrete in situ,0,0,,sin resultados
+Zenodo,global,self-healing concrete pilot structure,3,3,100.0,ok
+Zenodo,global,self-healing concrete real structure monitoring,8,8,100.0,ok

@@ -84,6 +84,9 @@ Los metadatos de una tesis salen de `?verb=GetRecord&metadataPrefix=oai_dc&ident
   - **T4:** periférica.
 
   Con solo metadatos el tier es **provisional y nunca pasa de T2**. T1 y T0 se fijan **solo después de leer el documento completo**, con `python -m hefesto.agentes.repositorios confirmar <handle> <tier>`.
+  - Al leer el documento completo, también se confirma si se aplicó en campo (`--campo si`) y el grado real (`--grado DOC` cuando la fuente solo dice "dissertation").
+  - Para traer un trabajo concreto al catálogo: `python -m hefesto.agentes.repositorios agregar <DOI o id W…>`.
+  - Cada confirmación se justifica en `datos/literatura/confirmaciones_calidad.md`. Ahí están las 11 SS+ confirmadas, las leídas que no llegan a SS+ y las que no tienen canal abierto.
 - **Grado** (nomenclatura interna del tipo de documento): `ORG`, `DATA`, `DOC` (doctorado o PhD), `ART-I` (revista con revisión por pares), `MAG`, `CONF`, `INF`, `LIB`, `LIC` (título profesional), `BAC`, `ART-G` (artículo genérico), `REV` (revisión) y `?`.
   - Sale **solo** del tipo que declara la fuente (`dc.type`, `formats`, `type`).
   - Un título como "según la norma ISO" no convierte una tesis en norma.

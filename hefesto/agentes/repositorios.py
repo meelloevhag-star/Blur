@@ -160,6 +160,8 @@ class Tesis:
     grado: str = ""             # nomenclatura interna: ORG, DATA, DOC, ART-I, MAG, CONF, INF, LIB, LIC, BAC, ART-G, REV, ?
     tier: str = ""              # 0–4 (provisional ≤ 2 hasta leer las tablas del documento)
     tier_confirmado: str = ""   # lo fija el agente al transcribir el documento completo
+    campo_confirmado: str = ""  # si/no: aplicado en campo según el documento completo (manda sobre el resumen)
+    grado_confirmado: str = ""  # grado leído en el documento (p. ej. DOC cuando la fuente solo dice "dissertation")
     rango: str = ""             # SS+ … D
     aplicado_campo: str = ""
     motivo_calidad: str = ""
@@ -201,7 +203,7 @@ class Tesis:
         revision = re.search(rx_rev, self.titulo.lower()) or (re.search(rx_rev, t) and not medida)
         self.con_datos = "no" if revision else "probable" if medida else "incierto"
         c = calificar(self.tipo_doc, self.familia, self.con_datos, self.titulo, self.resumen, self.revista,
-                      self.tier_confirmado, self.fuente)
+                      self.tier_confirmado, self.fuente, self.campo_confirmado, self.grado_confirmado)
         self.grado, self.tier, self.rango = c["grado"], str(c["tier"]), c["rango"]
         self.aplicado_campo, self.motivo_calidad = c["aplicado_campo"], c["motivo_calidad"]
         return self
@@ -403,6 +405,7 @@ class OpenAlex(Fuente):
     tesis de posgrado ("dissertation") o informes técnicos ("report"), buscando en título y resumen.
     El ámbito sale del país de las instituciones de los autores."""
     API = "https://api.openalex.org/works"
+    ambito = "global"
 
     def __init__(self, tipo: str = ""):
         super().__init__()
@@ -412,12 +415,12 @@ class OpenAlex(Fuente):
     def cosechar(self, maximo):
         out = {}
         for q in CONSULTAS_EN + CONSULTAS_ES[:9] + CONSULTAS_ZH:
-            cursor, n, total = "*", 0, None
+            pagina, n, total = 1, 0, None  # paginación por número: sin clave hasta 10 000 resultados
             # título y resumen (no texto completo): el texto completo trae decenas de miles de trabajos ajenos
             filtro = (f"type:{self.tipo}," if self.tipo else "") + "title_and_abstract.search:"
             busca = f"filter={filtro}{urllib.parse.quote(q.replace(',', ' '))}"
-            while cursor:
-                d = json.loads(self.get(f"{self.API}?{busca}&per-page=200&cursor={cursor}"
+            while pagina:
+                d = json.loads(self.get(f"{self.API}?{busca}&per-page=200&page={pagina}"
                                         "&select=id,doi,title,publication_year,authorships,abstract_inverted_index,"
                                         "open_access,primary_location,type,cited_by_count") or "{}")
                 total = d.get("meta", {}).get("count", total or 0)
@@ -442,7 +445,7 @@ class OpenAlex(Fuente):
                     k = clave(t.url, t.handle)
                     out.setdefault(k, t).terminos.add(q)
                     n += 1
-                cursor = d.get("meta", {}).get("next_cursor") if res else None
+                pagina = pagina + 1 if res and pagina * 200 < min(total, 10000) else None
                 if maximo and n >= maximo:
                     break
                 time.sleep(0.2)
@@ -508,11 +511,16 @@ class OSTI(Fuente):
             pagina, n, total = 1, 0, None
             while True:
                 url = f"{self.API}?q={urllib.parse.quote(_y(q))}&rows=100&page={pagina}"
-                try:
-                    with urllib.request.urlopen(urllib.request.Request(url, headers=AGENTE), timeout=90) as r:
-                        total = int(r.headers.get("X-Total-Count") or 0) if total is None else total
-                        recs = json.loads(r.read().decode("utf-8", "ignore") or "[]")
-                except Exception:  # noqa: BLE001 — red inestable: corta esta consulta y lo registra
+                recs = None
+                for intento in range(5):          # OSTI es lento: reintenta con espera creciente
+                    try:
+                        with urllib.request.urlopen(urllib.request.Request(url, headers=AGENTE), timeout=180) as r:
+                            total = int(r.headers.get("X-Total-Count") or 0) if total is None else total
+                            recs = json.loads(r.read().decode("utf-8", "ignore") or "[]")
+                        break
+                    except Exception:  # noqa: BLE001
+                        time.sleep(10 * (intento + 1))
+                if recs is None:
                     break
                 for w in recs:
                     enlace = next((x["href"] for x in w.get("links", []) if x.get("rel") == "citation"), "")
@@ -691,7 +699,8 @@ def escribir_catalogo(tesis: dict[str, Tesis]):
                "por_tier": {f"T{i}": sum(t.tier == str(i) for t in tesis.values()) for i in range(5)},
                "por_grado": {g: sum(t.grado == g for t in tesis.values())
                              for g in sorted({t.grado for t in tesis.values()})},
-               "peru_por_rango": {r: sum(t.ambito == "peru" and t.rango == r for t in tesis.values()) for r in RANGOS},
+               "rango_por_ambito": {a: {r: sum(t.ambito == a and t.rango == r for t in tesis.values()) for r in RANGOS}
+                                    for a in ("peru", "sudamerica", "global")},
                "peru_util_con_bacterias": sum(t.ambito == "peru" and t.familia == "autorreparable" and
                                               t.usa_bacterias == "si" for t in utiles),
                "peru_util_cloruros": sum(t.ambito == "peru" and t.tema_cloruros == "si" for t in utiles)}
@@ -708,29 +717,85 @@ def escribir_cobertura(filas: list[dict]):
     print(f"cobertura: {len(filas)} consultas · {len(bajas)} por debajo del {int(100 * COBERTURA_MINIMA)} %")
 
 
-def cosechar(grupos: set[str], maximo: int | None):
+def normalizar(t: Tesis) -> Tesis:
+    """Los id de LA Referencia y ALICIA llevan el país delante ("ES_<32 hex>"). Ese prefijo:
+    1) decide el ámbito (LA Referencia también incluye España, Portugal, México…, que son globales);
+    2) se guarda como "ES:<hex>", porque "ES_<32 hex>" tiene la forma de un secreto de hCaptcha y el
+       escáner de GitHub bloquea el push (falso positivo)."""
+    m = re.fullmatch(r"([A-Z]{2})[_:]([0-9a-f]{32})", t.handle or "")
+    if m:
+        t.handle = f"{m.group(1)}:{m.group(2)}"
+        if t.fuente in ("LA Referencia", "ALICIA", "BDTD"):
+            pais = m.group(1)
+            t.pais = pais
+            t.ambito = "peru" if pais == "PE" else "sudamerica" if pais in SUDAMERICA else "global"
+    return t
+
+
+def unir(catalogo: dict[str, Tesis], t: Tesis):
+    """Suma un registro al catálogo: el repositorio directo manda sobre el agregador; si ya estaba, completa
+    los campos vacíos y conserva el tier confirmado."""
+    t = normalizar(t)
+    k = clave(t.url, t.handle)
+    previa = catalogo.get(k)
+    if previa is None:
+        catalogo[k] = t.clasificar()
+        return
+    previa.terminos |= t.terminos
+    if previa.fuente in ("ALICIA", "LA Referencia", "") and t.fuente not in ("ALICIA", "LA Referencia", ""):
+        t.terminos, t.tier_confirmado = previa.terminos, previa.tier_confirmado or t.tier_confirmado
+        t.campo_confirmado = previa.campo_confirmado or t.campo_confirmado
+        t.grado_confirmado = previa.grado_confirmado or t.grado_confirmado
+        previa = catalogo[k] = t
+    else:
+        for c in ("tipo_doc", "revista", "citas", "resumen", "doi", "acceso", "anio", "autores", "tier_confirmado",
+                  "campo_confirmado", "grado_confirmado"):
+            if not getattr(previa, c) and getattr(t, c):
+                setattr(previa, c, getattr(t, c))
+    previa.clasificar()
+
+
+PARCIALES = LIT / "parciales"
+
+
+def cosechar(grupos: set[str], maximo: int | None, parcial: str = ""):
+    """Con `parcial`, escribe en datos/literatura/parciales/<parcial>_*.{csv,json} para correr varias fuentes en
+    paralelo sin pisarse; luego `fusionar` las une al catálogo principal."""
+    global CATALOGO, COBERTURA, METAS
+    if parcial:
+        PARCIALES.mkdir(parents=True, exist_ok=True)
+        CATALOGO, COBERTURA, METAS = (PARCIALES / f"{parcial}_catalogo.csv", PARCIALES / f"{parcial}_cobertura.csv",
+                                      PARCIALES / f"{parcial}_metas.json")
     catalogo = {k: a_tesis(r) for k, r in leer_catalogo().items()}
     cobertura = []
     for fuente in fuentes(grupos):
         print(f"[{fuente.ambito}] {fuente.nombre}", flush=True)
         for t in fuente.cosechar(maximo):
-            k = clave(t.url, t.handle)
-            if k in catalogo:                         # ya estaba: suma términos; el directo manda sobre el agregador
-                previa = catalogo[k]
-                previa.terminos |= t.terminos
-                if previa.fuente in ("ALICIA", "LA Referencia", "") and t.fuente not in ("ALICIA", "LA Referencia"):
-                    t.terminos, t.tier_confirmado = previa.terminos, previa.tier_confirmado
-                    previa = catalogo[k] = t
-                else:                                # completa lo que faltaba (tipo, revista, resumen, citas)
-                    for c in ("tipo_doc", "revista", "citas", "resumen", "doi", "acceso", "anio", "autores"):
-                        if not getattr(previa, c) and getattr(t, c):
-                            setattr(previa, c, getattr(t, c))
-                previa.clasificar()
-            else:
-                catalogo[k] = t.clasificar()
+            unir(catalogo, t)
         cobertura += fuente.cobertura
         escribir_cobertura(cobertura)
         escribir_catalogo(catalogo)
+
+
+def fusionar():
+    """Une los catálogos parciales al principal y reemplaza la cobertura de cada fuente por la más reciente."""
+    global CATALOGO, COBERTURA
+    principal, cob_principal = CATALOGO, COBERTURA
+    catalogo = {k: a_tesis(r) for k, r in leer_catalogo().items()}
+    filas_cob = list(csv.DictReader(open(COBERTURA, encoding="utf-8"))) if COBERTURA.exists() else []
+    for cat in sorted(PARCIALES.glob("*_catalogo.csv")):
+        CATALOGO = cat
+        for r in leer_catalogo().values():
+            unir(catalogo, a_tesis(r))
+        cob = cat.with_name(cat.name.replace("_catalogo.csv", "_cobertura.csv"))
+        if cob.exists():
+            nuevas = list(csv.DictReader(open(cob, encoding="utf-8")))
+            fuentes_ = {r["fuente"] for r in nuevas}
+            filas_cob = [r for r in filas_cob if r["fuente"] not in fuentes_] + nuevas
+        print(f"unido {cat.name}")
+    CATALOGO, COBERTURA = principal, cob_principal
+    escribir_cobertura(filas_cob)
+    escribir_catalogo({k: t.clasificar() for k, t in catalogo.items()})
 
 
 # ============================================================================ descarga y cola
@@ -819,13 +884,43 @@ def preparar():
     print(f"{len(cola)} tablas con datos en {len({c['pdf'] for c in cola})} documentos → {COLA.relative_to(RAIZ)}")
 
 
-def confirmar(handle: str, tier: str):
+def agregar(ident: str) -> str:
+    """Trae un trabajo concreto de OpenAlex (DOI o id W…) al catálogo; devuelve su clave."""
+    camino = ("doi:" + re.search(r"10\.\d{4,9}/\S+", ident).group(0)) if "10." in ident else ident.rstrip("/").split("/")[-1]
+    w = json.loads(Fuente.get(f"{OpenAlex.API}/{camino}") or "{}")
+    if not w.get("id"):
+        sys.exit(f"OpenAlex no encuentra {ident}")
+    paises = {c for a in w.get("authorships", []) for c in a.get("countries", [])}
+    inv = w.get("abstract_inverted_index") or {}
+    doi = (w.get("doi") or "").replace("https://doi.org/", "")
+    t = Tesis(institucion="; ".join(sorted({i.get("display_name", "") for a in w.get("authorships", [])
+                                             for i in a.get("institutions", [])}))[:200],
+              handle=w["id"], url=w.get("doi") or w["id"], titulo=" ".join((w.get("title") or "").split()),
+              autores="; ".join(a.get("author", {}).get("display_name", "") for a in w.get("authorships", [])[:8]),
+              anio=str(w.get("publication_year") or ""),
+              acceso="abierto" if (w.get("open_access") or {}).get("is_oa") else "restringido",
+              resumen=" ".join(p for _, p in sorted((p, pal) for pal, ps in inv.items() for p in ps)),
+              ambito="peru" if "PE" in paises else "sudamerica" if paises & SUDAMERICA else "global",
+              pais=",".join(sorted(paises))[:40], fuente="OpenAlex", doi=doi, tipo_doc=w.get("type") or "",
+              revista=(((w.get("primary_location") or {}).get("source") or {}).get("display_name") or "")[:150],
+              citas=str(w.get("cited_by_count") or ""), terminos={"agregado a mano"})
+    filas = {k: a_tesis(r) for k, r in leer_catalogo().items()}
+    unir(filas, t)
+    escribir_catalogo(filas)
+    return clave(t.url, t.handle)
+
+
+def confirmar(handle: str, tier: str, campo: str = "", grado_: str = ""):
     """El agente fija el tier al terminar de leer el documento completo (T1/T0 solo así)."""
     filas = leer_catalogo()
     k = clave(handle, handle)
     if k not in filas:
         sys.exit(f"{handle} no está en el catálogo")
     filas[k]["tier_confirmado"] = tier
+    if campo:
+        filas[k]["campo_confirmado"] = campo
+    if grado_:
+        filas[k]["grado_confirmado"] = grado_
     escribir_catalogo({c: a_tesis(r).clasificar() for c, r in filas.items()})
     t = a_tesis(filas[k]).clasificar()
     print(f"{t.titulo[:80]} → T{t.tier} · {t.grado} · rango {t.rango}")
@@ -837,6 +932,8 @@ def main(argv=None) -> int:
     c = sub.add_parser("cosechar")
     c.add_argument("--fuentes", default="peru,sudamerica,global")
     c.add_argument("--max-por-consulta", type=int, default=None, help="sin límite por defecto (cobertura ≥ 90 %)")
+    c.add_argument("--parcial", default="", help="nombre del catálogo parcial (para cosechar en paralelo)")
+    sub.add_parser("fusionar", help="une datos/literatura/parciales/* al catálogo principal")
     d = sub.add_parser("descargar")
     d.add_argument("--limite", type=int, default=60)
     sub.add_parser("preparar")
@@ -844,17 +941,25 @@ def main(argv=None) -> int:
     k = sub.add_parser("confirmar", help="fija el tier tras leer el documento completo")
     k.add_argument("handle", help="handle o DOI, p. ej. 20.500.12692/151797")
     k.add_argument("tier", choices=list("01234"))
+    k.add_argument("--campo", choices=["si", "no"], default="", help="aplicado en prototipo/estructura real (leído)")
+    k.add_argument("--grado", default="", help="grado leído en el documento: DOC, MAG, LIC, ORG, ART-I…")
+    g = sub.add_parser("agregar", help="trae un trabajo de OpenAlex por DOI o id W…")
+    g.add_argument("ident")
     a = ap.parse_args(argv)
     if a.etapa == "cosechar":
-        cosechar(set(a.fuentes.split(",")), a.max_por_consulta)
+        cosechar(set(a.fuentes.split(",")), a.max_por_consulta, a.parcial)
+    elif a.etapa == "fusionar":
+        fusionar()
     elif a.etapa == "descargar":
         descargar(a.limite)
     elif a.etapa == "preparar":
         preparar()
+    elif a.etapa == "agregar":
+        print(agregar(a.ident))
     elif a.etapa == "confirmar":
-        confirmar(a.handle, a.tier)
+        confirmar(a.handle, a.tier, a.campo, a.grado)
     else:
-        escribir_catalogo({k: a_tesis(r).clasificar() for k, r in leer_catalogo().items()})
+        escribir_catalogo({k: normalizar(a_tesis(r)).clasificar() for k, r in leer_catalogo().items()})
     return 0
 
 

@@ -1,61 +1,89 @@
 {
- "catalogo_total": 15667,
- "literatura_util": 2671,
+ "catalogo_total": 36450,
+ "literatura_util": 10028,
  "metas": {
   "minimo": 1000,
   "optimo": 3000,
   "ideal": 5000
  },
- "nivel_alcanzado": "mínimo",
+ "nivel_alcanzado": "ideal",
  "por_ambito": {
-  "peru": 2671,
-  "sudamerica": 0,
-  "global": 0
+  "peru": 2720,
+  "sudamerica": 1578,
+  "global": 5730
  },
  "por_familia": {
-  "autorreparable": 71,
-  "cloruros": 133,
-  "inspeccion_dano": 1310,
-  "durable_convencional": 1157
+  "autorreparable": 2345,
+  "cloruros": 2470,
+  "inspeccion_dano": 3013,
+  "durable_convencional": 2200
  },
  "por_rango": {
-  "SS+": 0,
+  "SS+": 11,
   "SS": 0,
-  "S": 3,
-  "A": 4,
-  "B": 877,
-  "C": 1783,
-  "D": 13000
+  "S": 1172,
+  "A": 457,
+  "B": 1282,
+  "C": 7087,
+  "D": 26441
+ },
+ "ss_plus": {
+  "meta": 10,
+  "confirmados": 11,
+  "candidatos": 129
  },
  "por_tier": {
-  "T0": 0,
-  "T1": 1,
-  "T2": 883,
-  "T3": 1787,
-  "T4": 12996
+  "T0": 11,
+  "T1": 2,
+  "T2": 2919,
+  "T3": 7096,
+  "T4": 26422
  },
  "por_grado": {
-  "?": 1983,
-  "ART-G": 17,
-  "ART-I": 56,
-  "BAC": 243,
-  "CONF": 4,
-  "DOC": 76,
-  "INF": 2026,
-  "LIB": 133,
-  "LIC": 9977,
-  "MAG": 1023,
-  "REV": 129
+  "?": 1630,
+  "ART-G": 2518,
+  "ART-I": 6717,
+  "BAC": 242,
+  "CONF": 2175,
+  "DATA": 41,
+  "DOC": 1524,
+  "INF": 128,
+  "LIB": 374,
+  "LIC": 12984,
+  "MAG": 2477,
+  "ORG": 4583,
+  "REV": 585,
+  "TES": 472
  },
- "peru_por_rango": {
-  "SS+": 0,
-  "SS": 0,
-  "S": 3,
-  "A": 4,
-  "B": 877,
-  "C": 1783,
-  "D": 13000
+ "rango_por_ambito": {
+  "peru": {
+   "SS+": 0,
+   "SS": 0,
+   "S": 12,
+   "A": 9,
+   "B": 998,
+   "C": 1696,
+   "D": 13571
+  },
+  "sudamerica": {
+   "SS+": 0,
+   "SS": 0,
+   "S": 90,
+   "A": 168,
+   "B": 116,
+   "C": 1201,
+   "D": 790
+  },
+  "global": {
+   "SS+": 11,
+   "SS": 0,
+   "S": 1070,
+   "A": 280,
+   "B": 168,
+   "C": 4190,
+   "D": 12080
+  }
  },
- "peru_util_con_bacterias": 66,
- "peru_util_cloruros": 149
+ "peru_util_con_bacterias": 87,
+ "peru_util_cloruros": 118
 }
