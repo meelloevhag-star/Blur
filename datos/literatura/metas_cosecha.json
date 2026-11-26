@@ -1,0 +1,60 @@
+{
+ "catalogo_total": 6573,
+ "literatura_util": 1070,
+ "metas": {
+  "minimo": 1000,
+  "optimo": 3000,
+  "ideal": 5000
+ },
+ "nivel_alcanzado": "mínimo",
+ "por_ambito": {
+  "peru": 1070,
+  "sudamerica": 0,
+  "global": 0
+ },
+ "por_familia": {
+  "autorreparable": 57,
+  "cloruros": 66,
+  "inspeccion_dano": 748,
+  "durable_convencional": 199
+ },
+ "por_rango": {
+  "SS+": 0,
+  "SS": 0,
+  "S": 2,
+  "A": 1,
+  "B": 552,
+  "C": 513,
+  "D": 5505
+ },
+ "por_tier": {
+  "T0": 0,
+  "T1": 1,
+  "T2": 554,
+  "T3": 515,
+  "T4": 5503
+ },
+ "por_grado": {
+  "?": 6315,
+  "ART-I": 41,
+  "BAC": 1,
+  "CONF": 3,
+  "DOC": 1,
+  "INF": 2,
+  "LIB": 120,
+  "LIC": 13,
+  "MAG": 8,
+  "REV": 69
+ },
+ "peru_por_rango": {
+  "SS+": 0,
+  "SS": 0,
+  "S": 2,
+  "A": 1,
+  "B": 552,
+  "C": 513,
+  "D": 5505
+ },
+ "peru_util_con_bacterias": 53,
+ "peru_util_cloruros": 74
+}

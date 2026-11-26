@@ -1,0 +1,17 @@
+fuente,ambito,consulta,reportado,cosechado,pct,estado
+PUCP,peru,concreto AND autorreparable,0,0,,sin resultados
+PUCP,peru,concreto AND autoreparable,0,0,,sin resultados
+PUCP,peru,concreto AND autocicatrizante,0,0,,sin resultados
+PUCP,peru,concreto AND autocicatrización,0,0,,sin resultados
+PUCP,peru,concreto AND autosellante,0,0,,sin resultados
+PUCP,peru,concreto AND autocurativo,0,0,,sin resultados
+PUCP,peru,concreto AND bacterias,12,12,100.0,ok
+PUCP,peru,concreto AND Bacillus,0,0,,sin resultados
+PUCP,peru,bioconcreto,0,0,,sin resultados
+PUCP,peru,concreto AND cloruros,11,11,100.0,ok
+PUCP,peru,"concreto AND ""ion cloruro""",1,1,100.0,ok
+PUCP,peru,"concreto AND ""agua de mar""",6,6,100.0,ok
+PUCP,peru,concreto AND corrosión,22,22,100.0,ok
+PUCP,peru,concreto AND patologías,125,125,100.0,ok
+PUCP,peru,concreto AND carbonatación,5,5,100.0,ok
+PUCP,peru,concreto AND fisuras,114,114,100.0,ok
