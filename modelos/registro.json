@@ -28,5 +28,16 @@
     "generaciones": 50,
     "archivo": "motor_v003.pkl",
     "motor": "H3 Hefesto (5 redes NEAT matriciales + corrección local), ganador del banco"
+  },
+  {
+    "version": 4,
+    "fecha": "2026-11-26T21:58:02+00:00",
+    "huella_datos": "5735db90a5196a0d",
+    "n_filas": 2329,
+    "K_redes": 5,
+    "generaciones": 50,
+    "archivo": "motor_v004.pkl",
+    "motor": "H3 Hefesto (5 redes NEAT matriciales + corrección local) entrenado con la cosecha: réplicas + 145 filas de 24 estudios + 18 de Piura (26 fuentes)",
+    "evaluacion": "resultados/evaluacion_cosecha.json: MAE fuente nueva 19,31 → 18,48 pp (todas); 18,61 → 17,72 entre laboratorios; Perú 23,11 → 22,50"
   }
 ]

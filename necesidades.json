@@ -1,96 +1,39 @@
 {
   "version_motor": {
     "version": 4,
-    "fecha": "2026-11-26T16:14:49+00:00",
-    "huella_datos": "fd29d7f2ca6ba8cf",
-    "n_filas": 2166,
+    "fecha": "2026-11-26T21:58:02+00:00",
+    "huella_datos": "5735db90a5196a0d",
+    "n_filas": 2329,
     "K_redes": 5,
     "generaciones": 50,
     "archivo": "motor_v004.pkl"
   },
   "datos": {
-    "filas_aceptadas": 2992,
-    "filas_usadas": 2166,
+    "filas_aceptadas": 2951,
+    "filas_usadas": 2329,
     "campos_que_faltan": {
-      "mezcla_curado_previo": 826,
-      "mezcla_agente_cristalino": 826,
       "resultado_cierre_pct": 622,
-      "mezcla_lactato_calcio": 600,
       "dano_ancho_fisura_mm": 588,
+      "mezcla_curado_previo": 588,
+      "mezcla_agente_cristalino": 588,
       "resultado_edad_dias": 582,
       "mezcla_nivel_proteccion": 582,
-      "zona_ambiente_marino": 26
+      "mezcla_lactato_calcio": 582,
+      "zona_ambiente_marino": 8
     }
   },
   "necesidades": [
     {
       "ambiente": "marino",
-      "proteccion": "sin bacterias",
-      "lactato_calcio": true,
-      "ancho_mm": 0.5,
-      "filas_de_soporte": 0,
-      "avisos": [
-        "ancho fuera del rango marino entrenado",
-        "combinación ambiente/protección/lactato sin datos"
-      ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 5.96,
-      "accion": "buscar datos o ensayar: combinación sin ningún dato"
-    },
-    {
-      "ambiente": "marino",
-      "proteccion": "directa/comercial",
-      "lactato_calcio": true,
-      "ancho_mm": 0.5,
-      "filas_de_soporte": 0,
-      "avisos": [
-        "ancho fuera del rango marino entrenado",
-        "combinación ambiente/protección/lactato sin datos"
-      ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 5.96,
-      "accion": "buscar datos o ensayar: combinación sin ningún dato"
-    },
-    {
-      "ambiente": "marino",
-      "proteccion": "portador",
-      "lactato_calcio": false,
-      "ancho_mm": 0.5,
-      "filas_de_soporte": 0,
-      "avisos": [
-        "ancho fuera del rango marino entrenado",
-        "combinación ambiente/protección/lactato sin datos"
-      ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 5.96,
-      "accion": "buscar datos o ensayar: combinación sin ningún dato"
-    },
-    {
-      "ambiente": "marino",
-      "proteccion": "portador",
-      "lactato_calcio": true,
-      "ancho_mm": 0.5,
-      "filas_de_soporte": 0,
-      "avisos": [
-        "ancho fuera del rango marino entrenado",
-        "combinación ambiente/protección/lactato sin datos"
-      ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 5.96,
-      "accion": "buscar datos o ensayar: combinación sin ningún dato"
-    },
-    {
-      "ambiente": "marino",
       "proteccion": "encapsulación",
       "lactato_calcio": false,
       "ancho_mm": 0.5,
       "filas_de_soporte": 0,
       "avisos": [
-        "ancho fuera del rango marino entrenado",
         "combinación ambiente/protección/lactato sin datos"
       ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 5.96,
+      "desacuerdo_redes_pp": 8.1,
+      "puntaje": 4.81,
       "accion": "buscar datos o ensayar: combinación sin ningún dato"
     },
     {
@@ -100,28 +43,27 @@
       "ancho_mm": 0.5,
       "filas_de_soporte": 0,
       "avisos": [
-        "ancho fuera del rango marino entrenado",
         "combinación ambiente/protección/lactato sin datos"
       ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 5.96,
+      "desacuerdo_redes_pp": 8.1,
+      "puntaje": 4.81,
       "accion": "buscar datos o ensayar: combinación sin ningún dato"
     },
     {
-      "ambiente": "no marino",
-      "proteccion": "directa/comercial",
+      "ambiente": "marino",
+      "proteccion": "portador",
       "lactato_calcio": false,
       "ancho_mm": 0.5,
       "filas_de_soporte": 0,
       "avisos": [
         "combinación ambiente/protección/lactato sin datos"
       ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 4.96,
+      "desacuerdo_redes_pp": 7.0,
+      "puntaje": 4.7,
       "accion": "buscar datos o ensayar: combinación sin ningún dato"
     },
     {
-      "ambiente": "no marino",
+      "ambiente": "marino",
       "proteccion": "directa/comercial",
       "lactato_calcio": true,
       "ancho_mm": 0.5,
@@ -129,34 +71,99 @@
       "avisos": [
         "combinación ambiente/protección/lactato sin datos"
       ],
-      "desacuerdo_redes_pp": 9.6,
-      "puntaje": 4.96,
+      "desacuerdo_redes_pp": 6.0,
+      "puntaje": 4.6,
       "accion": "buscar datos o ensayar: combinación sin ningún dato"
     },
     {
-      "ambiente": "no marino",
-      "proteccion": "directa/comercial",
+      "ambiente": "marino",
+      "proteccion": "sin bacterias",
+      "lactato_calcio": true,
+      "ancho_mm": 0.1,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 5.9,
+      "puntaje": 4.59,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "sin bacterias",
+      "lactato_calcio": true,
+      "ancho_mm": 0.5,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 5.5,
+      "puntaje": 4.55,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "encapsulación",
       "lactato_calcio": false,
       "ancho_mm": 0.3,
       "filas_de_soporte": 0,
       "avisos": [
         "combinación ambiente/protección/lactato sin datos"
       ],
-      "desacuerdo_redes_pp": 8.6,
-      "puntaje": 4.86,
+      "desacuerdo_redes_pp": 5.5,
+      "puntaje": 4.55,
       "accion": "buscar datos o ensayar: combinación sin ningún dato"
     },
     {
-      "ambiente": "no marino",
-      "proteccion": "directa/comercial",
+      "ambiente": "marino",
+      "proteccion": "encapsulación",
       "lactato_calcio": true,
       "ancho_mm": 0.3,
       "filas_de_soporte": 0,
       "avisos": [
         "combinación ambiente/protección/lactato sin datos"
       ],
-      "desacuerdo_redes_pp": 8.6,
-      "puntaje": 4.86,
+      "desacuerdo_redes_pp": 5.5,
+      "puntaje": 4.55,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "sin bacterias",
+      "lactato_calcio": true,
+      "ancho_mm": 0.2,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 5.1,
+      "puntaje": 4.51,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "encapsulación",
+      "lactato_calcio": false,
+      "ancho_mm": 0.2,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 4.7,
+      "puntaje": 4.47,
+      "accion": "buscar datos o ensayar: combinación sin ningún dato"
+    },
+    {
+      "ambiente": "marino",
+      "proteccion": "encapsulación",
+      "lactato_calcio": true,
+      "ancho_mm": 0.2,
+      "filas_de_soporte": 0,
+      "avisos": [
+        "combinación ambiente/protección/lactato sin datos"
+      ],
+      "desacuerdo_redes_pp": 4.7,
+      "puntaje": 4.47,
       "accion": "buscar datos o ensayar: combinación sin ningún dato"
     },
     {
@@ -168,21 +175,8 @@
       "avisos": [
         "combinación ambiente/protección/lactato sin datos"
       ],
-      "desacuerdo_redes_pp": 8.6,
-      "puntaje": 4.86,
-      "accion": "buscar datos o ensayar: combinación sin ningún dato"
-    },
-    {
-      "ambiente": "marino",
-      "proteccion": "directa/comercial",
-      "lactato_calcio": true,
-      "ancho_mm": 0.3,
-      "filas_de_soporte": 0,
-      "avisos": [
-        "combinación ambiente/protección/lactato sin datos"
-      ],
-      "desacuerdo_redes_pp": 8.6,
-      "puntaje": 4.86,
+      "desacuerdo_redes_pp": 4.6,
+      "puntaje": 4.46,
       "accion": "buscar datos o ensayar: combinación sin ningún dato"
     }
   ]

@@ -1,0 +1,218 @@
+{
+ "protocolo": "fuente nueva (leave-one-source-out); MAE en puntos de % de cierre",
+ "filas_totales": 2329,
+ "fuentes": 26,
+ "semillas": 3,
+ "fuentes_nuevas": {
+  "n_filas": 163,
+  "n_fuentes": 24,
+  "MAE_actual": 28.61,
+  "MAE_cosecha": 28.45,
+  "fuentes_que_mejoran": 13
+ },
+ "peru": {
+  "n_filas": 18,
+  "n_fuentes": 1,
+  "MAE_actual": 23.11,
+  "MAE_cosecha": 22.5,
+  "fuentes_que_mejoran": 1
+ },
+ "replicas_entre_laboratorios": {
+  "n_filas": 2166,
+  "n_fuentes": 2,
+  "MAE_actual": 18.61,
+  "MAE_cosecha": 17.72,
+  "fuentes_que_mejoran": 2
+ },
+ "todas": {
+  "n_filas": 2329,
+  "n_fuentes": 26,
+  "MAE_actual": 19.31,
+  "MAE_cosecha": 18.48,
+  "fuentes_que_mejoran": 15
+ },
+ "por_fuente": [
+  {
+   "fuente": "Cappellesso2024",
+   "n": 1402,
+   "ambito": "global",
+   "MAE_actual": 17.72,
+   "MAE_cosecha": 17.4
+  },
+  {
+   "fuente": "Mousa2022",
+   "n": 764,
+   "ambito": "global",
+   "MAE_actual": 20.23,
+   "MAE_cosecha": 18.32
+  },
+  {
+   "fuente": "Enhancement of bacterial survival ... alumina hollow spheres",
+   "n": 24,
+   "ambito": "global",
+   "MAE_actual": 39.52,
+   "MAE_cosecha": 38.06
+  },
+  {
+   "fuente": "Risdanareni et al. (alkali-activated LWA carrier)",
+   "n": 24,
+   "ambito": "global",
+   "MAE_actual": 21.45,
+   "MAE_cosecha": 21.41
+  },
+  {
+   "fuente": "UCV_72746_Lsphaericus_Piura",
+   "n": 18,
+   "ambito": "peru",
+   "MAE_actual": 23.11,
+   "MAE_cosecha": 22.5
+  },
+  {
+   "fuente": "Tran-SET 18CLSU02 (LSU) encapsulated bacterial spores, hot s",
+   "n": 16,
+   "ambito": "global",
+   "MAE_actual": 27.37,
+   "MAE_cosecha": 26.75
+  },
+  {
+   "fuente": "Recycled coarse and fine aggregates as microbial carriers (M",
+   "n": 10,
+   "ambito": "global",
+   "MAE_actual": 33.82,
+   "MAE_cosecha": 32.93
+  },
+  {
+   "fuente": "Tan et al. (carbonation, Bath)",
+   "n": 10,
+   "ambito": "global",
+   "MAE_actual": 38.73,
+   "MAE_cosecha": 38.61
+  },
+  {
+   "fuente": "Aerobic-anaerobic composite microbial self-healing recycled ",
+   "n": 9,
+   "ambito": "global",
+   "MAE_actual": 28.33,
+   "MAE_cosecha": 28.52
+  },
+  {
+   "fuente": "Bacterial viability in self-healing concrete: non-ureolytic ",
+   "n": 5,
+   "ambito": "global",
+   "MAE_actual": 31.55,
+   "MAE_cosecha": 30.27
+  },
+  {
+   "fuente": "Liu, Xu, Lv y Xing (JACT, recycled aggregate carrier)",
+   "n": 5,
+   "ambito": "global",
+   "MAE_actual": 27.59,
+   "MAE_cosecha": 26.95
+  },
+  {
+   "fuente": "Doostkami et al. (reextraccion)",
+   "n": 4,
+   "ambito": "global",
+   "MAE_actual": 3.69,
+   "MAE_cosecha": 4.92
+  },
+  {
+   "fuente": "Khan et al.",
+   "n": 4,
+   "ambito": "global",
+   "MAE_actual": 21.35,
+   "MAE_cosecha": 23.56
+  },
+  {
+   "fuente": "Luo Qian y Li",
+   "n": 4,
+   "ambito": "global",
+   "MAE_actual": 26.05,
+   "MAE_cosecha": 27.46
+  },
+  {
+   "fuente": "Mohammed et al. (reextraccion)",
+   "n": 4,
+   "ambito": "global",
+   "MAE_actual": 42.95,
+   "MAE_cosecha": 44.48
+  },
+  {
+   "fuente": "Wang et al.",
+   "n": 4,
+   "ambito": "global",
+   "MAE_actual": 26.23,
+   "MAE_cosecha": 26.17
+  },
+  {
+   "fuente": "Coated expanded clay particles for biological concrete (Mate",
+   "n": 3,
+   "ambito": "global",
+   "MAE_actual": 21.5,
+   "MAE_cosecha": 19.83
+  },
+  {
+   "fuente": "Ersan et al. (Front. Built Environ.)",
+   "n": 3,
+   "ambito": "global",
+   "MAE_actual": 29.33,
+   "MAE_cosecha": 26.61
+  },
+  {
+   "fuente": "Tziviloglou et al.",
+   "n": 3,
+   "ambito": "global",
+   "MAE_actual": 28.51,
+   "MAE_cosecha": 31.06
+  },
+  {
+   "fuente": "Wiktor y Jonkers",
+   "n": 3,
+   "ambito": "global",
+   "MAE_actual": 26.87,
+   "MAE_cosecha": 28.99
+  },
+  {
+   "fuente": "Cappellesso et al. (frost salt)",
+   "n": 2,
+   "ambito": "global",
+   "MAE_actual": 15.14,
+   "MAE_cosecha": 16.24
+  },
+  {
+   "fuente": "Evaluation of microencapsulation techniques for MICP spores ",
+   "n": 2,
+   "ambito": "global",
+   "MAE_actual": 28.24,
+   "MAE_cosecha": 24.39
+  },
+  {
+   "fuente": "Jia et al.",
+   "n": 2,
+   "ambito": "global",
+   "MAE_actual": 32.7,
+   "MAE_cosecha": 43.65
+  },
+  {
+   "fuente": "Xiao et al.",
+   "n": 2,
+   "ambito": "global",
+   "MAE_actual": 35.26,
+   "MAE_cosecha": 34.71
+  },
+  {
+   "fuente": "Jonkers y Schlangen",
+   "n": 1,
+   "ambito": "global",
+   "MAE_actual": 11.12,
+   "MAE_cosecha": 15.34
+  },
+  {
+   "fuente": "Mohammed et al.",
+   "n": 1,
+   "ambito": "global",
+   "MAE_actual": 36.12,
+   "MAE_cosecha": 40.02
+  }
+ ]
+}

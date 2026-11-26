@@ -53,18 +53,31 @@ def mapear_replicas() -> list[dict]:
     } for r in filas]
 
 
+# DOI de los datasets que entran como réplicas (Mousa 2022 en Zenodo; Cappellesso 2024)
+DOI_DATASETS = {"10.5281/zenodo.6469122", "10.5281/zenodo.11305154", "10.1016/j.dibe.2024.100486"}
+
+
 def mapear_literatura() -> list[dict]:
     with open(RAIZ / "datos" / "literatura" / "meta_dataset_cab_v2.csv", encoding="utf-8") as fh:
         filas = [r for r in csv.DictReader(fh) if r["usar_en_modelo"].strip() == "si"]
     salida = []
     for r in filas:
         doi = r["doi"].strip()
+        if doi in DOI_DATASETS:          # ya están como réplicas individuales: no se cuentan dos veces
+            continue
         salida.append({
             "fuente": r["estudio"][:60], "id_grupo": r["estudio"][:60],
             "zona_ambiente_marino": r["ambiente_marino"], "dano_tipo": "fisura",
             "dano_ancho_fisura_mm": r["ancho_fisura_mm"], "dano_uso": "laboratorio",
             "mezcla_a_c": r["a_c"], "mezcla_nivel_proteccion": r["nivel_proteccion"],
             "mezcla_lactato_calcio": r["usa_lactato"],
+            # Deducidos del documento, no imputados:
+            # - curado previo = régimen de Cappellesso (curado antes de exponer a agua de mar). Fuera de ese
+            #   ensayo no existe: los estudios no marinos nunca van a agua de mar y los marinos de esta tabla
+            #   (Palin, Khan) cicatrizan directamente en agua de mar → 0.
+            # - agente cristalino: la nota de cada fila describe el agente (bacterias en LWA, hidrogel, cápsulas,
+            #   nanocristales de celulosa…); ninguna usa aditivo cristalino → 0.
+            "mezcla_curado_previo": "0", "mezcla_agente_cristalino": "0",
             "resultado_edad_dias": r["edad_curado_dias"], "resultado_cierre_pct": r["cierre_fisura_pct"],
             "resultado_alpha": r["alpha_equiv"] if r["alpha_base"].strip() == "referencia" else "",
             "resultado_alpha_propiedad": r["alpha_propiedad"],
