@@ -42,7 +42,17 @@ Los metadatos de una tesis salen de `?verb=GetRecord&metadataPrefix=oai_dc&ident
    - Se registran la mezcla, la adición y su %, y los resultados de durabilidad: `resultado_fc_mpa`, `resultado_d_rcm_1e12_m2_s`, `resultado_penetracion_cloruros_mm`, `resultado_carga_pasante_coulomb`, `resultado_absorcion_pct` y `resultado_resistividad_kohm_cm`.
    - Son **bases** que ya funcionan en ese ambiente: Hefesto evalúa qué ganaría cada una si se le añade autorreparación.
 3. **Inspecciones de daño** en estructuras reales: `dano_tipo`, `dano_elemento`, `dano_nivel_corrosion` y `dano_n_elementos` (para tablas de conteo), la edad de la estructura y la zona. Sirven para contrastar el modelo de vida útil con la realidad.
-   - **Hecho:** Morán Córdova, F. E. (2023, UCV), *Evaluación del impacto de la corrosión en estructuras de concreto armado construidas en las playas del norte peruano*, `hdl.handle.net/20.500.12692/151797`. Tiene 64 estructuras en La Esmeralda, Colán. La **Tabla 7** ya está transcrita en `datos/entrantes/repositorios_2026-11-26.csv`. **Pendiente:** las Tablas 1–4 (por elemento), la 9 (con protección) y lo que reporte de distancia al mar.
+   - **Hecho:** Morán Córdova, F. E. (2023, UCV), *Evaluación del impacto de la corrosión en estructuras de concreto armado construidas en las playas del norte peruano*, `hdl.handle.net/20.500.12692/151797`. Tiene 64 estructuras en La Esmeralda, Colán. Ya están transcritas las **Tablas 1–4, 7 y 9** (`datos/entrantes/repositorios_2026-11-26*.csv`). Las Tablas 1–4 sumadas difieren en ±1 de la Tabla 7 en dos rangos de antigüedad; el error está en la tesis. **Pendiente:** lo que reporte de distancia al mar.
+
+### Cómo trabajar: tres etapas (`python -m hefesto.agentes.repositorios <etapa>`)
+1. **`cosechar`:** recorre **ALICIA (CONCYTEC)**, el agregador nacional de unas 167 instituciones (UCV, ULADECH, PUCP, UPN, USS, UPC, URP, UNI, UDEP, ULIMA, UNP, USAT…), más la **UCV directa**, que encuentra más que ALICIA en esa universidad. Clasifica cada tesis (`familia`, `bacterias`, `zona`, `con_datos`) en `datos/literatura/catalogo_repositorios.csv`. La primera cosecha, del 26-11-2026, trajo 1 937 tesis: 55 autorreparables (51 con bacterias, sobre todo *B. subtilis*), 689 inspecciones de daño y 163 de concretos durables.
+2. **`descargar`:** baja los PDF de acceso abierto de las tesis útiles, primero la costa norte y las autorreparables, a `datos/literatura/raw/repositorios/`, que no se sube.
+3. **`preparar`:** ubica en cada PDF las tablas con datos y arma `datos/literatura/cola_extraccion.csv` (tesis, tabla, página, estado).
+
+Luego **tú lees cada tabla pendiente** (`pdftotext -layout -f <p> -l <p+2>`) y la transcribes al esquema en `datos/entrantes/`. Después cambias su `estado` en la cola a `transcrita`, `transcrita (sin w0: no entra al motor)` o `descartada (motivo)`. Si el catálogo cambia de reglas, usa la etapa `reclasificar`.
+- **Si falta el ancho inicial de fisura,** el sellado va en `resultado_ancho_sellado_mm` y no se convierte a % de cierre. Ejemplo: la Tabla 22 de `hdl.handle.net/20.500.12692/134208` (bioconcreto en Piura).
+- **La Universidad del Pacífico** no tiene ingeniería civil: no aporta tesis de concreto.
+- **Bloquean el acceso directo:** PUCP y UPN (403), y UNP y UNSA no responden. Sus tesis se encuentran por ALICIA; si el PDF no baja, se registra la tesis en el catálogo y se deja como pendiente.
 
 ### Otras fuentes
 - RENATI (SUNEDU), ALICIA (CONCYTEC) y los repositorios DSpace de UNI, PUCP, UDEP, UNP, UNMSM, UNSA, UNT y otras.

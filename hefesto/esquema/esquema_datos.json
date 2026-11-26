@@ -52,6 +52,11 @@
       "required": [
         "resultado_carga_pasante_coulomb"
       ]
+    },
+    {
+      "required": [
+        "resultado_ancho_sellado_mm"
+      ]
     }
   ],
   "properties": {
@@ -357,6 +362,12 @@
       "type": "integer",
       "minimum": 0,
       "description": "número de elementos observados con ese daño (para tablas de conteo)"
+    },
+    "resultado_ancho_sellado_mm": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 20,
+      "description": "ancho de fisura sellado que reporta la fuente; sin el ancho inicial no se convierte a % de cierre"
     }
   },
   "additionalProperties": false
