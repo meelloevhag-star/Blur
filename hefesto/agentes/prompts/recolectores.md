@@ -64,6 +64,35 @@ Los metadatos de una tesis salen de `?verb=GetRecord&metadataPrefix=oai_dc&ident
 2. **`descargar`:** baja los PDF de acceso abierto de las tesis útiles, primero la costa norte y las autorreparables, a `datos/literatura/raw/repositorios/`, que no se sube.
 3. **`preparar`:** ubica en cada PDF las tablas con datos y arma `datos/literatura/cola_extraccion.csv` (tesis, tabla, página, estado).
 
+### Calidad de cada fuente (`hefesto/agentes/calidad.py`): tres etiquetas independientes
+- **Tier 0–4:** qué tan completa es la información.
+  - **T0:** completa, tangible, trazable, cualitativa y cuantitativa, con respaldo de organizaciones (norma, laboratorio, dataset con DOI).
+  - **T1:** completa en todo lo que Hefesto necesita.
+  - **T2:** parcial pero útil.
+  - **T3:** toca el tema sin centrarse en él.
+  - **T4:** periférica.
+
+  Con solo metadatos el tier es **provisional y nunca pasa de T2**. T1 y T0 se fijan **solo después de leer el documento completo**, con `python -m hefesto.agentes.repositorios confirmar <handle> <tier>`.
+- **Grado** (nomenclatura interna del tipo de documento): `ORG`, `DATA`, `DOC` (doctorado o PhD), `ART-I` (revista con revisión por pares), `MAG`, `CONF`, `INF`, `LIB`, `LIC` (título profesional), `BAC`, `ART-G` (artículo genérico), `REV` (revisión) y `?`.
+  - Sale **solo** del tipo que declara la fuente (`dc.type`, `formats`, `type`).
+  - Un título como "según la norma ISO" no convierte una tesis en norma.
+- **Rango SS+ … D:**
+
+  | Rango | Regla |
+  |---|---|
+  | SS+ | T0 aplicada en prototipo o estructura en servicio |
+  | SS | T0, o T1 de grado alto (ORG, DATA, DOC, ART-I) |
+  | S | T1 de otros grados, o T2 de grado alto |
+  | A | T2 de MAG, CONF, INF o LIB |
+  | B | T2 de LIC, BAC o ART-G |
+  | C | T3 o revisión |
+  | D | T4, o un trabajo genérico sin ensayos propios |
+
+- **Prioridad:** dentro de cada ámbito se descarga y transcribe en orden de rango. Perú sigue mandando.
+- **Ya confirmados:**
+  - Morán Córdova: T1, rango S.
+  - Bioconcreto Piura (`20.500.12692/134208`): T2, rango B (falta w0).
+
 Luego **tú lees cada tabla pendiente** (`pdftotext -layout -f <p> -l <p+2>`) y la transcribes al esquema en `datos/entrantes/`. Después cambias su `estado` en la cola a `transcrita`, `transcrita (sin w0: no entra al motor)` o `descartada (motivo)`. Si el catálogo cambia de reglas, usa la etapa `reclasificar`.
 - **Si falta el ancho inicial de fisura,** el sellado va en `resultado_ancho_sellado_mm` y no se convierte a % de cierre. Ejemplo: la Tabla 22 de `hdl.handle.net/20.500.12692/134208` (bioconcreto en Piura).
 - **La Universidad del Pacífico** no tiene ingeniería civil: no aporta tesis de concreto.

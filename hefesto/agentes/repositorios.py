@@ -19,6 +19,7 @@ Metas de literatura útil (familia ≠ otro): mínimo 1 000 · óptimo 3 000 · 
 
 Etapas:
   cosechar      metadatos + clasificación (familia, bacterias, tema_cloruros, zona, con_datos)
+                y calidad (hefesto/agentes/calidad.py): grado del documento, tier 0–4 y rango SS+…D
   descargar     PDF de acceso abierto (primero Perú, costa norte, autorreparables y cloruros)
   preparar      tablas con datos en cada PDF → datos/literatura/cola_extraccion.csv
   reclasificar  vuelve a clasificar el catálogo con las reglas actuales
@@ -28,6 +29,7 @@ Uso:
     python -m hefesto.agentes.repositorios cosechar [--fuentes peru,sudamerica,global] [--max-por-consulta N]
     python -m hefesto.agentes.repositorios descargar [--limite 60]
     python -m hefesto.agentes.repositorios preparar
+    python -m hefesto.agentes.repositorios confirmar <handle> <tier 0-4>   (tras transcribir el documento)
 """
 
 from __future__ import annotations
@@ -46,6 +48,11 @@ from abc import ABC, abstractmethod
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
+
+try:
+    from hefesto.agentes.calidad import RANGOS, calificar
+except ImportError:  # ejecutado como script suelto
+    from calidad import RANGOS, calificar  # type: ignore
 
 RAIZ = Path(__file__).resolve().parents[2]
 LIT = RAIZ / "datos" / "literatura"
@@ -125,6 +132,15 @@ class Tesis:
     tema_cloruros: str = ""
     zona: str = ""
     con_datos: str = ""
+    tipo_doc: str = ""          # tal como lo declara la fuente (dc.type, formats, type de OpenAlex)
+    revista: str = ""
+    citas: str = ""
+    grado: str = ""             # nomenclatura interna: ORG, DATA, DOC, ART-I, MAG, CONF, INF, LIB, LIC, BAC, ART-G, REV, ?
+    tier: str = ""              # 0–4 (provisional ≤ 2 hasta leer las tablas del documento)
+    tier_confirmado: str = ""   # lo fija el agente al transcribir el documento completo
+    rango: str = ""             # SS+ … D
+    aplicado_campo: str = ""
+    motivo_calidad: str = ""
     terminos: set = field(default_factory=set)
 
     def clasificar(self) -> "Tesis":
@@ -154,10 +170,16 @@ class Tesis:
         else:
             self.familia = "otro"
         self.zona = "; ".join(sorted({z.replace("Colan", "Colán") for z in ZONAS if re.search(rf"\b{z.lower()}\b", t)}))
-        revision = re.search(r"revisi[oó]n (te[oó]rica|literaria|sistem[aá]tica|documental|bibliogr)|\breview\b", t)
+        rx_rev = r"revisi[oó]n (te[oó]rica|literaria|sistem[aá]tica|documental|bibliogr)|\breview\b|estado del arte"
         medida = re.search(r"ensay|resultad|se obtuv|kg/cm|mpa|%|d[ií]as|days|probetas|specimens|muestras|inspecci|"
                            r"evalu|measured|tested", t)
+        # revisión: lo dice el título, o el resumen lo dice y no reporta mediciones propias
+        revision = re.search(rx_rev, self.titulo.lower()) or (re.search(rx_rev, t) and not medida)
         self.con_datos = "no" if revision else "probable" if medida else "incierto"
+        c = calificar(self.tipo_doc, self.familia, self.con_datos, self.titulo, self.resumen, self.revista,
+                      self.tier_confirmado)
+        self.grado, self.tier, self.rango = c["grado"], str(c["tier"]), c["rango"]
+        self.aplicado_campo, self.motivo_calidad = c["aplicado_campo"], c["motivo_calidad"]
         return self
 
     def fila(self) -> dict:
@@ -229,6 +251,9 @@ class DSpace7(Fuente):
                               anio=next((d[:4] for d in v("dc.date.issued") if d[:4].isdigit()), ""),
                               acceso="abierto" if any("openAccess" in x for x in v("dc.rights")) else "restringido",
                               resumen=" ".join(" ".join(v("dc.description.abstract")).split()), fuente=self.nombre,
+                              tipo_doc="; ".join(v("dc.type") + v("dc.type.other") + v("thesis.degree.level")
+                                                 + v("thesis.degree.name"))[:200],
+                              revista=(v("dc.relation.ispartof") or v("dc.source") or [""])[0][:150],
                               terminos={q})
                     k = clave(t.url, h)
                     obtenidos.add(k)
@@ -279,7 +304,8 @@ class DSpace6(Fuente):
                      autores="; ".join(meta("DC.creator") or meta("citation_author")), anio=anio,
                      acceso="abierto" if "openAccess" in derechos or meta("citation_pdf_url") else "restringido",
                      resumen=" ".join(" ".join(meta("DCTERMS.abstract") or meta("DC.description")).split()),
-                     fuente=self.nombre)
+                     tipo_doc="; ".join(meta("DC.type") + meta("citation_dissertation_name"))[:200],
+                     revista=(meta("citation_journal_title") or [""])[0][:150], fuente=self.nombre)
 
     def cosechar(self, maximo):
         por_consulta, todos = {}, {}
@@ -311,7 +337,7 @@ class VuFind(Fuente):
     def cosechar(self, maximo):
         out = {}
         campos = "".join(f"&field[]={c}" for c in ("id", "title", "authors", "institutions", "urls",
-                                                       "publicationDates", "summary"))
+                                                       "publicationDates", "summary", "formats", "containerTitle"))
         for q in self.consultas:
             total, pagina, n = None, 1, 0
             while True:
@@ -331,7 +357,9 @@ class VuFind(Fuente):
                     t_ = Tesis(institucion=inst, handle=r.get("id", ""), url=url, titulo=" ".join(r.get("title", "").split()),
                                autores="; ".join(autores), anio=(r.get("publicationDates") or [""])[0][:4],
                                resumen=" ".join(" ".join(r.get("summary", [])).split()), fuente=self.nombre,
-                               ambito=self.ambito, pais=self.pais, terminos={q})
+                               ambito=self.ambito, pais=self.pais, terminos={q},
+                               tipo_doc="; ".join(r.get("formats") or [])[:200],
+                               revista=str(r.get("containerTitle") or "")[:150])
                     if self.nombre == "LA Referencia" and re.search(r"\.pe\b|Per[uú]", url + " " + inst):
                         t_.ambito, t_.pais = "peru", "PE"
                     k = clave(url, t_.handle)
@@ -358,7 +386,7 @@ class OpenAlex(Fuente):
             while cursor:
                 d = json.loads(self.get(f"{self.API}?search={urllib.parse.quote(q)}&per-page=200&cursor={cursor}"
                                         "&select=id,doi,title,publication_year,authorships,abstract_inverted_index,"
-                                        "open_access,primary_location") or "{}")
+                                        "open_access,primary_location,type,cited_by_count") or "{}")
                 total = d.get("meta", {}).get("count", total or 0)
                 res = d.get("results", [])
                 for w in res:
@@ -374,7 +402,10 @@ class OpenAlex(Fuente):
                               autores="; ".join(a.get("author", {}).get("display_name", "") for a in w.get("authorships", [])[:8]),
                               anio=str(w.get("publication_year") or ""), acceso="abierto" if (w.get("open_access") or {}).get("is_oa") else "restringido",
                               resumen=" ".join(p for _, p in pos), ambito=ambito, pais=",".join(sorted(paises))[:40],
-                              fuente="OpenAlex", doi=doi, terminos={q})
+                              fuente="OpenAlex", doi=doi, terminos={q}, tipo_doc=w.get("type") or "",
+                              revista=(((w.get("primary_location") or {}).get("source") or {}).get("display_name")
+                                       or "")[:150],
+                              citas=str(w.get("cited_by_count") or ""))
                     k = clave(t.url, t.handle)
                     out.setdefault(k, t).terminos.add(q)
                     n += 1
@@ -414,7 +445,7 @@ def leer_catalogo() -> dict[str, dict]:
             r.setdefault("institucion", r.pop("universidad", ""))
             r.pop("universidad", None)
             r.pop("tipo", None)
-            for k in ("resumen", "familia", "con_datos", "ambito", "pais", "fuente", "doi", "tema_cloruros"):
+            for k in Tesis.__dataclass_fields__:
                 r.setdefault(k, "")
             r["ambito"] = r["ambito"] or "peru"
             out[clave(r.get("url", ""), r.get("handle", ""))] = r
@@ -433,8 +464,9 @@ def escribir_catalogo(tesis: dict[str, Tesis]):
     with open(CATALOGO, "w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(Tesis.__dataclass_fields__), extrasaction="ignore")
         w.writeheader()
-        w.writerows(t.fila() for t in sorted(tesis.values(), key=lambda t: (orden_a.get(t.ambito, 9),
-                                                                            orden_f.get(t.familia, 9), t.institucion)))
+        w.writerows(t.fila() for t in sorted(tesis.values(), key=lambda t: (
+            orden_a.get(t.ambito, 9), RANGOS.index(t.rango) if t.rango in RANGOS else 9,
+            orden_f.get(t.familia, 9), t.institucion)))
     utiles = [t for t in tesis.values() if t.familia != "otro"]
     por_ambito = {a: sum(t.ambito == a for t in utiles) for a in ("peru", "sudamerica", "global")}
     por_familia = {fa: sum(t.familia == fa for t in utiles) for fa in orden_f if fa != "otro"}
@@ -443,6 +475,11 @@ def escribir_catalogo(tesis: dict[str, Tesis]):
         else "por debajo del mínimo"
     resumen = {"catalogo_total": len(tesis), "literatura_util": n, "metas": META, "nivel_alcanzado": nivel,
                "por_ambito": por_ambito, "por_familia": por_familia,
+               "por_rango": {r: sum(t.rango == r for t in tesis.values()) for r in RANGOS},
+               "por_tier": {f"T{i}": sum(t.tier == str(i) for t in tesis.values()) for i in range(5)},
+               "por_grado": {g: sum(t.grado == g for t in tesis.values())
+                             for g in sorted({t.grado for t in tesis.values()})},
+               "peru_por_rango": {r: sum(t.ambito == "peru" and t.rango == r for t in tesis.values()) for r in RANGOS},
                "peru_util_con_bacterias": sum(t.ambito == "peru" and t.familia == "autorreparable" and
                                               t.usa_bacterias == "si" for t in utiles),
                "peru_util_cloruros": sum(t.ambito == "peru" and t.tema_cloruros == "si" for t in utiles)}
@@ -470,8 +507,13 @@ def cosechar(grupos: set[str], maximo: int | None):
                 previa = catalogo[k]
                 previa.terminos |= t.terminos
                 if previa.fuente in ("ALICIA", "LA Referencia", "") and t.fuente not in ("ALICIA", "LA Referencia"):
-                    t.terminos = previa.terminos
-                    catalogo[k] = t.clasificar()
+                    t.terminos, t.tier_confirmado = previa.terminos, previa.tier_confirmado
+                    previa = catalogo[k] = t
+                else:                                # completa lo que faltaba (tipo, revista, resumen, citas)
+                    for c in ("tipo_doc", "revista", "citas", "resumen", "doi", "acceso", "anio", "autores"):
+                        if not getattr(previa, c) and getattr(t, c):
+                            setattr(previa, c, getattr(t, c))
+                previa.clasificar()
             else:
                 catalogo[k] = t.clasificar()
         cobertura += fuente.cobertura
@@ -563,6 +605,18 @@ def preparar():
     print(f"{len(cola)} tablas con datos en {len({c['pdf'] for c in cola})} documentos → {COLA.relative_to(RAIZ)}")
 
 
+def confirmar(handle: str, tier: str):
+    """El agente fija el tier al terminar de leer el documento completo (T1/T0 solo así)."""
+    filas = leer_catalogo()
+    k = clave(handle, handle)
+    if k not in filas:
+        sys.exit(f"{handle} no está en el catálogo")
+    filas[k]["tier_confirmado"] = tier
+    escribir_catalogo({c: a_tesis(r).clasificar() for c, r in filas.items()})
+    t = a_tesis(filas[k]).clasificar()
+    print(f"{t.titulo[:80]} → T{t.tier} · {t.grado} · rango {t.rango}")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="etapa", required=True)
@@ -573,6 +627,9 @@ def main(argv=None) -> int:
     d.add_argument("--limite", type=int, default=60)
     sub.add_parser("preparar")
     sub.add_parser("reclasificar")
+    k = sub.add_parser("confirmar", help="fija el tier tras leer el documento completo")
+    k.add_argument("handle", help="handle o DOI, p. ej. 20.500.12692/151797")
+    k.add_argument("tier", choices=list("01234"))
     a = ap.parse_args(argv)
     if a.etapa == "cosechar":
         cosechar(set(a.fuentes.split(",")), a.max_por_consulta)
@@ -580,6 +637,8 @@ def main(argv=None) -> int:
         descargar(a.limite)
     elif a.etapa == "preparar":
         preparar()
+    elif a.etapa == "confirmar":
+        confirmar(a.handle, a.tier)
     else:
         escribir_catalogo({k: a_tesis(r).clasificar() for k, r in leer_catalogo().items()})
     return 0
